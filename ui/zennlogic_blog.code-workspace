@@ -1,11 +1,11 @@
 {
-	"folders": [
-		{
-			"path": "../../zennlogic_blog"
-		},
-		{
-			"path": ".."
-		}
-	],
-	"settings": {}
+  "folders": [
+    {
+      "path": "../../zennlogic_blog",
+    },
+    {
+      "path": "..",
+    },
+  ],
+  "settings": {},
 }

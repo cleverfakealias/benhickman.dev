@@ -6,12 +6,12 @@ import {
   useMediaQuery,
   styled,
 } from "@mui/material";
-import { PortableText } from "@portabletext/react";
+import { PortableText, PortableTextReactComponents } from "@portabletext/react";
+import { TypedObject } from "@portabletext/types";
 import imageUrlBuilder from "./sanity/imageUrl";
 
-// Interface for blog content types
 interface BlogBodyProps {
-  content: any[];
+  content: TypedObject[];
 }
 
 // Styled components for blog content
@@ -119,9 +119,9 @@ const BlogBody: React.FC<BlogBodyProps> = ({ content }) => {
   }
 
   // Custom components for Portable Text
-  const portableTextComponents = {
+  const portableTextComponents: Partial<PortableTextReactComponents> = {
     block: {
-      h1: ({ children }: any) => (
+      h1: ({ children }) => (
         <Typography
           variant="h1"
           component="h1"
@@ -139,7 +139,7 @@ const BlogBody: React.FC<BlogBodyProps> = ({ content }) => {
           {children}
         </Typography>
       ),
-      h2: ({ children }: any) => (
+      h2: ({ children }) => (
         <Typography
           variant="h2"
           component="h2"
@@ -157,7 +157,7 @@ const BlogBody: React.FC<BlogBodyProps> = ({ content }) => {
           {children}
         </Typography>
       ),
-      h3: ({ children }: any) => (
+      h3: ({ children }) => (
         <Typography
           variant="h3"
           component="h3"
@@ -174,7 +174,7 @@ const BlogBody: React.FC<BlogBodyProps> = ({ content }) => {
           {children}
         </Typography>
       ),
-      normal: ({ children }: any) => (
+      normal: ({ children }) => (
         <Typography
           variant="body1"
           component="p"
@@ -190,7 +190,7 @@ const BlogBody: React.FC<BlogBodyProps> = ({ content }) => {
           {children}
         </Typography>
       ),
-      blockquote: ({ children }: any) => (
+      blockquote: ({ children }) => (
         <Box
           component="blockquote"
           sx={{
@@ -222,33 +222,33 @@ const BlogBody: React.FC<BlogBodyProps> = ({ content }) => {
       ),
     },
     list: {
-      bullet: ({ children }: any) => (
+      bullet: ({ children }) => (
         <Box component="ul" sx={{ mb: 2, pl: 3 }}>
           {children}
         </Box>
       ),
-      number: ({ children }: any) => (
+      number: ({ children }) => (
         <Box component="ol" sx={{ mb: 2, pl: 3 }}>
           {children}
         </Box>
       ),
     },
     listItem: {
-      bullet: ({ children }: any) => (
+      bullet: ({ children }) => (
         <Box component="li" sx={{ mb: 1, lineHeight: 1.6 }}>
           {children}
         </Box>
       ),
-      number: ({ children }: any) => (
+      number: ({ children }) => (
         <Box component="li" sx={{ mb: 1, lineHeight: 1.6 }}>
           {children}
         </Box>
       ),
     },
     marks: {
-      strong: ({ children }: any) => <strong>{children}</strong>,
-      em: ({ children }: any) => <em>{children}</em>,
-      code: ({ children }: any) => (
+      strong: ({ children }) => <strong>{children}</strong>,
+      em: ({ children }) => <em>{children}</em>,
+      code: ({ children }) => (
         <Box
           component="code"
           sx={{
@@ -268,7 +268,16 @@ const BlogBody: React.FC<BlogBodyProps> = ({ content }) => {
       ),
     },
     types: {
-      image: ({ value }: any) => {
+      image: ({
+        value,
+      }: {
+        value: {
+          asset?: { url?: string };
+          url?: string;
+          alt?: string;
+          caption?: string;
+        };
+      }) => {
         // Debug: Log the image value to see what we're working with
         console.log("Image value in BlogBody:", value);
 
@@ -316,7 +325,7 @@ const BlogBody: React.FC<BlogBodyProps> = ({ content }) => {
           </Box>
         );
       },
-      code: ({ value }: any) => (
+      code: ({ value }: { value: { code: string } }) => (
         <Box
           component="pre"
           sx={{
