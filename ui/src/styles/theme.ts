@@ -404,9 +404,9 @@ declare module "@mui/material/styles" {
       shadows: typeof commonStyles.shadows;
       transitions: typeof commonStyles.transitions;
       borders: typeof commonStyles.borders;
-      getCardStyles: () => any;
-      getSocialStyles: () => any;
-      getCallToActionStyles: () => any;
+      getCardStyles: () => object;
+      getSocialStyles: () => object;
+      getCallToActionStyles: () => object;
     };
   }
   interface ThemeOptions {
@@ -415,9 +415,9 @@ declare module "@mui/material/styles" {
       shadows?: typeof commonStyles.shadows;
       transitions?: typeof commonStyles.transitions;
       borders?: typeof commonStyles.borders;
-      getCardStyles?: () => any;
-      getSocialStyles?: () => any;
-      getCallToActionStyles?: () => any;
+      getCardStyles?: () => object;
+      getSocialStyles?: () => object;
+      getCallToActionStyles?: () => object;
     };
   }
 }

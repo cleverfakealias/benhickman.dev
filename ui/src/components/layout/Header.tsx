@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Avatar, Box, Typography, IconButton, useTheme } from "@mui/material";
+import { Avatar, Box, Typography, IconButton } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import CloseIcon from "@mui/icons-material/Close";
 import { useLocation } from "react-router-dom";
 import "./Header.css";
 import Socials from "./Socials";
@@ -23,14 +22,13 @@ interface HeaderProps {
 const useSafeLocation = () => {
   try {
     return useLocation();
-  } catch (error) {
+  } catch {
     // Return a default location if not inside Router context
     return { pathname: window.location.pathname };
   }
 };
 
 const Header: React.FC<HeaderProps> = () => {
-  const theme = useTheme();
   const location = useSafeLocation();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -92,11 +90,11 @@ const Header: React.FC<HeaderProps> = () => {
             sx={{
               width: 64,
               height: 64,
-              border: "3px solid #8CD2EF",
+              border: "3px solid #8CD2EF", // loonGray, same in both modes
               boxShadow: "0 4px 24px 0 rgba(140,210,239,0.15)",
               bgcolor: "#fff",
               marginRight: "0.5rem",
-              transition: theme.custom.transitions.standard,
+              transition: "background 0.3s, border 0.3s",
             }}
           />
           <Box
@@ -114,12 +112,13 @@ const Header: React.FC<HeaderProps> = () => {
                 fontWeight: 900,
                 letterSpacing: "0.04em",
                 color: "#fff",
-                fontFamily: theme.typography.fontFamily,
+                fontFamily: "Inter, Montserrat, Roboto, Arial, sans-serif",
                 lineHeight: 1.05,
-                fontSize: { xs: "1.4rem", md: "2rem" },
-                textShadow: "0 2px 8px rgba(255,255,255,0.18)",
+                fontSize: { xs: "1.7rem", md: "2.5rem" },
+                textShadow:
+                  "0 2px 16px #8CD2EF, 0 4px 32px rgba(65,42,145,0.10)",
                 mb: 0.2,
-                transition: theme.custom.transitions.standard,
+                transition: "color 0.3s",
               }}
             >
               ZennLogic
@@ -128,14 +127,14 @@ const Header: React.FC<HeaderProps> = () => {
               variant="subtitle1"
               component="span"
               sx={{
-                color: "#4DD0E1",
+                color: "#4DD0E1", // teal accent in both modes
                 fontWeight: 700,
-                fontFamily: theme.typography.fontFamily,
+                fontFamily: "Inter, Montserrat, Roboto, Arial, sans-serif",
                 letterSpacing: "0.08em",
                 mt: 0.5,
-                fontSize: { xs: "0.9rem", md: "1rem" },
+                fontSize: { xs: "1.08rem", md: "1.22rem" },
                 textShadow: "0 2px 8px rgba(77,208,225,0.18)",
-                transition: theme.custom.transitions.standard,
+                transition: "color 0.3s",
               }}
             >
               Software Development
@@ -226,57 +225,21 @@ const Header: React.FC<HeaderProps> = () => {
                 aria-label="Mobile navigation menu"
                 ref={drawerRef}
               >
-                {/* Close button */}
-                <IconButton
-                  onClick={() => setDrawerOpen(false)}
-                  aria-label="Close navigation menu"
-                  sx={{
-                    position: "absolute",
-                    top: "1rem",
-                    right: "1rem",
-                    color: "#8CD2EF",
-                    zIndex: 1,
-                    background: "rgba(255,255,255,0.1)",
-                    "&:hover": {
-                      background: "rgba(255,255,255,0.2)",
-                    },
-                  }}
-                >
-                  <CloseIcon />
-                </IconButton>
-
                 <div
                   style={{
                     display: "flex",
                     alignItems: "center",
                     gap: "1rem",
-                    marginBottom: "1.5rem",
-                    marginTop: "1rem",
+                    marginBottom: "2rem",
                   }}
                 >
-                  <Avatar
+                  <img
                     src="/images/ZL monogram.png"
                     alt="ZennLogic monogram logo"
-                    sx={{
-                      width: 44,
-                      height: 44,
-                      border: "3px solid #8CD2EF",
-                      boxShadow: "0 4px 24px 0 rgba(140,210,239,0.15)",
-                      bgcolor: "#fff",
-                    }}
+                    style={{ height: "2.75rem", width: "2.75rem" }}
                   />
-                  <span className="site-title">ZennLogic</span>
+                  <span className="site-title">ZennLogic Development</span>
                 </div>
-
-                {/* Divider */}
-                <div
-                  style={{
-                    height: "1px",
-                    background:
-                      "linear-gradient(90deg, transparent, rgba(140,210,239,0.3), transparent)",
-                    marginBottom: "1.5rem",
-                  }}
-                />
                 <ul>
                   {navLinks.map((link) => (
                     <li key={link.name}>
