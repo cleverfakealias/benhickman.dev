@@ -84,7 +84,7 @@ const DevelopmentExperience: React.FC = () => {
       title: "Support Supervisor",
       subtitle: "WhereToLive.com",
       description:
-        "Managed technical support team for web development and email hosting services in the Real Estate industry, leading a team of 8+ support representatives.",
+        "Managed technical support team for web development and email hosting services in the Real Estate industry, leading a team of support representatives.",
       timestamp: "2012 - 2017",
       startDate: "2012",
       color: "secondary",
