@@ -22,7 +22,7 @@ const GradientDivider: React.FC<GradientDividerProps> = ({
         width,
         height,
         background: gradient || theme.custom.gradients.primary,
-        borderRadius: "2px",
+        borderRadius: "4px",
         mx: margin,
       }}
     />

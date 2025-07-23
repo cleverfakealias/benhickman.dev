@@ -66,14 +66,14 @@ const BlogContent = styled(Box)(({ theme }) => ({
         ? theme.palette.grey[800]
         : theme.palette.grey[200],
     padding: theme.spacing(2),
-    borderRadius: theme.shape.borderRadius,
+    borderRadius: "4px",
     color: theme.palette.text.primary,
   },
   "& pre": {
     backgroundColor: theme.palette.grey[900],
     color: theme.palette.common.white,
     padding: theme.spacing(2),
-    borderRadius: theme.shape.borderRadius,
+    borderRadius: "4px",
     overflow: "auto",
     fontSize: theme.typography.body2?.fontSize,
     fontFamily: 'Monaco, "Lucida Console", monospace',
@@ -85,14 +85,14 @@ const BlogContent = styled(Box)(({ theme }) => ({
         : theme.palette.grey[200],
     color: theme.palette.text.primary,
     padding: "2px 6px",
-    borderRadius: theme.shape.borderRadius,
+    borderRadius: "4px",
     fontSize: theme.typography.caption?.fontSize,
     fontFamily: 'Monaco, "Lucida Console", monospace',
   },
   "& img": {
     maxWidth: "100%",
     height: "auto",
-    borderRadius: theme.shape.borderRadius,
+    borderRadius: "4px",
     margin: theme.spacing(2, 0),
     boxShadow: theme.shadows[2],
   },
@@ -306,7 +306,7 @@ const BlogBody: React.FC<BlogBodyProps> = ({ content }) => {
               style={{
                 maxWidth: "100%",
                 height: "auto",
-                borderRadius: theme.shape.borderRadius,
+                borderRadius: "4px",
                 boxShadow: theme.shadows[2],
               }}
               onError={(e) =>

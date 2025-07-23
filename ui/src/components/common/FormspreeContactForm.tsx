@@ -173,7 +173,7 @@ const FormspreeContactForm: React.FC<FormspreeContactFormProps> = ({
             mt: 3,
             px: 5,
             py: 1.5,
-            borderRadius: theme.shape.borderRadius,
+            borderRadius: "4px",
             fontWeight: theme.typography.fontWeightBold,
             fontSize: theme.typography.body1?.fontSize,
             background: `linear-gradient(90deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
@@ -219,7 +219,7 @@ const FormspreeContactForm: React.FC<FormspreeContactFormProps> = ({
         sx={{
           backgroundColor: "transparent",
           padding: { xs: 1, sm: 2, md: 3 },
-          borderRadius: theme.shape.borderRadius,
+          borderRadius: "4px",
           boxShadow: "none",
         }}
       >
@@ -246,7 +246,7 @@ const FormspreeContactForm: React.FC<FormspreeContactFormProps> = ({
               }}
               sx={{
                 "& .MuiOutlinedInput-root": {
-                  borderRadius: `${theme.shape.borderRadius}px`, // Explicitly use the same rounding as the rest of the app
+                  borderRadius: "4px", // Explicitly use the same rounding as the rest of the app
                   background: theme.palette.background.paper,
                   boxShadow: "0 1px 4px 0 rgba(31,38,135,0.07)",
                   "&.Mui-focused fieldset": {

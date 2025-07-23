@@ -53,7 +53,7 @@ const SocialLinks: React.FC<SocialLinksProps> = ({
                 flexDirection: "column",
                 alignItems: "center",
                 p: compact ? 1.5 : 2,
-                borderRadius: 2,
+                borderRadius: "4px",
                 textDecoration: "none",
                 borderColor: social.color,
                 "&:hover": {
