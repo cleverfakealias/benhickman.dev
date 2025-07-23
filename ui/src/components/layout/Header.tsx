@@ -80,9 +80,10 @@ const Header: React.FC<HeaderProps> = () => {
         }}
       >
         {/* Left cell: Logo and site title */}
-        <div
-          className="header-cell-left"
-          style={{ display: "flex", alignItems: "center", gap: "1rem" }}
+        <a
+          href="/"
+          aria-label="Go to home"
+          style={{ textDecoration: "none", color: "inherit", display: "flex", alignItems: "center", gap: "1rem" }}
         >
           <Avatar
             src="/images/ZL monogram.png"
@@ -140,7 +141,7 @@ const Header: React.FC<HeaderProps> = () => {
               Software Development
             </Typography>
           </Box>
-        </div>
+        </a>
         {/* Center cell: Nav links (desktop only) */}
         <div
           className="header-cell-center"
@@ -225,13 +226,10 @@ const Header: React.FC<HeaderProps> = () => {
                 aria-label="Mobile navigation menu"
                 ref={drawerRef}
               >
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "1rem",
-                    marginBottom: "2rem",
-                  }}
+                <a
+                  href="/"
+                  aria-label="Go to home"
+                  style={{ textDecoration: "none", color: "inherit", display: "flex", alignItems: "center", gap: "1rem", marginBottom: "2rem" }}
                 >
                   <img
                     src="/images/ZL monogram.png"
@@ -239,7 +237,7 @@ const Header: React.FC<HeaderProps> = () => {
                     style={{ height: "2.75rem", width: "2.75rem" }}
                   />
                   <span className="site-title">ZennLogic Development</span>
-                </div>
+                </a>
                 <ul>
                   {navLinks.map((link) => (
                     <li key={link.name}>
