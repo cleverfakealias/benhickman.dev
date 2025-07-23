@@ -122,7 +122,7 @@ const BlogPostDetail = () => {
               width: "100%",
               height: { xs: "250px", md: "400px" },
               objectFit: "cover",
-              borderRadius: 4, // Match other cards/images for consistency
+              borderRadius: "4px", // Match other cards/images for consistency
               mb: 3,
             }}
           />

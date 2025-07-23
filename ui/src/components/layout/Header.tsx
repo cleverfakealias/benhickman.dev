@@ -179,7 +179,7 @@ const Header: React.FC<HeaderProps> = () => {
                           height: "4px",
                           background:
                             "linear-gradient(90deg, #8CD2EF, #5DADE2, #3498DB)",
-                          borderRadius: "2px",
+                          borderRadius: "4px",
                           boxShadow: "0 2px 8px rgba(140, 210, 239, 0.6)",
                           animation: "glow 2s ease-in-out infinite alternate",
                         }}
@@ -253,7 +253,7 @@ const Header: React.FC<HeaderProps> = () => {
                           display: "flex",
                           alignItems: "center",
                           padding: "12px 16px",
-                          borderRadius: "8px",
+                          borderRadius: "4px",
                           transition: "all 0.3s ease",
                           ...(isActiveLink(link.href) && {
                             background:

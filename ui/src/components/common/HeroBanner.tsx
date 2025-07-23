@@ -52,7 +52,7 @@ const HeroBanner: React.FC = () => {
                 : "brightness(0.9)",
             transition: theme.custom.transitions.standard,
             boxShadow: theme.custom.shadows.social[theme.palette.mode],
-            borderRadius: 4,
+            borderRadius: "4px",
           }}
         />
       </Box>

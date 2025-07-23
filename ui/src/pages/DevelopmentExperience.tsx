@@ -84,7 +84,7 @@ const DevelopmentExperience: React.FC = () => {
       title: "Support Supervisor",
       subtitle: "WhereToLive.com",
       description:
-        "Managed technical support team for web development and email hosting services in the Real Estate industry, leading a team of 8+ support representatives.",
+        "Managed technical support team for web development and email hosting services in the Real Estate industry, leading a team of support representatives.",
       timestamp: "2012 - 2017",
       startDate: "2012",
       color: "secondary",
@@ -141,7 +141,7 @@ const DevelopmentExperience: React.FC = () => {
               theme.palette.mode === "dark"
                 ? "linear-gradient(90deg, #7C4DFF, #448AFF)"
                 : "linear-gradient(90deg, #412A91, #002B5C)",
-            borderRadius: "2px",
+            borderRadius: "4px",
             mx: "auto",
           }}
         />
@@ -163,7 +163,7 @@ const DevelopmentExperience: React.FC = () => {
                     : "linear-gradient(145deg, rgba(255,255,255,0.9) 0%, rgba(248,250,252,0.9) 100%)",
                 backdropFilter: "blur(10px)",
                 border: `1px solid ${theme.palette.divider}`,
-                borderRadius: "16px",
+                borderRadius: "4px",
                 overflow: "hidden",
                 position: "relative",
                 "&:hover": {
@@ -210,7 +210,7 @@ const DevelopmentExperience: React.FC = () => {
                     sx={{
                       width: 56,
                       height: 56,
-                      borderRadius: "16px",
+                      borderRadius: "4px",
                       background:
                         experience.color === "primary"
                           ? `linear-gradient(135deg, ${theme.palette.primary.main}, ${theme.palette.primary.dark})`
