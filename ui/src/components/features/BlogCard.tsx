@@ -135,3 +135,4 @@ export default function BlogCard({ post }: { post: BlogPost }) {
     </Card>
   );
 }
+
