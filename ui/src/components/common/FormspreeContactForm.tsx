@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import { getDomainConfig } from "../../config/domainConfig";
 import ReCAPTCHA from "react-google-recaptcha";
 import {
   Box,
@@ -24,11 +25,11 @@ interface FormspreeContactFormProps {
   recaptchaSiteKey?: string;
 }
 
-const FormspreeContactForm: React.FC<FormspreeContactFormProps> = ({
-  formspreeUrl = import.meta.env.VITE_FORMSPREE_URL || "",
-  recaptchaSiteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY ||
-    "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI",
-}) => {
+
+
+
+const FormspreeContactForm: React.FC<FormspreeContactFormProps> = () => {
+  const { formspreeUrl, recaptchaSiteKey } = getDomainConfig();
   const theme = useTheme();
   const recaptchaRef = useRef<ReCAPTCHA>(null);
 

@@ -78,7 +78,10 @@ interface FooterProps {
   setThemeMode: (mode: string) => void;
 }
 
+import { getDomainConfig } from "../../config/domainConfig";
+
 const Footer: React.FC<FooterProps> = ({ themeMode, setThemeMode }) => {
+  const { branding: brand } = getDomainConfig();
   const isDark = themeMode === "dark";
   return (
     <footer
@@ -112,8 +115,8 @@ const Footer: React.FC<FooterProps> = ({ themeMode, setThemeMode }) => {
           }}
         >
           <Avatar
-            src="/images/zengineer dark logo 2.png"
-            alt="Zengineer monogram logo"
+            src={brand.logo}
+            alt={brand.alt}
             sx={{
               width: { xs: 20, md: 20 },
               height: { xs: 20, md: 20 },
