@@ -34,8 +34,8 @@ describe("Header", () => {
   test("renders logo and branding", () => {
     renderWithTheme(<Header {...mockProps} />);
 
-    expect(screen.getByText("ZennLogic")).toBeInTheDocument();
-    expect(screen.getByText("Software Development")).toBeInTheDocument();
+    expect(screen.getByText("Zengineer")).toBeInTheDocument();
+    expect(screen.getByText("Cloud Software Development")).toBeInTheDocument();
   });
 
   test("renders social links", () => {

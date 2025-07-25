@@ -28,7 +28,7 @@ describe("About", () => {
   test("renders introduction text", () => {
     renderWithTheme(<About />);
     expect(
-      screen.getByText("Hello, I’m Ben — the developer behind ZennLogic."),
+      screen.getByText("Hello, I’m Ben — the developer behind Zengineer Cloud Development."),
     ).toBeInTheDocument();
   });
 

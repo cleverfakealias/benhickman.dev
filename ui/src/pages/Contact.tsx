@@ -57,8 +57,8 @@ const Contact: React.FC = () => {
       {/* Contact Card */}
       <Box>
         <Card
-            sx={{
-              borderRadius: theme.shape.borderRadius,
+          sx={{
+            borderRadius: theme.shape.borderRadius,
             background:
               theme.palette.mode === "dark"
                 ? "linear-gradient(145deg, rgba(30,30,30,0.95) 0%, rgba(40,40,40,0.95) 100%)"
@@ -84,8 +84,8 @@ const Contact: React.FC = () => {
               right: 0,
               height: "4px",
               background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
-                  borderRadius: theme.shape.borderRadius,
-                },
+              borderRadius: theme.shape.borderRadius,
+            },
           }}
         >
           <CardContent sx={{ p: { xs: 2, sm: 4 } }}>
@@ -93,7 +93,7 @@ const Contact: React.FC = () => {
               <ContactInformation />
             </Box>
             <Box sx={{ mt: 4, borderRadius: 0, p: 0 }}>
-                  <FormspreeContactForm />
+              <FormspreeContactForm />
             </Box>
           </CardContent>
         </Card>
