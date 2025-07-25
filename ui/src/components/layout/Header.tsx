@@ -19,16 +19,54 @@ interface HeaderProps {
 }
 
 // Custom hook to safely use location
-const useSafeLocation = () => {
+interface LocationLike {
+  pathname: string;
+}
+
+const useSafeLocation = (): LocationLike => {
   try {
-    return useLocation();
+    return useLocation() as LocationLike;
   } catch {
     // Return a default location if not inside Router context
     return { pathname: window.location.pathname };
   }
 };
 
+interface BrandInfo {
+  name: string;
+  logo: string;
+  alt: string;
+  subtitle: string;
+}
+
+const branding: Record<string, BrandInfo> = {
+  "zengineer.cloud": {
+    name: "Zengineer",
+    logo: "/images/zengineer dark logo 2.png",
+    alt: "Zengineer monogram logo",
+    subtitle: "Cloud Architecture and Development",
+  },
+  "zennlogic.com": {
+    name: "ZennLogic",
+    logo: "/images/ZL monogram.png",
+    alt: "ZennLogic logo",
+    subtitle: "Cloud Software Engineering",
+  },
+  "benhickman.dev": {
+    name: "Ben Hickman",
+    logo: "/images/BH monogram.png",
+    alt: "Ben Hickman logo",
+    subtitle: "Cloud Architecture and Engineering",
+  },
+};
+
+const getBrand = () => {
+  const host = typeof window !== "undefined" ? window.location.hostname : "zengineer.cloud";
+  return branding[host] || branding["zengineer.cloud"];
+};
+
 const Header: React.FC<HeaderProps> = () => {
+  const brand = getBrand();
   const location = useSafeLocation();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -92,8 +130,8 @@ const Header: React.FC<HeaderProps> = () => {
           }}
         >
           <Avatar
-            src="/images/zengineer dark logo 2.png"
-            alt="Zengineer monogram logo"
+            src={brand.logo}
+            alt={brand.alt}
             sx={{
               width: 64,
               height: 64,
@@ -128,7 +166,7 @@ const Header: React.FC<HeaderProps> = () => {
                 transition: "color 0.3s",
               }}
             >
-              Zengineer
+              {brand.name}
             </Typography>
             <Typography
               variant="subtitle1"
@@ -144,7 +182,7 @@ const Header: React.FC<HeaderProps> = () => {
                 transition: "color 0.3s",
               }}
             >
-              Cloud Software Development
+              {brand.subtitle}
             </Typography>
           </Box>
         </a>
@@ -245,11 +283,11 @@ const Header: React.FC<HeaderProps> = () => {
                   }}
                 >
                   <img
-                    src="/images/zengineer dark logo 2.png"
-                    alt="Zengineer monogram logo"
+                    src={brand.logo}
+                    alt={brand.alt}
                     style={{ height: "2.75rem", width: "2.75rem" }}
                   />
-                  <span className="site-title">Zengineer Cloud Software Development</span>
+                  <span className="site-title">{brand.name} {brand.subtitle}</span>
                 </a>
                 <ul>
                   {navLinks.map((link) => (

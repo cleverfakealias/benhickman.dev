@@ -78,7 +78,32 @@ interface FooterProps {
   setThemeMode: (mode: string) => void;
 }
 
+interface BrandInfo {
+  name: string;
+  logo: string;
+  alt: string;
+}
+
+const branding: Record<string, BrandInfo> = {
+  "zengineer.cloud": {
+    name: "Zengineer",
+    logo: "/images/zengineer dark logo 2.png",
+    alt: "Zengineer monogram logo",
+  },
+  "example.com": {
+    name: "ExampleSite",
+    logo: "/images/example-logo.png",
+    alt: "ExampleSite logo",
+  },
+};
+
+const getBrand = () => {
+  const host = typeof window !== "undefined" ? window.location.hostname : "zengineer.cloud";
+  return branding[host] || branding["zengineer.cloud"];
+};
+
 const Footer: React.FC<FooterProps> = ({ themeMode, setThemeMode }) => {
+  const brand = getBrand();
   const isDark = themeMode === "dark";
   return (
     <footer
@@ -112,8 +137,8 @@ const Footer: React.FC<FooterProps> = ({ themeMode, setThemeMode }) => {
           }}
         >
           <Avatar
-            src="/images/zengineer dark logo 2.png"
-            alt="Zengineer monogram logo"
+            src={brand.logo}
+            alt={brand.alt}
             sx={{
               width: { xs: 20, md: 20 },
               height: { xs: 20, md: 20 },
