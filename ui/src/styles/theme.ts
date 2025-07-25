@@ -73,6 +73,13 @@ export const mnThemeConfig = {
   },
 };
 
+// Add or update fontFamily in theme config
+export const fontFamilies = {
+  heading: "'Manrope', Arial, sans-serif",
+  body: "'Space Grotesk', Arial, sans-serif",
+  mono: "'JetBrains Mono', 'Fira Mono', 'Menlo', monospace",
+};
+
 // Common styling patterns used throughout the site
 const commonStyles = {
   // Gradient patterns
@@ -162,13 +169,7 @@ export const createMnTheme = (mode: "light" | "dark") => {
       borderRadius: 4, // Less aggressive, subtle rounding
     },
     typography: {
-      fontFamily: [
-        "Inter",
-        "Roboto",
-        "Helvetica Neue",
-        "Arial",
-        "sans-serif",
-      ].join(","),
+      fontFamily: [fontFamilies.heading, fontFamilies.body].join(","),
       h1: {
         fontWeight: 700,
         fontSize: "2.5rem",
