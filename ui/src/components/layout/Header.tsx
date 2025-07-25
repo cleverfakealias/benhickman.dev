@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { getDomainConfig } from "../../config/domainConfig";
 import { Avatar, Box, Typography, IconButton } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import { useLocation } from "react-router-dom";
@@ -32,41 +33,10 @@ const useSafeLocation = (): LocationLike => {
   }
 };
 
-interface BrandInfo {
-  name: string;
-  logo: string;
-  alt: string;
-  subtitle: string;
-}
 
-const branding: Record<string, BrandInfo> = {
-  "zengineer.cloud": {
-    name: "Zengineer",
-    logo: "/images/zengineer dark logo 2.png",
-    alt: "Zengineer monogram logo",
-    subtitle: "Cloud Architecture and Development",
-  },
-  "zennlogic.com": {
-    name: "ZennLogic",
-    logo: "/images/ZL monogram.png",
-    alt: "ZennLogic logo",
-    subtitle: "Cloud Software Engineering",
-  },
-  "benhickman.dev": {
-    name: "Ben Hickman",
-    logo: "/images/BH monogram.png",
-    alt: "Ben Hickman logo",
-    subtitle: "Cloud Architecture and Engineering",
-  },
-};
-
-const getBrand = () => {
-  const host = typeof window !== "undefined" ? window.location.hostname : "zengineer.cloud";
-  return branding[host] || branding["zengineer.cloud"];
-};
 
 const Header: React.FC<HeaderProps> = () => {
-  const brand = getBrand();
+  const { branding: brand } = getDomainConfig();
   const location = useSafeLocation();
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);

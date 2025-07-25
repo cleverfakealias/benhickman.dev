@@ -78,32 +78,10 @@ interface FooterProps {
   setThemeMode: (mode: string) => void;
 }
 
-interface BrandInfo {
-  name: string;
-  logo: string;
-  alt: string;
-}
-
-const branding: Record<string, BrandInfo> = {
-  "zengineer.cloud": {
-    name: "Zengineer",
-    logo: "/images/zengineer dark logo 2.png",
-    alt: "Zengineer monogram logo",
-  },
-  "example.com": {
-    name: "ExampleSite",
-    logo: "/images/example-logo.png",
-    alt: "ExampleSite logo",
-  },
-};
-
-const getBrand = () => {
-  const host = typeof window !== "undefined" ? window.location.hostname : "zengineer.cloud";
-  return branding[host] || branding["zengineer.cloud"];
-};
+import { getDomainConfig } from "../../config/domainConfig";
 
 const Footer: React.FC<FooterProps> = ({ themeMode, setThemeMode }) => {
-  const brand = getBrand();
+  const { branding: brand } = getDomainConfig();
   const isDark = themeMode === "dark";
   return (
     <footer
