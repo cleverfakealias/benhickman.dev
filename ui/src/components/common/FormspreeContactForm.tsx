@@ -25,9 +25,6 @@ interface FormspreeContactFormProps {
   recaptchaSiteKey?: string;
 }
 
-
-
-
 const FormspreeContactForm: React.FC<FormspreeContactFormProps> = () => {
   const { formspreeUrl, recaptchaSiteKey } = getDomainConfig();
   const theme = useTheme();

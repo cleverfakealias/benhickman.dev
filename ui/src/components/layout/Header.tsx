@@ -127,11 +127,9 @@ const Header: React.FC<HeaderProps> = () => {
                 fontWeight: 900,
                 letterSpacing: "0.04em",
                 color: "#fff",
-                fontFamily: "Inter, Montserrat, Roboto, Arial, sans-serif",
+                fontFamily: "'Manrope', Arial, sans-serif",
                 lineHeight: 1.05,
                 fontSize: { xs: "1.7rem", md: "2.5rem" },
-                textShadow:
-                  "0 2px 16px #8CD2EF, 0 4px 32px rgba(65,42,145,0.10)",
                 mb: 0.2,
                 transition: "color 0.3s",
               }}
