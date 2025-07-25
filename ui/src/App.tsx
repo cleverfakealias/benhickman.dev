@@ -13,8 +13,25 @@ import DevelopmentExperience from "./pages/DevelopmentExperience";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import { createMnTheme } from "./styles/theme";
+import { useEffect } from "react";
+import { getDomainConfig } from "./config/domainConfig";
 function App() {
   const { themeMode, setThemeMode } = useTheme();
+
+  // Set document title and meta description dynamically
+  useEffect(() => {
+    const { branding } = getDomainConfig();
+    // Set document title
+    document.title = branding.title;
+    // Set or update meta description
+    let metaDesc = document.querySelector('meta[name="description"]');
+    if (!metaDesc) {
+      metaDesc = document.createElement('meta');
+      metaDesc.setAttribute('name', 'description');
+      document.head.appendChild(metaDesc);
+    }
+    metaDesc.setAttribute('content', branding.description);
+  }, []);
 
   const theme = createMnTheme(themeMode as "light" | "dark");
 

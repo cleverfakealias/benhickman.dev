@@ -4,6 +4,20 @@ import { ThemeProvider } from "@mui/material/styles";
 import { createMnTheme } from "../../styles/theme";
 import Header from "../layout/Header";
 
+// Mock getDomainConfig to always use the default domain for tests
+jest.mock("../../config/domainConfig", () => ({
+  getDomainConfig: () => ({
+    formspreeUrl: "test-formspree-url",
+    recaptchaSiteKey: "test-recaptcha-key",
+    branding: {
+      name: "Zengineer",
+      logo: "/images/zengineer dark logo 2.png",
+      alt: "Zengineer monogram logo",
+      subtitle: "Cloud Software Development",
+    },
+  }),
+}));
+
 const theme = createMnTheme("light");
 
 const renderWithTheme = (component: React.ReactElement) => {

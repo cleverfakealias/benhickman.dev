@@ -4,7 +4,21 @@ import { ThemeProvider } from "@mui/material/styles";
 import { createMnTheme } from "../../styles/theme";
 import Footer from "../layout/Footer";
 
+jest.mock("../../config/domainConfig", () => ({
+  getDomainConfig: () => ({
+    formspreeUrl: "test-formspree-url",
+    recaptchaSiteKey: "test-recaptcha-key",
+    branding: {
+      name: "Zengineer",
+      logo: "/images/zengineer dark logo 2.png",
+      alt: "Zengineer monogram logo",
+      subtitle: "Cloud Software Development",
+    },
+  }),
+}));
+
 const theme = createMnTheme("light");
+
 
 const renderWithTheme = (component: React.ReactElement) => {
   return render(<ThemeProvider theme={theme}>{component}</ThemeProvider>);
