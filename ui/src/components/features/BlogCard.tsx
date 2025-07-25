@@ -1,5 +1,14 @@
 import React from "react";
-import { Card, CardActionArea, CardContent, CardMedia, Typography, Box, Chip, useTheme } from "@mui/material";
+import {
+  Card,
+  CardActionArea,
+  CardContent,
+  CardMedia,
+  Typography,
+  Box,
+  Chip,
+  useTheme,
+} from "@mui/material";
 import { Link } from "react-router-dom";
 import { AccessTime, Person } from "@mui/icons-material";
 import imageUrlBuilder from "./sanity/imageUrl";
@@ -9,7 +18,11 @@ export default function BlogCard({ post }: { post: BlogPost }) {
   const theme = useTheme();
   const formatDate = (dateString?: string) =>
     dateString
-      ? new Date(dateString).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })
+      ? new Date(dateString).toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        })
       : "Recently";
 
   return (
@@ -51,10 +64,7 @@ export default function BlogCard({ post }: { post: BlogPost }) {
             height="200"
             image={(() => {
               const builder = imageUrlBuilder(post.mainImage);
-              if (
-                "width" in builder &&
-                typeof builder.width === "function"
-              ) {
+              if ("width" in builder && typeof builder.width === "function") {
                 return builder.width(400).height(200).url();
               }
               return builder.url();
@@ -99,16 +109,30 @@ export default function BlogCard({ post }: { post: BlogPost }) {
             </Typography>
           )}
           <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1, mt: "auto" }}>
-            <Chip icon={<AccessTime />} label={formatDate(post.publishedAt)} size="small" variant="outlined" />
+            <Chip
+              icon={<AccessTime />}
+              label={formatDate(post.publishedAt)}
+              size="small"
+              variant="outlined"
+            />
             {post.estimatedReadingTime && (
-              <Chip label={`${post.estimatedReadingTime} min read`} size="small" variant="outlined" />
+              <Chip
+                label={`${post.estimatedReadingTime} min read`}
+                size="small"
+                variant="outlined"
+              />
             )}
             {post.author && (
-              <Chip icon={<Person />} label={post.author} size="small" variant="outlined" />
+              <Chip
+                icon={<Person />}
+                label={post.author}
+                size="small"
+                variant="outlined"
+              />
             )}
           </Box>
         </CardContent>
       </CardActionArea>
     </Card>
   );
-} 
+}

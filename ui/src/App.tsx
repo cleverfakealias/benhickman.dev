@@ -26,11 +26,11 @@ function App() {
     // Set or update meta description
     let metaDesc = document.querySelector('meta[name="description"]');
     if (!metaDesc) {
-      metaDesc = document.createElement('meta');
-      metaDesc.setAttribute('name', 'description');
+      metaDesc = document.createElement("meta");
+      metaDesc.setAttribute("name", "description");
       document.head.appendChild(metaDesc);
     }
-    metaDesc.setAttribute('content', branding.description);
+    metaDesc.setAttribute("content", branding.description);
   }, []);
 
   const theme = createMnTheme(themeMode as "light" | "dark");

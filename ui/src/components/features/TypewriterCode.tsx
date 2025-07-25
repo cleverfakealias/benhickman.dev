@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import './TypewriterCode.css';
+import "./TypewriterCode.css";
 
 interface TypewriterCodeProps {
   code: string;
@@ -8,7 +8,10 @@ interface TypewriterCodeProps {
 
 const BLINK_INTERVAL = 500;
 
-const TypewriterCode: React.FC<TypewriterCodeProps> = ({ code, typingSpeed = 40 }) => {
+const TypewriterCode: React.FC<TypewriterCodeProps> = ({
+  code,
+  typingSpeed = 40,
+}) => {
   const [displayed, setDisplayed] = useState("");
   const [showCursor, setShowCursor] = useState(true);
   const indexRef = useRef(0);
@@ -47,4 +50,4 @@ const TypewriterCode: React.FC<TypewriterCodeProps> = ({ code, typingSpeed = 40 
   );
 };
 
-export default TypewriterCode; 
+export default TypewriterCode;

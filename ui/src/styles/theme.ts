@@ -169,10 +169,7 @@ export const createMnTheme = (mode: "light" | "dark") => {
       borderRadius: 4, // Less aggressive, subtle rounding
     },
     typography: {
-      fontFamily: [
-        fontFamilies.heading,
-        fontFamilies.body,
-      ].join(","),
+      fontFamily: [fontFamilies.heading, fontFamilies.body].join(","),
       h1: {
         fontWeight: 700,
         fontSize: "2.5rem",

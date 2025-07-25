@@ -19,7 +19,6 @@ jest.mock("../../config/domainConfig", () => ({
 
 const theme = createMnTheme("light");
 
-
 const renderWithTheme = (component: React.ReactElement) => {
   return render(<ThemeProvider theme={theme}>{component}</ThemeProvider>);
 };

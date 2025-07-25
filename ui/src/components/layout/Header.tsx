@@ -33,8 +33,6 @@ const useSafeLocation = (): LocationLike => {
   }
 };
 
-
-
 const Header: React.FC<HeaderProps> = () => {
   const { branding: brand } = getDomainConfig();
   const location = useSafeLocation();
@@ -255,7 +253,9 @@ const Header: React.FC<HeaderProps> = () => {
                     alt={brand.alt}
                     style={{ height: "2.75rem", width: "2.75rem" }}
                   />
-                  <span className="site-title">{brand.name} {brand.subtitle}</span>
+                  <span className="site-title">
+                    {brand.name} {brand.subtitle}
+                  </span>
                 </a>
                 <ul>
                   {navLinks.map((link) => (
