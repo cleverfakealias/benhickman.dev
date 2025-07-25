@@ -9,10 +9,11 @@ import {
   Box,
   Typography,
 } from "@mui/material";
+import { Theme } from "@mui/material/styles";
 import GradientDivider from "../components/common/GradientDivider";
 
 const Contact: React.FC = () => {
-  const theme = useTheme();
+  const theme = useTheme() as Theme;
   return (
     <Container maxWidth="md" sx={{ py: 8 }}>
       {/* Header Section */}
