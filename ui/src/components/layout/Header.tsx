@@ -83,11 +83,17 @@ const Header: React.FC<HeaderProps> = () => {
         <a
           href="/"
           aria-label="Go to home"
-          style={{ textDecoration: "none", color: "inherit", display: "flex", alignItems: "center", gap: "1rem" }}
+          style={{
+            textDecoration: "none",
+            color: "inherit",
+            display: "flex",
+            alignItems: "center",
+            gap: "1rem",
+          }}
         >
           <Avatar
-            src="/images/ZL monogram.png"
-            alt="ZennLogic monogram logo"
+            src="/images/zengineer dark logo 2.png"
+            alt="Zengineer monogram logo"
             sx={{
               width: 64,
               height: 64,
@@ -122,7 +128,7 @@ const Header: React.FC<HeaderProps> = () => {
                 transition: "color 0.3s",
               }}
             >
-              ZennLogic
+              Zengineer
             </Typography>
             <Typography
               variant="subtitle1"
@@ -138,7 +144,7 @@ const Header: React.FC<HeaderProps> = () => {
                 transition: "color 0.3s",
               }}
             >
-              Software Development
+              Cloud Software Development
             </Typography>
           </Box>
         </a>
@@ -229,14 +235,21 @@ const Header: React.FC<HeaderProps> = () => {
                 <a
                   href="/"
                   aria-label="Go to home"
-                  style={{ textDecoration: "none", color: "inherit", display: "flex", alignItems: "center", gap: "1rem", marginBottom: "2rem" }}
+                  style={{
+                    textDecoration: "none",
+                    color: "inherit",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "1rem",
+                    marginBottom: "2rem",
+                  }}
                 >
                   <img
-                    src="/images/ZL monogram.png"
-                    alt="ZennLogic monogram logo"
+                    src="/images/zengineer dark logo 2.png"
+                    alt="Zengineer monogram logo"
                     style={{ height: "2.75rem", width: "2.75rem" }}
                   />
-                  <span className="site-title">ZennLogic Development</span>
+                  <span className="site-title">Zengineer Cloud Software Development</span>
                 </a>
                 <ul>
                   {navLinks.map((link) => (

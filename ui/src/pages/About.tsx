@@ -142,7 +142,7 @@ const About: React.FC = () => {
               fontFamily: "Inter, Montserrat, Roboto, Arial, sans-serif",
             }}
           >
-            Hello, I’m Ben — the developer behind ZennLogic.
+            Hello, I’m Ben — the developer behind Zengineer Cloud Development.
           </Typography>
           <Typography
             variant="body1"
@@ -198,7 +198,7 @@ const About: React.FC = () => {
             I'm especially passionate about clean system design, developer
             experience, and mentoring newer engineers. When I’m not refining
             backend infrastructure or pushing pixels on a UI, I’m likely hiking
-            Minnesota’s trails or working on new tools under the ZennLogic
+            Minnesota’s trails or working on new tools under the Zengineer
             banner.
           </Typography>
         </Grid>

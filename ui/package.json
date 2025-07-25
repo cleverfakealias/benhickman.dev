@@ -12,7 +12,8 @@
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "prettier": "prettier --write ."
   },
   "dependencies": {
     "@emotion/react": "^11.13.3",
@@ -61,6 +62,7 @@
     "identity-obj-proxy": "^3.0.0",
     "jest": "^30.0.4",
     "jest-environment-jsdom": "^30.0.4",
+    "prettier": "^3.6.2",
     "storybook": "^8.2.9",
     "ts-jest": "^29.4.0",
     "typescript": "^5.5.3",

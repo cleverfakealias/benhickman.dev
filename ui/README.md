@@ -1,6 +1,6 @@
-# Zennlogic UI
+# Zengineer Cloud UI
 
-This is the UI for the Zennlogic project, built with React, TypeScript, Vite, and Material-UI, with content managed through Sanity CMS.
+This is the UI for the zengineer.cloud project, built with React, TypeScript, Vite, and Material-UI, with content managed through Sanity CMS.
 
 ## Features
 
@@ -14,7 +14,7 @@ This is the UI for the Zennlogic project, built with React, TypeScript, Vite, an
 ## Project Structure
 
 ```
-zennlogic/
+zengineer.cloud/
 ├── ui/                    # React frontend application
 │   ├── src/
 │   │   ├── components/    # React components

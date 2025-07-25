@@ -112,8 +112,8 @@ const Footer: React.FC<FooterProps> = ({ themeMode, setThemeMode }) => {
           }}
         >
           <Avatar
-            src="/images/ZL monogram.png"
-            alt="ZennLogic monogram logo"
+            src="/images/zengineer dark logo 2.png"
+            alt="Zengineer monogram logo"
             sx={{
               width: { xs: 20, md: 20 },
               height: { xs: 20, md: 20 },
