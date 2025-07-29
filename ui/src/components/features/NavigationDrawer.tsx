@@ -9,7 +9,7 @@ import {
   Divider,
 } from "@mui/material";
 import { Close as CloseIcon, Menu as MenuIcon } from "@mui/icons-material";
-import "./NavigationDrawer.css";
+
 
 const NavigationDrawer: React.FC = () => {
   const [open, setOpen] = useState(false);

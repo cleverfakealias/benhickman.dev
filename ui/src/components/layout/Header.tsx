@@ -1,10 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
-import { getDomainConfig } from "../../config/domainConfig";
-import { Avatar, Box, Typography, IconButton } from "@mui/material";
+import { Avatar, Box, Typography, IconButton, useTheme } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import { useLocation } from "react-router-dom";
-import "./Header.css";
+import { Link, useLocation, matchPath } from "react-router-dom";
+import debounce from "lodash/debounce";
+import { getDomainConfig } from "../../config/domainConfig";
 import Socials from "./Socials";
+import Brightness4Icon from "@mui/icons-material/Brightness4";
+import Brightness7Icon from "@mui/icons-material/Brightness7";
+import MobileDrawer from "./MobileDrawer";
 
 const navLinks = [
   { name: "Home", href: "/" },
@@ -19,62 +22,36 @@ interface HeaderProps {
   setThemeMode: (mode: string) => void;
 }
 
-// Custom hook to safely use location
-interface LocationLike {
-  pathname: string;
-}
-
-const useSafeLocation = (): LocationLike => {
-  try {
-    return useLocation() as LocationLike;
-  } catch {
-    // Return a default location if not inside Router context
-    return { pathname: window.location.pathname };
-  }
-};
-
-const Header: React.FC<HeaderProps> = () => {
+const Header: React.FC<HeaderProps> = ({ themeMode, setThemeMode }) => {
   const { branding: brand } = getDomainConfig();
-  const location = useSafeLocation();
+  const location = useLocation();
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-  const drawerRef = useRef<HTMLDivElement>(null);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const theme = useTheme();
 
-  // Function to check if a link is active
-  const isActiveLink = (href: string) => {
-    if (href === "/") {
-      return location.pathname === "/";
-    }
-    return location.pathname.startsWith(href);
-  };
-  // Close drawer when clicking outside
-  useEffect(() => {
-    if (!drawerOpen) return;
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        drawerRef.current &&
-        !drawerRef.current.contains(event.target as Node)
-      ) {
-        setDrawerOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [drawerOpen]);
+  const isActiveLink = (href: string) =>
+    !!matchPath({ path: href, end: href === "/" }, location.pathname);
 
   useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
+    const handleResize = debounce(() => {
+      setIsMobile(window.innerWidth <= 768);
+    }, 200);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  const handleDrawerToggle = () => {
-    setDrawerOpen((prev) => !prev);
-  };
+  const handleDrawerToggle = () => setDrawerOpen((prev) => !prev);
 
   return (
-    <header className="header" role="banner" aria-label="Site header">
+    <header 
+      className="header" 
+      role="banner" 
+      aria-label="Site header"
+              style={{
+          background: '#412A91',
+          color: '#ffffff'
+        }}
+    >
       <nav
         className="header-nav"
         aria-label="Main navigation"
@@ -85,9 +62,9 @@ const Header: React.FC<HeaderProps> = () => {
           minHeight: "4.5rem",
         }}
       >
-        {/* Left cell: Logo and site title */}
-        <a
-          href="/"
+        {/* Left: Brand */}
+        <Link
+          to="/"
           aria-label="Go to home"
           style={{
             textDecoration: "none",
@@ -103,78 +80,53 @@ const Header: React.FC<HeaderProps> = () => {
             sx={{
               width: 64,
               height: 64,
-              border: "3px solid #8CD2EF", // loonGray, same in both modes
+              border: `3px solid ${theme.palette.primary.light}`,
               boxShadow: "0 4px 24px 0 rgba(140,210,239,0.15)",
               bgcolor: "#fff",
               marginRight: "0.5rem",
-              transition: "background 0.3s, border 0.3s",
             }}
           />
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              lineHeight: 1,
-              ml: 1,
-            }}
-          >
+          <Box sx={{ display: "flex", flexDirection: "column", ml: 1 }}>
             <Typography
               variant="h2"
               component="span"
               sx={{
                 fontWeight: 900,
-                letterSpacing: "0.04em",
-                color: "#fff",
+                color: theme.palette.text.primary,
                 fontFamily: "'Manrope', Arial, sans-serif",
-                lineHeight: 1.05,
                 fontSize: { xs: "1.7rem", md: "2.5rem" },
-                mb: 0.2,
-                transition: "color 0.3s",
               }}
             >
               {brand.name}
             </Typography>
             <Typography
               variant="subtitle1"
-              component="span"
               sx={{
-                color: "#4DD0E1", // teal accent in both modes
+                color: theme.palette.primary.main,
                 fontWeight: 700,
-                fontFamily: "Inter, Montserrat, Roboto, Arial, sans-serif",
-                letterSpacing: "0.08em",
-                mt: 0.5,
                 fontSize: { xs: "1.08rem", md: "1.22rem" },
-                textShadow: "0 2px 8px rgba(77,208,225,0.18)",
-                transition: "color 0.3s",
               }}
             >
               {brand.subtitle}
             </Typography>
           </Box>
-        </a>
-        {/* Center cell: Nav links (desktop only) */}
-        <div
-          className="header-cell-center"
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
+        </Link>
+
+        {/* Center: Nav links */}
+        <Box sx={{ display: "flex", justifyContent: "center" }}>
           {!isMobile && (
-            <ul className="header-links">
+            <ul className="header-links" style={{ display: "flex", gap: "1.5rem" }}>
               {navLinks.map((link) => (
                 <li key={link.name}>
-                  <a
-                    href={link.href}
-                    aria-label={link.name}
+                  <Link
+                    to={link.href}
                     className={isActiveLink(link.href) ? "active" : ""}
                     style={{
                       position: "relative",
                       ...(isActiveLink(link.href) && {
-                        color: "#8CD2EF",
-                        fontWeight: "600",
-                        textShadow: "0 0 8px rgba(140, 210, 239, 0.8)",
+                        color: theme.palette.primary.light,
+                        fontWeight: 600,
+                        textShadow: `0 0 8px ${theme.palette.primary.light}`,
                       }),
                     }}
                   >
@@ -188,131 +140,45 @@ const Header: React.FC<HeaderProps> = () => {
                           transform: "translateX(-50%)",
                           width: "100%",
                           height: "4px",
-                          background:
-                            "linear-gradient(90deg, #8CD2EF, #5DADE2, #3498DB)",
+                          background: `linear-gradient(90deg, ${theme.palette.primary.light}, ${theme.palette.primary.main})`,
                           borderRadius: "4px",
-                          boxShadow: "0 2px 8px rgba(140, 210, 239, 0.6)",
-                          animation: "glow 2s ease-in-out infinite alternate",
                         }}
                       />
                     )}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
           )}
-        </div>
-        {/* Right cell: Socials (desktop) and menu button/mobile drawer (mobile) */}
-        <div
-          className="header-cell-right"
-          style={{
-            display: "flex",
-            justifyContent: "flex-end",
-            alignItems: "center",
-            gap: "1rem",
-          }}
-        >
+        </Box>
+
+        {/* Right: Socials + Mobile menu */}
+        <Box sx={{ display: "flex", justifyContent: "flex-end", alignItems: "center", gap: 1.5 }}>
           {!isMobile && <Socials />}
+          {!isMobile && (
+            <IconButton onClick={() => setThemeMode(themeMode === "light" ? "dark" : "light")}>
+              {themeMode === "light" ? <Brightness4Icon /> : <Brightness7Icon />}
+            </IconButton>
+          )}
           {isMobile && (
             <>
               <IconButton
-                className="menu-btn"
-                aria-label={
-                  drawerOpen ? "Close navigation menu" : "Open navigation menu"
-                }
-                aria-controls="mobile-nav"
-                aria-expanded={drawerOpen}
+                aria-label="Toggle menu"
                 onClick={handleDrawerToggle}
-                size="large"
-                sx={{ color: "#8CD2EF" }}
+                sx={{ color: theme.palette.primary.light }}
               >
-                <MenuIcon fontSize="inherit" />
+                <MenuIcon />
               </IconButton>
-              <div
-                id="mobile-nav"
-                className={`mobile-drawer${drawerOpen ? " open" : ""}`}
-                role="dialog"
-                aria-modal="true"
-                aria-label="Mobile navigation menu"
-                ref={drawerRef}
-              >
-                <a
-                  href="/"
-                  aria-label="Go to home"
-                  style={{
-                    textDecoration: "none",
-                    color: "inherit",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "1rem",
-                    marginBottom: "2rem",
-                  }}
-                >
-                  <img
-                    src={brand.logo}
-                    alt={brand.alt}
-                    style={{ height: "2.75rem", width: "2.75rem" }}
-                  />
-                  <span className="site-title">
-                    {brand.name} {brand.subtitle}
-                  </span>
-                </a>
-                <ul>
-                  {navLinks.map((link) => (
-                    <li key={link.name}>
-                      <a
-                        href={link.href}
-                        aria-label={link.name}
-                        onClick={() => setDrawerOpen(false)}
-                        className={isActiveLink(link.href) ? "active" : ""}
-                        style={{
-                          position: "relative",
-                          display: "flex",
-                          alignItems: "center",
-                          padding: "12px 16px",
-                          borderRadius: "4px",
-                          transition: "all 0.3s ease",
-                          ...(isActiveLink(link.href) && {
-                            background:
-                              "linear-gradient(135deg, rgba(140, 210, 239, 0.15), rgba(140, 210, 239, 0.05))",
-                            color: "#8CD2EF",
-                            fontWeight: "600",
-                            borderLeft: "4px solid #8CD2EF",
-                            textShadow: "0 0 8px rgba(140, 210, 239, 0.6)",
-                          }),
-                        }}
-                      >
-                        {isActiveLink(link.href) && (
-                          <span
-                            style={{
-                              width: "8px",
-                              height: "8px",
-                              borderRadius: "50%",
-                              background:
-                                "linear-gradient(135deg, #8CD2EF, #5DADE2)",
-                              marginRight: "12px",
-                              boxShadow: "0 0 8px rgba(140, 210, 239, 0.7)",
-                            }}
-                          />
-                        )}
-                        {link.name}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-                <div
-                  style={{
-                    marginTop: "2rem",
-                    display: "flex",
-                    justifyContent: "center",
-                  }}
-                >
-                  <Socials />
-                </div>
-              </div>
+              <MobileDrawer
+                open={drawerOpen}
+                onClose={() => setDrawerOpen(false)}
+                navLinks={navLinks}
+                brand={brand}
+                isActiveLink={isActiveLink}
+              />
             </>
           )}
-        </div>
+        </Box>
       </nav>
     </header>
   );

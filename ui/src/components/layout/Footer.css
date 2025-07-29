@@ -1,7 +1,7 @@
 .footer {
-  background: var(--footer-bg, #412a91);
-  color: var(--footer-text, #ffffff);
-  padding: 0.5rem 0 0.5rem 0;
+  background: var(--footer-bg);
+  color: var(--footer-text);
+  padding: 0.5rem 0;
   text-align: center;
   font-family: "Segoe UI", Arial, sans-serif;
   box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
@@ -10,17 +10,6 @@
   left: 0;
   width: 100vw;
   z-index: 1000;
-}
-
-/* Theme-specific footer styling */
-body[data-theme="dark"] .footer {
-  background: #412a91; /* Updated ABE Purple */
-  color: #ffffff;
-}
-
-body[data-theme="light"] .footer {
-  background: #412a91; /* Updated ABE Purple */
-  color: #ffffff;
 }
 
 .footer-content {
@@ -39,6 +28,10 @@ body[data-theme="light"] .footer {
   letter-spacing: 1.2px;
 }
 
+.footer-content p {
+  margin: 0.5rem 0;
+}
+
 @media (max-width: 600px) {
   .footer-content {
     grid-template-columns: 1fr;
@@ -47,6 +40,7 @@ body[data-theme="light"] .footer {
     padding-left: 0.5rem;
     padding-right: 0.5rem;
   }
+  
   .footer-cell-left,
   .footer-cell-center,
   .footer-cell-right {
@@ -54,12 +48,9 @@ body[data-theme="light"] .footer {
     text-align: center !important;
     margin-bottom: 0.25rem;
   }
+  
   .footer-cell-left span[aria-label="Mission statement"] {
     font-size: 0.95rem;
     letter-spacing: 0.5px;
   }
-}
-
-.footer-content p {
-  margin: 0.5rem 0;
 }

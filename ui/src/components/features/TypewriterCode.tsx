@@ -15,10 +15,13 @@ const TypewriterCode: React.FC<TypewriterCodeProps> = ({
   const [displayed, setDisplayed] = useState("");
   const [showCursor, setShowCursor] = useState(true);
   const indexRef = useRef(0);
+  const codeContainerRef = useRef<HTMLPreElement>(null);
 
+  // Typing effect
   useEffect(() => {
     setDisplayed("");
     indexRef.current = 0;
+
     const type = () => {
       if (indexRef.current < code.length) {
         setDisplayed(code.slice(0, indexRef.current + 1));
@@ -26,14 +29,23 @@ const TypewriterCode: React.FC<TypewriterCodeProps> = ({
         setTimeout(type, typingSpeed);
       }
     };
+
     type();
-    return () => {};
   }, [code, typingSpeed]);
 
+  // Cursor blinking
   useEffect(() => {
     const blink = setInterval(() => setShowCursor((c) => !c), BLINK_INTERVAL);
     return () => clearInterval(blink);
   }, []);
+
+  // Auto-scroll as content grows
+  useEffect(() => {
+    const el = codeContainerRef.current;
+    if (el) {
+      el.scrollTop = el.scrollHeight;
+    }
+  }, [displayed]);
 
   return (
     <div className="terminal-window">
@@ -42,9 +54,11 @@ const TypewriterCode: React.FC<TypewriterCodeProps> = ({
         <span className="terminal-dot yellow" />
         <span className="terminal-dot green" />
       </div>
-      <pre className="terminal-code">
+      <pre className="terminal-code" ref={codeContainerRef}>
         {displayed}
-        <span style={{ opacity: showCursor ? 1 : 0 }}>|</span>
+        <span className="cursor" style={{ opacity: showCursor ? 1 : 0 }}>
+          |
+        </span>
       </pre>
     </div>
   );

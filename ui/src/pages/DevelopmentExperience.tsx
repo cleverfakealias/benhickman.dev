@@ -3,7 +3,6 @@ import {
   Container,
   Typography,
   Box,
-  Grid,
   Card,
   CardContent,
   useTheme,
@@ -17,9 +16,12 @@ import {
   Support,
   Business,
 } from "@mui/icons-material";
+import Grid2 from "@mui/material/Grid2";
 import CareerTimeline, {
   TimelineItemData,
 } from "../components/features/CareerTimeline";
+import GradientDivider from "../components/common/GradientDivider";
+
 
 const DevelopmentExperience: React.FC = () => {
   const theme = useTheme();
@@ -103,9 +105,9 @@ const DevelopmentExperience: React.FC = () => {
   ];
 
   return (
-    <Container maxWidth="lg" sx={{ py: 4, pb: 8 }}>
+    <Container maxWidth="lg" sx={{ py: 4 }}>
       {/* Header Section */}
-      <Box sx={{ textAlign: "center", mb: 6 }}>
+      <Box sx={{ textAlign: "center", mb: 4 }}>
         <Typography
           variant="h2"
           component="h1"
@@ -131,26 +133,18 @@ const DevelopmentExperience: React.FC = () => {
           frameworks, and enterprise solutions
         </Typography>
 
-        {/* Decorative line */}
-        <Box
-          sx={{
-            mt: 3,
-            width: { xs: "100px", md: "150px" },
-            height: "4px",
-            background:
-              theme.palette.mode === "dark"
-                ? "linear-gradient(90deg, #7C4DFF, #448AFF)"
-                : "linear-gradient(90deg, #412A91, #002B5C)",
-            borderRadius: "4px",
-            mx: "auto",
-          }}
-        />
-      </Box>
+        </Box>
+
+        <Box sx={{ mb: 4 }}>
+          <GradientDivider />
+        </Box>
+
+ 
 
       {/* Experience Cards */}
-      <Grid container spacing={4}>
+      <Grid2 container spacing={4}>
         {programmingExperiences.map((experience, index) => (
-          <Grid item xs={12} md={6} key={index}>
+          <Grid2  size={{ xs: 12, md: 6 }} key={index}>
             <Card
               sx={{
                 height: "100%",
@@ -272,9 +266,9 @@ const DevelopmentExperience: React.FC = () => {
                 </Typography>
               </CardContent>
             </Card>
-          </Grid>
+          </Grid2>
         ))}
-      </Grid>
+      </Grid2>
       <CareerTimeline
         timelineData={timelineData}
         title="Career Timeline"

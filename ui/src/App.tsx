@@ -1,12 +1,12 @@
-import "./styles/App.css";
+
 import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
 import { Container } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { useTheme } from "./hooks/useTheme";
-import Blog from "./components/features/Blog";
-import BlogPostDetail from "./components/features/BlogPostDetail";
+import Blog from "./pages/Blog";
+import BlogPostDetail from "./components/features/blog/BlogPostDetail";
 import Contact from "./pages/Contact";
 import About from "./pages/About";
 import DevelopmentExperience from "./pages/DevelopmentExperience";

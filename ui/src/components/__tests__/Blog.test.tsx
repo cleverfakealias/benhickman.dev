@@ -5,7 +5,7 @@ jest.mock("../features/sanity/sanityClient", () => ({
 }));
 import { render, waitFor } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
-import Blog from "../features/Blog";
+import Blog from "../../pages/Blog";
 
 const renderWithRouter = (component: React.ReactElement) => {
   return render(<BrowserRouter>{component}</BrowserRouter>);

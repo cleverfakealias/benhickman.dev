@@ -3,7 +3,6 @@ import {
   Container,
   Typography,
   Box,
-  Grid,
   Card,
   CardContent,
   Avatar,
@@ -12,6 +11,7 @@ import {
 } from "@mui/material";
 import { Code, Cloud, Architecture, Work } from "@mui/icons-material";
 import GradientDivider from "../components/common/GradientDivider";
+import Grid2 from "@mui/material/Grid2";
 
 const About: React.FC = () => {
   const theme = useTheme();
@@ -126,13 +126,10 @@ const About: React.FC = () => {
             />
           ))}
         </Box>
-        <Box sx={{ mt: 4 }}>
-          <GradientDivider />
-        </Box>
       </Box>
       {/* Introduction Section */}
-      <Grid container spacing={4} sx={{ mb: 6 }} alignItems="center">
-        <Grid item xs={12} md={8}>
+      <Grid2 container spacing={4} sx={{ mb: 6 }} alignItems="center">
+        <Grid2 size={{ xs: 12, md: 8 }}>
           <Typography
             variant="h5"
             sx={{
@@ -201,11 +198,9 @@ const About: React.FC = () => {
             Minnesota’s trails or working on new tools under the Zengineer
             banner.
           </Typography>
-        </Grid>
-        <Grid
-          item
-          xs={12}
-          md={4}
+        </Grid2>
+        <Grid2
+          size={{ xs: 12, md: 4 }}
           sx={{
             display: "flex",
             justifyContent: "center",
@@ -235,8 +230,8 @@ const About: React.FC = () => {
               BH
             </Avatar>
           </Box>
-        </Grid>
-      </Grid>
+        </Grid2>
+      </Grid2>
       <Box sx={{ textAlign: "center", mb: 6 }}>
         <Box sx={{ mb: 4 }}>
           <GradientDivider />
@@ -253,9 +248,9 @@ const About: React.FC = () => {
         >
           What I Bring
         </Typography>
-        <Grid container spacing={3}>
+        <Grid2 container spacing={3}>
           {highlights.map((highlight, index) => (
-            <Grid item xs={12} sm={6} md={3} key={index}>
+            <Grid2 size={{ xs: 12, md: 6, sm: 3 }} key={index}>
               <Card
                 sx={{
                   height: "100%",
@@ -298,9 +293,9 @@ const About: React.FC = () => {
                   </Typography>
                 </CardContent>
               </Card>
-            </Grid>
+            </Grid2>
           ))}
-        </Grid>
+        </Grid2>
       </Box>
     </Container>
   );
