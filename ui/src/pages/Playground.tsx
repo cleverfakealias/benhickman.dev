@@ -2,16 +2,26 @@ import { useRef, useState, useEffect } from "react";
 import Editor from "@monaco-editor/react";
 import { Paper, Button, Typography, useTheme, Box } from "@mui/material";
 import AccentBar from "../components/common/AccentBar";
+import ReCAPTCHA from "react-google-recaptcha";
+import { getDomainConfig } from "../config/domainConfig";
 
 const DEFAULT_CODE = `console.log('Hello, world!');`;
 
 export default function Playground() {
   const [code, setCode] = useState(DEFAULT_CODE);
   const [output, setOutput] = useState("");
+  const [captchaVerified, setCaptchaVerified] = useState(false);
   const theme = useTheme();
   const workerRef = useRef<Worker | null>(null);
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
+  const { recaptchaSiteKey } = getDomainConfig();
 
   const runCode = () => {
+    if (!captchaVerified) {
+      setOutput("Please verify that you are human before running code.\n");
+      return;
+    }
+
     if (workerRef.current) {
       workerRef.current.terminate();
     }
@@ -75,6 +85,14 @@ export default function Playground() {
     worker.postMessage(code);
   };
 
+  const onCaptchaVerified = (token: string | null) => {
+    setCaptchaVerified(!!token);
+  };
+
+  const onCaptchaExpired = () => {
+    setCaptchaVerified(false);
+  };
+
   useEffect(() => {
     return () => {
       if (workerRef.current) {
@@ -125,6 +143,15 @@ export default function Playground() {
       >
         Run
       </Button>
+      <Box sx={{ alignSelf: "flex-start", mb: 2 }}>
+        <ReCAPTCHA
+          ref={recaptchaRef}
+          sitekey={recaptchaSiteKey}
+          onChange={onCaptchaVerified}
+          onExpired={onCaptchaExpired}
+          theme={theme.palette.mode}
+        />
+      </Box>
       <Box
         sx={{
           background: "#222",
