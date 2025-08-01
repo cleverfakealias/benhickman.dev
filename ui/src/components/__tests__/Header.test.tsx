@@ -20,8 +20,14 @@ jest.mock("../../config/domainConfig", () => ({
 
 const theme = createMnTheme("light");
 
+import { MemoryRouter } from "react-router-dom";
+
 const renderWithTheme = (component: React.ReactElement) => {
-  return render(<ThemeProvider theme={theme}>{component}</ThemeProvider>);
+  return render(
+    <MemoryRouter>
+      <ThemeProvider theme={theme}>{component}</ThemeProvider>
+    </MemoryRouter>
+  );
 };
 
 // Mock props for Header component
