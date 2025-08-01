@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Container } from "@mui/material";
 import HeroBanner from "../components/common/HeroBanner";
 import HomeSummary from "../components/features/HomeSummary";
-import BlogCard from "../components/features/BlogCard";
+import BlogCard from "../components/features/blog/BlogCard";
 import TypewriterCode from "../components/features/TypewriterCode";
 import { fetchPosts } from "../components/features/sanity/sanityClient";
 import { BlogPost } from "../components/features/sanity/types";

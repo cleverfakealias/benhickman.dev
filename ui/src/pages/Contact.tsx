@@ -10,7 +10,6 @@ import {
   Typography,
 } from "@mui/material";
 import { Theme } from "@mui/material/styles";
-import GradientDivider from "../components/common/GradientDivider";
 
 const Contact: React.FC = () => {
   const theme = useTheme() as Theme;
@@ -42,18 +41,6 @@ const Contact: React.FC = () => {
           Get in touch for project inquiries, collaboration, or just to say
           hello!
         </Typography>
-        {/* Decorative line */}
-        <Box sx={{ mt: 3 }}>
-          <GradientDivider
-            width={{ xs: "100px", md: "150px" }}
-            height="4px"
-            gradient={
-              theme.palette.mode === "dark"
-                ? theme.custom.gradients.primaryDark
-                : theme.custom.gradients.primary
-            }
-          />
-        </Box>
       </Box>
       {/* Contact Card */}
       <Box>

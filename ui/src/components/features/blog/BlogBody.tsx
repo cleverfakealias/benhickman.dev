@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { PortableText, PortableTextReactComponents } from "@portabletext/react";
 import { TypedObject } from "@portabletext/types";
-import imageUrlBuilder from "./sanity/imageUrl";
+import imageUrlBuilder from "../sanity/imageUrl";
 
 interface BlogBodyProps {
   content: TypedObject[];

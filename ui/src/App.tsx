@@ -1,15 +1,15 @@
-import "./styles/App.css";
 import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
 import { Container } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { useTheme } from "./hooks/useTheme";
-import Blog from "./components/features/Blog";
-import BlogPostDetail from "./components/features/BlogPostDetail";
+import Blog from "./pages/Blog";
+import BlogPostDetail from "./components/features/blog/BlogPostDetail";
 import Contact from "./pages/Contact";
 import About from "./pages/About";
 import DevelopmentExperience from "./pages/DevelopmentExperience";
+import Playground from "./pages/Playground";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import { createMnTheme } from "./styles/theme";
@@ -71,6 +71,7 @@ function App() {
               <Route path="experience" element={<DevelopmentExperience />} />
               <Route path="about" element={<About />} />
               <Route path="contact" element={<Contact />} />
+              <Route path="playground" element={<Playground />} />
             </Routes>
           </Container>
         </main>

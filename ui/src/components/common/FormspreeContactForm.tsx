@@ -6,12 +6,12 @@ import {
   TextField,
   Button,
   Typography,
-  Grid,
   Alert,
   CircularProgress,
   useTheme,
 } from "@mui/material";
 import { Person, Email, Phone, Message, Send } from "@mui/icons-material";
+import Grid2 from "@mui/material/Grid2";
 
 interface FormData {
   name: string;
@@ -226,8 +226,8 @@ const FormspreeContactForm: React.FC<FormspreeContactFormProps> = () => {
             {submitError}
           </Alert>
         )}
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
+        <Grid2 container spacing={3}>
+          <Grid2 size={{ xs: 12 }}>
             <TextField
               fullWidth
               label="Name"
@@ -254,9 +254,9 @@ const FormspreeContactForm: React.FC<FormspreeContactFormProps> = () => {
                 },
               }}
             />
-          </Grid>
+          </Grid2>
 
-          <Grid item xs={12}>
+          <Grid2 size={{ xs: 12 }}>
             <TextField
               fullWidth
               label="Email"
@@ -284,9 +284,9 @@ const FormspreeContactForm: React.FC<FormspreeContactFormProps> = () => {
                 },
               }}
             />
-          </Grid>
+          </Grid2>
 
-          <Grid item xs={12}>
+          <Grid2 size={{ xs: 12 }}>
             <TextField
               fullWidth
               label="Phone (optional)"
@@ -312,9 +312,9 @@ const FormspreeContactForm: React.FC<FormspreeContactFormProps> = () => {
                 },
               }}
             />
-          </Grid>
+          </Grid2>
 
-          <Grid item xs={12}>
+          <Grid2 size={{ xs: 12 }}>
             <TextField
               fullWidth
               label="Message"
@@ -350,9 +350,9 @@ const FormspreeContactForm: React.FC<FormspreeContactFormProps> = () => {
                 },
               }}
             />
-          </Grid>
+          </Grid2>
 
-          <Grid item xs={12}>
+          <Grid2 size={{ xs: 12 }}>
             <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
               <ReCAPTCHA
                 ref={recaptchaRef}
@@ -362,9 +362,9 @@ const FormspreeContactForm: React.FC<FormspreeContactFormProps> = () => {
                 theme={theme.palette.mode === "dark" ? "dark" : "light"}
               />
             </Box>
-          </Grid>
+          </Grid2>
 
-          <Grid item xs={12}>
+          <Grid2 size={{ xs: 12 }}>
             <Box sx={{ display: "flex", justifyContent: "center" }}>
               <Button
                 type="submit"
@@ -398,8 +398,8 @@ const FormspreeContactForm: React.FC<FormspreeContactFormProps> = () => {
                 {isSubmitting ? "Submitting..." : "Submit"}
               </Button>
             </Box>
-          </Grid>
-        </Grid>
+          </Grid2>
+        </Grid2>
       </Box>
     </Box>
   );

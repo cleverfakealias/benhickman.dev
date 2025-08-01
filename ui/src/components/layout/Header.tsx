@@ -1,10 +1,14 @@
-import React, { useState, useEffect, useRef } from "react";
-import { getDomainConfig } from "../../config/domainConfig";
-import { Avatar, Box, Typography, IconButton } from "@mui/material";
+import React, { useState, useEffect, useCallback } from "react";
+import { Avatar, Box, Typography, IconButton, useTheme } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
-import { useLocation } from "react-router-dom";
-import "./Header.css";
+import { Link, useLocation, matchPath } from "react-router-dom";
+import debounce from "lodash/debounce";
+import { getDomainConfig } from "../../config/domainConfig";
 import Socials from "./Socials";
+import Brightness4Icon from "@mui/icons-material/Brightness4";
+import Brightness7Icon from "@mui/icons-material/Brightness7";
+import MobileDrawer from "./MobileDrawer";
+import "./Header.css";
 
 const navLinks = [
   { name: "Home", href: "/" },
@@ -12,6 +16,7 @@ const navLinks = [
   { name: "About", href: "/about" },
   { name: "Contact", href: "/contact" },
   { name: "Blog", href: "/blog" },
+  { name: "Playground", href: "/playground" },
 ];
 
 interface HeaderProps {
@@ -19,83 +24,63 @@ interface HeaderProps {
   setThemeMode: (mode: string) => void;
 }
 
-// Custom hook to safely use location
-interface LocationLike {
-  pathname: string;
-}
-
-const useSafeLocation = (): LocationLike => {
-  try {
-    return useLocation() as LocationLike;
-  } catch {
-    // Return a default location if not inside Router context
-    return { pathname: window.location.pathname };
-  }
-};
-
-const Header: React.FC<HeaderProps> = () => {
+const Header: React.FC<HeaderProps> = ({ themeMode, setThemeMode }) => {
   const { branding: brand } = getDomainConfig();
-  const location = useSafeLocation();
+  const location = useLocation();
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-  const drawerRef = useRef<HTMLDivElement>(null);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const theme = useTheme();
 
-  // Function to check if a link is active
-  const isActiveLink = (href: string) => {
-    if (href === "/") {
-      return location.pathname === "/";
-    }
-    return location.pathname.startsWith(href);
-  };
-  // Close drawer when clicking outside
+  const isActiveLink = useCallback(
+    (href: string) =>
+      !!matchPath({ path: href, end: href === "/" }, location.pathname),
+    [location.pathname],
+  );
+
+  // Memoize the debounced resize handler
+  const handleResize = useCallback(
+    debounce(() => {
+      setIsMobile(window.innerWidth <= 768);
+    }, 200),
+    [],
+  );
+
   useEffect(() => {
-    if (!drawerOpen) return;
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        drawerRef.current &&
-        !drawerRef.current.contains(event.target as Node)
-      ) {
-        setDrawerOpen(false);
-      }
+    window.addEventListener("resize", handleResize);
+    return () => {
+      handleResize.cancel();
+      window.removeEventListener("resize", handleResize);
     };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [drawerOpen]);
+  }, [handleResize]);
 
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
-
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const handleDrawerToggle = () => {
     setDrawerOpen((prev) => !prev);
   };
+  const handleThemeToggle = useCallback(
+    () => setThemeMode(themeMode === "light" ? "dark" : "light"),
+    [themeMode, setThemeMode],
+  );
+
+  const handleKeyDown = useCallback((event: React.KeyboardEvent) => {
+    if (event.key === "Escape") {
+      setDrawerOpen(false);
+    }
+  }, []);
 
   return (
-    <header className="header" role="banner" aria-label="Site header">
-      <nav
-        className="header-nav"
-        aria-label="Main navigation"
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 2fr 1fr",
-          alignItems: "center",
-          minHeight: "4.5rem",
-        }}
-      >
-        {/* Left cell: Logo and site title */}
-        <a
-          href="/"
-          aria-label="Go to home"
-          style={{
-            textDecoration: "none",
-            color: "inherit",
-            display: "flex",
-            alignItems: "center",
-            gap: "1rem",
-          }}
+    <header
+      className="header"
+      role="banner"
+      aria-label="Site header"
+      onKeyDown={handleKeyDown}
+    >
+      <nav className="header-nav" aria-label="Main navigation">
+        {/* Left: Brand */}
+        <Link
+          to="/"
+          aria-label={`Go to ${brand.name} home page`}
+          className="header-logo"
         >
           <Avatar
             src={brand.logo}
@@ -103,84 +88,74 @@ const Header: React.FC<HeaderProps> = () => {
             sx={{
               width: 64,
               height: 64,
-              border: "3px solid #8CD2EF", // loonGray, same in both modes
-              boxShadow: "0 4px 24px 0 rgba(140,210,239,0.15)",
-              bgcolor: "#fff",
+              border: "3px solid #8CD2EF", // Consistent loonGray
+              boxShadow: "0 4px 24px 0 rgba(140, 210, 239, 0.15)",
+              bgcolor: theme.palette.background.paper,
               marginRight: "0.5rem",
-              transition: "background 0.3s, border 0.3s",
             }}
           />
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              lineHeight: 1,
-              ml: 1,
-            }}
-          >
+          <Box sx={{ display: "flex", flexDirection: "column", ml: 1 }}>
             <Typography
               variant="h2"
               component="span"
+              className="site-title"
               sx={{
                 fontWeight: 900,
-                letterSpacing: "0.04em",
-                color: "#fff",
+                color: "#ffffff",
                 fontFamily: "'Manrope', Arial, sans-serif",
-                lineHeight: 1.05,
                 fontSize: { xs: "1.7rem", md: "2.5rem" },
-                mb: 0.2,
-                transition: "color 0.3s",
               }}
             >
               {brand.name}
             </Typography>
             <Typography
               variant="subtitle1"
-              component="span"
               sx={{
-                color: "#4DD0E1", // teal accent in both modes
+                color: "#8CD2EF", // Consistent loonGray
                 fontWeight: 700,
-                fontFamily: "Inter, Montserrat, Roboto, Arial, sans-serif",
-                letterSpacing: "0.08em",
-                mt: 0.5,
                 fontSize: { xs: "1.08rem", md: "1.22rem" },
-                textShadow: "0 2px 8px rgba(77,208,225,0.18)",
-                transition: "color 0.3s",
+                maxWidth: { xs: "120px", md: "180px" },
+                whiteSpace: "normal",
+                wordBreak: "break-word",
+                lineHeight: 1.2,
+                textAlign: "left",
+                overflowWrap: "break-word",
               }}
             >
               {brand.subtitle}
             </Typography>
           </Box>
-        </a>
-        {/* Center cell: Nav links (desktop only) */}
-        <div
-          className="header-cell-center"
-          style={{
+        </Link>
+
+        {/* Center: Nav links */}
+        <Box
+          sx={{
+            position: "absolute",
+            left: 0,
+            right: 0,
+            top: 0,
+            bottom: 0,
+            margin: "auto",
+            width: "fit-content",
+            height: "100%",
             display: "flex",
-            justifyContent: "center",
             alignItems: "center",
+            zIndex: 1,
           }}
         >
           {!isMobile && (
             <ul className="header-links">
               {navLinks.map((link) => (
                 <li key={link.name}>
-                  <a
-                    href={link.href}
-                    aria-label={link.name}
+                  <Link
+                    to={link.href}
                     className={isActiveLink(link.href) ? "active" : ""}
-                    style={{
-                      position: "relative",
-                      ...(isActiveLink(link.href) && {
-                        color: "#8CD2EF",
-                        fontWeight: "600",
-                        textShadow: "0 0 8px rgba(140, 210, 239, 0.8)",
-                      }),
-                    }}
+                    aria-current={isActiveLink(link.href) ? "page" : undefined}
                   >
                     {link.name}
                     {isActiveLink(link.href) && (
                       <span
+                        className="active-indicator"
                         style={{
                           position: "absolute",
                           bottom: "-10px",
@@ -189,130 +164,71 @@ const Header: React.FC<HeaderProps> = () => {
                           width: "100%",
                           height: "4px",
                           background:
-                            "linear-gradient(90deg, #8CD2EF, #5DADE2, #3498DB)",
+                            "linear-gradient(90deg, #8CD2EF, #5DADE2)", // Consistent loonGray gradient
                           borderRadius: "4px",
-                          boxShadow: "0 2px 8px rgba(140, 210, 239, 0.6)",
-                          animation: "glow 2s ease-in-out infinite alternate",
                         }}
                       />
                     )}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
           )}
-        </div>
-        {/* Right cell: Socials (desktop) and menu button/mobile drawer (mobile) */}
-        <div
-          className="header-cell-right"
-          style={{
+        </Box>
+
+        {/* Right: Socials + Mobile menu */}
+        <Box
+          sx={{
             display: "flex",
-            justifyContent: "flex-end",
             alignItems: "center",
-            gap: "1rem",
+            gap: isMobile ? 0 : 1.5,
           }}
         >
           {!isMobile && <Socials />}
-          {isMobile && (
-            <>
-              <IconButton
-                className="menu-btn"
-                aria-label={
-                  drawerOpen ? "Close navigation menu" : "Open navigation menu"
-                }
-                aria-controls="mobile-nav"
-                aria-expanded={drawerOpen}
-                onClick={handleDrawerToggle}
-                size="large"
-                sx={{ color: "#8CD2EF" }}
-              >
-                <MenuIcon fontSize="inherit" />
-              </IconButton>
-              <div
-                id="mobile-nav"
-                className={`mobile-drawer${drawerOpen ? " open" : ""}`}
-                role="dialog"
-                aria-modal="true"
-                aria-label="Mobile navigation menu"
-                ref={drawerRef}
-              >
-                <a
-                  href="/"
-                  aria-label="Go to home"
-                  style={{
-                    textDecoration: "none",
-                    color: "inherit",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "1rem",
-                    marginBottom: "2rem",
-                  }}
-                >
-                  <img
-                    src={brand.logo}
-                    alt={brand.alt}
-                    style={{ height: "2.75rem", width: "2.75rem" }}
-                  />
-                  <span className="site-title">
-                    {brand.name} {brand.subtitle}
-                  </span>
-                </a>
-                <ul>
-                  {navLinks.map((link) => (
-                    <li key={link.name}>
-                      <a
-                        href={link.href}
-                        aria-label={link.name}
-                        onClick={() => setDrawerOpen(false)}
-                        className={isActiveLink(link.href) ? "active" : ""}
-                        style={{
-                          position: "relative",
-                          display: "flex",
-                          alignItems: "center",
-                          padding: "12px 16px",
-                          borderRadius: "4px",
-                          transition: "all 0.3s ease",
-                          ...(isActiveLink(link.href) && {
-                            background:
-                              "linear-gradient(135deg, rgba(140, 210, 239, 0.15), rgba(140, 210, 239, 0.05))",
-                            color: "#8CD2EF",
-                            fontWeight: "600",
-                            borderLeft: "4px solid #8CD2EF",
-                            textShadow: "0 0 8px rgba(140, 210, 239, 0.6)",
-                          }),
-                        }}
-                      >
-                        {isActiveLink(link.href) && (
-                          <span
-                            style={{
-                              width: "8px",
-                              height: "8px",
-                              borderRadius: "50%",
-                              background:
-                                "linear-gradient(135deg, #8CD2EF, #5DADE2)",
-                              marginRight: "12px",
-                              boxShadow: "0 0 8px rgba(140, 210, 239, 0.7)",
-                            }}
-                          />
-                        )}
-                        {link.name}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-                <div
-                  style={{
-                    marginTop: "2rem",
-                    display: "flex",
-                    justifyContent: "center",
-                  }}
-                >
-                  <Socials />
-                </div>
-              </div>
-            </>
+          {!isMobile && (
+            <IconButton
+              onClick={handleThemeToggle}
+              aria-label={`Switch to ${themeMode === "light" ? "dark" : "light"} mode`}
+              sx={{
+                color: "#ffffff",
+                "&:hover": {
+                  color: "#8CD2EF", // Consistent loonGray
+                },
+              }}
+            >
+              {themeMode === "light" ? (
+                <Brightness4Icon />
+              ) : (
+                <Brightness7Icon />
+              )}
+            </IconButton>
           )}
-        </div>
+          {isMobile && (
+            <IconButton
+              aria-label="Toggle navigation menu"
+              aria-expanded={drawerOpen}
+              aria-controls="mobile-drawer"
+              onClick={handleDrawerToggle}
+              sx={{
+                color: "#8CD2EF", // Consistent loonGray
+                "&:hover": {
+                  color: "#5DADE2", // Lighter loonGray
+                },
+              }}
+            >
+              <MenuIcon />
+            </IconButton>
+          )}
+          {isMobile && (
+            <MobileDrawer
+              open={drawerOpen}
+              onClose={() => setDrawerOpen(false)}
+              navLinks={navLinks}
+              brand={brand}
+              isActiveLink={isActiveLink}
+            />
+          )}
+        </Box>
       </nav>
     </header>
   );

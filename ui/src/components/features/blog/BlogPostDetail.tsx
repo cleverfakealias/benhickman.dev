@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
-import { getPostBySlug } from "./sanity/sanityClient";
-import imageUrlBuilder from "./sanity/imageUrl";
-import { BlogPost } from "./sanity/types";
+import { getPostBySlug } from "../sanity/sanityClient";
+import imageUrlBuilder from "../sanity/imageUrl";
+import { BlogPost } from "../sanity/types";
 import {
   Container,
   Typography,
