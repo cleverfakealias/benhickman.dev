@@ -49,7 +49,10 @@ const Header: React.FC<HeaderProps> = ({ themeMode, setThemeMode }) => {
     };
   }, [handleResize]);
 
-  const handleDrawerToggle = useCallback(() => setDrawerOpen((prev) => !prev), []);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const handleDrawerToggle = () => {
+    setDrawerOpen((prev) => !prev);
+  };
   const handleThemeToggle = useCallback(() => 
     setThemeMode(themeMode === "light" ? "dark" : "light"), [themeMode, setThemeMode]);
 

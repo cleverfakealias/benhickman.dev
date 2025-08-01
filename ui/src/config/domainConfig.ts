@@ -5,6 +5,8 @@ export interface BrandInfo {
   logo: string;
   alt: string;
   subtitle?: string;
+  title: string;
+  description: string;
 }
 
 export interface DomainConfig {
@@ -22,6 +24,8 @@ export const domainConfigs: Record<string, DomainConfig> = {
       logo: "/images/zengineer dark logo 2.png",
       alt: "Zengineer monogram logo",
       subtitle: "Cloud Architecture and Development",
+      title: "Zengineer | Cloud Architecture and Development",
+      description: "Zengineer provides expert cloud architecture and development services, specializing in scalable, modern software solutions.",
     },
   },
   "zennlogic.com": {
@@ -32,6 +36,8 @@ export const domainConfigs: Record<string, DomainConfig> = {
       logo: "/images/ZL monogram.png",
       alt: "ZennLogic logo",
       subtitle: "Cloud Software Engineering",
+      title: "ZennLogic | Cloud Software Engineering",
+      description: "ZennLogic delivers cloud software engineering solutions, focusing on robust, efficient, and innovative cloud applications.",
     },
   },
   "benhickman.dev": {
@@ -42,6 +48,8 @@ export const domainConfigs: Record<string, DomainConfig> = {
       logo: "/images/BH monogram.png",
       alt: "Ben Hickman logo",
       subtitle: "Cloud Architecture and Engineering",
+      title: "Ben Hickman | Cloud Architecture and Engineering",
+      description: "Ben Hickman specializes in cloud architecture and engineering, offering tailored solutions for modern businesses.",
     },
   },
 };

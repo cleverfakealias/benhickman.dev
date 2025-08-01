@@ -10,7 +10,6 @@ import {
   Typography,
 } from "@mui/material";
 import { Theme } from "@mui/material/styles";
-import GradientDivider from "../components/common/GradientDivider";
 
 const Contact: React.FC = () => {
   const theme = useTheme() as Theme;

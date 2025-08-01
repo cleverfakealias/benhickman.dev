@@ -31,6 +31,7 @@ export default function BlogCard({ post }: BlogCardProps): React.ReactElement {
   };
 
   const imageSrc = (() => {
+    if (!post.mainImage) return undefined;
     const builder = imageUrlBuilder(post.mainImage);
     if ("width" in builder && typeof builder.width === "function") {
       return builder.width(400).height(200).url();
@@ -93,7 +94,7 @@ export default function BlogCard({ post }: BlogCardProps): React.ReactElement {
             component="img"
             height="200"
             image={imageSrc}
-            alt={post.mainImage.alt || post.title || "Blog image"}
+            alt={post.mainImage?.alt || post.title || "Blog image"}
             sx={{
               objectFit: "cover",
               borderTopLeftRadius: 0,
@@ -154,7 +155,7 @@ export default function BlogCard({ post }: BlogCardProps): React.ReactElement {
             {post.author && (
               <Chip
                 icon={<Person />}
-                label={typeof post.author === "string" ? post.author : post.author.name}
+                label={post.author}
                 size="small"
                 variant="outlined"
               />
