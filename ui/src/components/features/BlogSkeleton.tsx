@@ -15,4 +15,4 @@ const BlogSkeleton: React.FC = () => (
   </Grid2>
 );
 
-export default BlogSkeleton;  
+export default BlogSkeleton;

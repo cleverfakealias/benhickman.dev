@@ -56,8 +56,16 @@ const TimelineItem = styled(Box)<{ index: number }>(({ theme, index }) => ({
   flexDirection: index % 2 === 0 ? "row" : "row-reverse",
   [theme.breakpoints.down("md")]: {
     flexDirection: "row",
-    paddingLeft: { xs: theme.spacing(1), sm: theme.spacing(1.5), md: theme.spacing(2) },
-    marginBottom: { xs: theme.spacing(2), sm: theme.spacing(3), md: theme.spacing(4) },
+    paddingLeft: {
+      xs: theme.spacing(1),
+      sm: theme.spacing(1.5),
+      md: theme.spacing(2),
+    },
+    marginBottom: {
+      xs: theme.spacing(2),
+      sm: theme.spacing(3),
+      md: theme.spacing(4),
+    },
   },
 }));
 
@@ -135,10 +143,13 @@ const CareerTimeline: React.FC<CareerTimelineProps> = ({
     (a, b) => parseInt(b.startDate) - parseInt(a.startDate),
   );
   return (
-    <Container maxWidth="lg" sx={{ 
-      py: { xs: 2, sm: 3, md: 4 },
-      px: { xs: 0, sm: 0.5, md: 1 },
-    }}>
+    <Container
+      maxWidth="lg"
+      sx={{
+        py: { xs: 2, sm: 3, md: 4 },
+        px: { xs: 0, sm: 0.5, md: 1 },
+      }}
+    >
       {(title || description || header) && (
         <Box sx={{ textAlign: "center", mb: { xs: 3, sm: 4, md: 6 } }}>
           {title && (
@@ -160,8 +171,8 @@ const CareerTimeline: React.FC<CareerTimelineProps> = ({
             <Typography
               variant="h5"
               color="text.secondary"
-              sx={{ 
-                maxWidth: "600px", 
+              sx={{
+                maxWidth: "600px",
                 mx: "auto",
                 fontSize: { xs: "0.875rem", sm: "1rem", md: "1.25rem" },
               }}
@@ -192,18 +203,20 @@ const CareerTimeline: React.FC<CareerTimelineProps> = ({
                   border: `1px solid ${theme.palette.divider}`,
                 }}
               >
-                <CardContent sx={{ 
-                  p: { xs: 1, sm: 1.5, md: 2 },
-                  "&:last-child": { pb: { xs: 1, sm: 1.5, md: 2 } }
-                }}>
+                <CardContent
+                  sx={{
+                    p: { xs: 1, sm: 1.5, md: 2 },
+                    "&:last-child": { pb: { xs: 1, sm: 1.5, md: 2 } },
+                  }}
+                >
                   <Chip
                     label={item.timestamp}
                     color={item.color}
                     variant="outlined"
                     size="small"
-                    sx={{ 
+                    sx={{
                       mb: { xs: 1, sm: 1.5 },
-                      fontSize: { xs: "0.7rem", sm: "0.75rem", md: "0.875rem" }
+                      fontSize: { xs: "0.7rem", sm: "0.75rem", md: "0.875rem" },
                     }}
                   />
                   <Typography

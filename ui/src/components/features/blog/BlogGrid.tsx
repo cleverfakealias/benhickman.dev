@@ -10,7 +10,10 @@ interface BlogGridProps {
   loading: boolean;
 }
 
-export default function BlogGrid({ posts, loading }: BlogGridProps): React.ReactElement {
+export default function BlogGrid({
+  posts,
+  loading,
+}: BlogGridProps): React.ReactElement {
   if (loading) {
     return (
       <Grid2
@@ -47,16 +50,13 @@ export default function BlogGrid({ posts, loading }: BlogGridProps): React.React
     );
   }
 
-return (
-  <Grid2 container spacing={4}>
-    {posts.map((post) => (
-      <Grid2
-        key={post.slug.current}
-        size={{ xs: 12, sm: 6, md: 4 }}
-      >
-        <BlogCard post={post} />
-      </Grid2>
-    ))}
-  </Grid2>
-);
-} 
+  return (
+    <Grid2 container spacing={4}>
+      {posts.map((post) => (
+        <Grid2 key={post.slug.current} size={{ xs: 12, sm: 6, md: 4 }}>
+          <BlogCard post={post} />
+        </Grid2>
+      ))}
+    </Grid2>
+  );
+}

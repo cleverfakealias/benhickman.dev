@@ -32,4 +32,4 @@ export default function BlogHeader(): React.ReactElement {
       </Typography>
     </Box>
   );
-} 
+}

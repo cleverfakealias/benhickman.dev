@@ -22,7 +22,6 @@ import CareerTimeline, {
 } from "../components/features/CareerTimeline";
 import GradientDivider from "../components/common/GradientDivider";
 
-
 const DevelopmentExperience: React.FC = () => {
   const theme = useTheme();
 
@@ -132,19 +131,16 @@ const DevelopmentExperience: React.FC = () => {
           Technical expertise spanning full-stack development, modern
           frameworks, and enterprise solutions
         </Typography>
+      </Box>
 
-        </Box>
-
-        <Box sx={{ mb: 4 }}>
-          <GradientDivider />
-        </Box>
-
- 
+      <Box sx={{ mb: 4 }}>
+        <GradientDivider />
+      </Box>
 
       {/* Experience Cards */}
       <Grid2 container spacing={4}>
         {programmingExperiences.map((experience, index) => (
-          <Grid2  size={{ xs: 12, md: 6 }} key={index}>
+          <Grid2 size={{ xs: 12, md: 6 }} key={index}>
             <Card
               sx={{
                 height: "100%",

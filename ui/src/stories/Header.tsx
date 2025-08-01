@@ -1,6 +1,5 @@
 import { Button } from "./Button";
 
-
 type User = {
   name: string;
 };

@@ -12,7 +12,7 @@
 /* Container */
 .terminal-window {
   margin: 1rem auto;
-  padding: 0; 
+  padding: 0;
   background: var(--terminal-bg);
   border: 1px solid var(--terminal-border);
   border-radius: 12px;
@@ -45,9 +45,15 @@
   border-radius: 50%;
   display: inline-block;
 }
-.terminal-dot.red { background: var(--dot-red); }
-.terminal-dot.yellow { background: var(--dot-yellow); }
-.terminal-dot.green { background: var(--dot-green); }
+.terminal-dot.red {
+  background: var(--dot-red);
+}
+.terminal-dot.yellow {
+  background: var(--dot-yellow);
+}
+.terminal-dot.green {
+  background: var(--dot-green);
+}
 
 /* Code area */
 .terminal-code {

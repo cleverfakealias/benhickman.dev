@@ -12,7 +12,13 @@ interface Props {
   isActiveLink: (href: string) => boolean;
 }
 
-const MobileDrawer: React.FC<Props> = ({ open, onClose, navLinks, brand, isActiveLink }) => {
+const MobileDrawer: React.FC<Props> = ({
+  open,
+  onClose,
+  navLinks,
+  brand,
+  isActiveLink,
+}) => {
   const drawerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -55,7 +61,7 @@ const MobileDrawer: React.FC<Props> = ({ open, onClose, navLinks, brand, isActiv
         onTouchEnd={onClose}
         aria-hidden="true"
       />
-      
+
       <FocusTrap>
         <div
           ref={drawerRef}
@@ -80,20 +86,22 @@ const MobileDrawer: React.FC<Props> = ({ open, onClose, navLinks, brand, isActiv
           onClick={(e) => e.stopPropagation()}
         >
           {/* Header with close button */}
-          <div style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            paddingBottom: "1rem",
-            borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
-            marginBottom: "1.5rem",
-          }}>
-            <Link 
-              to="/" 
-              onClick={onClose} 
-              style={{ 
-                display: "flex", 
-                alignItems: "center", 
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              paddingBottom: "1rem",
+              borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
+              marginBottom: "1.5rem",
+            }}
+          >
+            <Link
+              to="/"
+              onClick={onClose}
+              style={{
+                display: "flex",
+                alignItems: "center",
                 gap: "0.75rem",
                 textDecoration: "none",
                 color: "#ffffff",
@@ -115,7 +123,7 @@ const MobileDrawer: React.FC<Props> = ({ open, onClose, navLinks, brand, isActiv
               />
               <span>{brand.name}</span>
             </Link>
-            
+
             <button
               onClick={onClose}
               aria-label="Close navigation menu"
@@ -135,7 +143,8 @@ const MobileDrawer: React.FC<Props> = ({ open, onClose, navLinks, brand, isActiv
                 justifyContent: "center",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = "rgba(255, 255, 255, 0.1)";
+                e.currentTarget.style.backgroundColor =
+                  "rgba(255, 255, 255, 0.1)";
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = "transparent";
@@ -147,35 +156,38 @@ const MobileDrawer: React.FC<Props> = ({ open, onClose, navLinks, brand, isActiv
 
           {/* Navigation Links */}
           <nav aria-label="Mobile navigation">
-            <ul style={{ 
-              listStyle: "none", 
-              padding: 0, 
-              margin: 0,
-              display: "flex",
-              flexDirection: "column",
-              gap: "0.5rem",
-            }}>
+            <ul
+              style={{
+                listStyle: "none",
+                padding: 0,
+                margin: 0,
+                display: "flex",
+                flexDirection: "column",
+                gap: "0.5rem",
+              }}
+            >
               {navLinks.map((link) => (
                 <li key={link.name}>
                   <Link
                     to={link.href}
                     onClick={onClose}
                     aria-current={isActiveLink(link.href) ? "page" : undefined}
-                                          style={{
-                        display: "flex",
-                        alignItems: "center",
-                        padding: "1rem",
-                        color: isActiveLink(link.href) ? "#8CD2EF" : "#ffffff",
-                        fontWeight: isActiveLink(link.href) ? "600" : "400",
-                        textDecoration: "none",
-                        borderRadius: "8px",
-                        transition: "all 0.2s ease",
-                        fontSize: "1.1rem",
-                        minHeight: "44px",
-                      }}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      padding: "1rem",
+                      color: isActiveLink(link.href) ? "#8CD2EF" : "#ffffff",
+                      fontWeight: isActiveLink(link.href) ? "600" : "400",
+                      textDecoration: "none",
+                      borderRadius: "8px",
+                      transition: "all 0.2s ease",
+                      fontSize: "1.1rem",
+                      minHeight: "44px",
+                    }}
                     onMouseEnter={(e) => {
                       if (!isActiveLink(link.href)) {
-                        e.currentTarget.style.backgroundColor = "rgba(255, 255, 255, 0.05)";
+                        e.currentTarget.style.backgroundColor =
+                          "rgba(255, 255, 255, 0.05)";
                       }
                     }}
                     onMouseLeave={(e) => {
@@ -186,14 +198,16 @@ const MobileDrawer: React.FC<Props> = ({ open, onClose, navLinks, brand, isActiv
                   >
                     {link.name}
                     {isActiveLink(link.href) && (
-                      <span style={{
-                        marginLeft: "auto",
-                        width: "8px",
-                        height: "8px",
-                        borderRadius: "50%",
-                        backgroundColor: "#8CD2EF",
-                        boxShadow: "0 0 8px rgba(140, 210, 239, 0.5)",
-                      }} />
+                      <span
+                        style={{
+                          marginLeft: "auto",
+                          width: "8px",
+                          height: "8px",
+                          borderRadius: "50%",
+                          backgroundColor: "#8CD2EF",
+                          boxShadow: "0 0 8px rgba(140, 210, 239, 0.5)",
+                        }}
+                      />
                     )}
                   </Link>
                 </li>
@@ -202,12 +216,14 @@ const MobileDrawer: React.FC<Props> = ({ open, onClose, navLinks, brand, isActiv
           </nav>
 
           {/* Social Links */}
-          <div style={{ 
-            marginTop: "2rem", 
-            paddingTop: "1.5rem",
-            borderTop: "1px solid rgba(255, 255, 255, 0.1)",
-            textAlign: "center",
-          }}>
+          <div
+            style={{
+              marginTop: "2rem",
+              paddingTop: "1.5rem",
+              borderTop: "1px solid rgba(255, 255, 255, 0.1)",
+              textAlign: "center",
+            }}
+          >
             <Socials />
           </div>
         </div>

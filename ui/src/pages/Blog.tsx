@@ -12,8 +12,8 @@ export default function Blog(): React.ReactElement {
     <Container maxWidth="lg" sx={{ py: 4 }}>
       <BlogHeader />
       <Box sx={{ mb: 4 }}>
-          <GradientDivider />
-        </Box>
+        <GradientDivider />
+      </Box>
       <BlogGrid posts={posts} loading={loading} />
     </Container>
   );

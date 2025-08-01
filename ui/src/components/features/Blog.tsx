@@ -30,7 +30,6 @@ export default function Blog(): React.ReactElement {
       });
   }, []);
 
-
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
       {/* Header Section */}
@@ -87,7 +86,9 @@ export default function Blog(): React.ReactElement {
         }}
       >
         {loading ? (
-          Array.from(new Array(6)).map((_, index) => <BlogSkeleton key={index} />)
+          Array.from(new Array(6)).map((_, index) => (
+            <BlogSkeleton key={index} />
+          ))
         ) : error ? (
           <Grid2 size={{ xs: 12 }}>
             <Box sx={{ textAlign: "center", py: 8 }}>

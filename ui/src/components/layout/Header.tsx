@@ -16,6 +16,7 @@ const navLinks = [
   { name: "About", href: "/about" },
   { name: "Contact", href: "/contact" },
   { name: "Blog", href: "/blog" },
+  { name: "Playground", href: "/playground" },
 ];
 
 interface HeaderProps {
@@ -30,15 +31,18 @@ const Header: React.FC<HeaderProps> = ({ themeMode, setThemeMode }) => {
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const theme = useTheme();
 
-  const isActiveLink = useCallback((href: string) =>
-    !!matchPath({ path: href, end: href === "/" }, location.pathname), [location.pathname]);
+  const isActiveLink = useCallback(
+    (href: string) =>
+      !!matchPath({ path: href, end: href === "/" }, location.pathname),
+    [location.pathname],
+  );
 
   // Memoize the debounced resize handler
   const handleResize = useCallback(
     debounce(() => {
       setIsMobile(window.innerWidth <= 768);
     }, 200),
-    []
+    [],
   );
 
   useEffect(() => {
@@ -53,8 +57,10 @@ const Header: React.FC<HeaderProps> = ({ themeMode, setThemeMode }) => {
   const handleDrawerToggle = () => {
     setDrawerOpen((prev) => !prev);
   };
-  const handleThemeToggle = useCallback(() => 
-    setThemeMode(themeMode === "light" ? "dark" : "light"), [themeMode, setThemeMode]);
+  const handleThemeToggle = useCallback(
+    () => setThemeMode(themeMode === "light" ? "dark" : "light"),
+    [themeMode, setThemeMode],
+  );
 
   const handleKeyDown = useCallback((event: React.KeyboardEvent) => {
     if (event.key === "Escape") {
@@ -63,16 +69,13 @@ const Header: React.FC<HeaderProps> = ({ themeMode, setThemeMode }) => {
   }, []);
 
   return (
-    <header 
-      className="header" 
-      role="banner" 
+    <header
+      className="header"
+      role="banner"
       aria-label="Site header"
       onKeyDown={handleKeyDown}
     >
-      <nav
-        className="header-nav"
-        aria-label="Main navigation"
-      >
+      <nav className="header-nav" aria-label="Main navigation">
         {/* Left: Brand */}
         <Link
           to="/"
@@ -160,7 +163,8 @@ const Header: React.FC<HeaderProps> = ({ themeMode, setThemeMode }) => {
                           transform: "translateX(-50%)",
                           width: "100%",
                           height: "4px",
-                          background: "linear-gradient(90deg, #8CD2EF, #5DADE2)", // Consistent loonGray gradient
+                          background:
+                            "linear-gradient(90deg, #8CD2EF, #5DADE2)", // Consistent loonGray gradient
                           borderRadius: "4px",
                         }}
                       />
@@ -173,24 +177,30 @@ const Header: React.FC<HeaderProps> = ({ themeMode, setThemeMode }) => {
         </Box>
 
         {/* Right: Socials + Mobile menu */}
-        <Box sx={{ 
-          display: "flex", 
-          alignItems: "center", 
-          gap: isMobile ? 0 : 1.5,
-        }}>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: isMobile ? 0 : 1.5,
+          }}
+        >
           {!isMobile && <Socials />}
           {!isMobile && (
-            <IconButton 
+            <IconButton
               onClick={handleThemeToggle}
               aria-label={`Switch to ${themeMode === "light" ? "dark" : "light"} mode`}
-              sx={{ 
+              sx={{
                 color: "#ffffff",
-                '&:hover': {
+                "&:hover": {
                   color: "#8CD2EF", // Consistent loonGray
-                }
+                },
               }}
             >
-              {themeMode === "light" ? <Brightness4Icon /> : <Brightness7Icon />}
+              {themeMode === "light" ? (
+                <Brightness4Icon />
+              ) : (
+                <Brightness7Icon />
+              )}
             </IconButton>
           )}
           {isMobile && (
@@ -199,9 +209,9 @@ const Header: React.FC<HeaderProps> = ({ themeMode, setThemeMode }) => {
               aria-expanded={drawerOpen}
               aria-controls="mobile-drawer"
               onClick={handleDrawerToggle}
-              sx={{ 
+              sx={{
                 color: "#8CD2EF", // Consistent loonGray
-                '&:hover': {
+                "&:hover": {
                   color: "#5DADE2", // Lighter loonGray
                 },
               }}

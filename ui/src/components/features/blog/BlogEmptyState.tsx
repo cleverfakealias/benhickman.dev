@@ -14,4 +14,4 @@ export default function BlogEmptyState(): React.ReactElement {
       </Box>
     </Grid>
   );
-} 
+}

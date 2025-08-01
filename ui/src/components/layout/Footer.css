@@ -40,7 +40,7 @@
     padding-left: 0.5rem;
     padding-right: 0.5rem;
   }
-  
+
   .footer-cell-left,
   .footer-cell-center,
   .footer-cell-right {
@@ -48,7 +48,7 @@
     text-align: center !important;
     margin-bottom: 0.25rem;
   }
-  
+
   .footer-cell-left span[aria-label="Mission statement"] {
     font-size: 0.95rem;
     letter-spacing: 0.5px;

@@ -26,7 +26,7 @@ const renderWithTheme = (component: React.ReactElement) => {
   return render(
     <MemoryRouter>
       <ThemeProvider theme={theme}>{component}</ThemeProvider>
-    </MemoryRouter>
+    </MemoryRouter>,
   );
 };
 
