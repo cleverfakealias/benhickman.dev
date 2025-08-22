@@ -146,11 +146,17 @@ const Header: React.FC<HeaderProps> = ({ themeMode, setThemeMode }) => {
           {!isMobile && (
             <ul className="header-links">
               {navLinks.map((link) => (
-                <li key={link.name}>
+                <li key={link.name} style={{ position: "relative" }}>
                   <Link
                     to={link.href}
                     className={isActiveLink(link.href) ? "active" : ""}
                     aria-current={isActiveLink(link.href) ? "page" : undefined}
+                    style={{
+                      color: isActiveLink(link.href) ? "#8CD2EF" : "#fff",
+                      fontWeight: isActiveLink(link.href) ? 700 : 500,
+                      position: "relative",
+                      transition: "color 0.2s cubic-bezier(0.4,0,0.2,1)",
+                    }}
                   >
                     {link.name}
                     {isActiveLink(link.href) && (
@@ -158,14 +164,14 @@ const Header: React.FC<HeaderProps> = ({ themeMode, setThemeMode }) => {
                         className="active-indicator"
                         style={{
                           position: "absolute",
-                          bottom: "-10px",
-                          left: "50%",
-                          transform: "translateX(-50%)",
+                          left: 0,
+                          bottom: -6,
                           width: "100%",
-                          height: "4px",
-                          background:
-                            "linear-gradient(90deg, #8CD2EF, #5DADE2)", // Consistent loonGray gradient
-                          borderRadius: "4px",
+                          height: "3px",
+                          background: "linear-gradient(90deg, #8CD2EF, #5DADE2)",
+                          borderRadius: "2px",
+                          transition: "all 0.3s cubic-bezier(0.4,0,0.2,1)",
+                          boxShadow: "0 2px 8px 0 rgba(140, 210, 239, 0.15)",
                         }}
                       />
                     )}

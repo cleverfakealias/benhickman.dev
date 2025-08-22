@@ -143,32 +143,15 @@ const DevelopmentExperience: React.FC = () => {
           <Grid2 size={{ xs: 12, md: 6 }} key={index}>
             <Card
               sx={{
-                height: "100%",
-                display: "flex",
-                flexDirection: "column",
-                transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-                background:
-                  theme.palette.mode === "dark"
-                    ? "linear-gradient(145deg, rgba(30,30,30,0.95) 0%, rgba(40,40,40,0.95) 100%)"
-                    : "linear-gradient(145deg, rgba(255,255,255,0.9) 0%, rgba(248,250,252,0.9) 100%)",
-                backdropFilter: "blur(10px)",
-                border: `1px solid ${theme.palette.divider}`,
-                borderRadius: "4px",
-                overflow: "hidden",
+                borderRadius: 4,
+                background: theme.custom.gradients.hero[theme.palette.mode],
+                border: theme.custom.borders.card[theme.palette.mode],
+                boxShadow: theme.custom.shadows.card[theme.palette.mode],
                 position: "relative",
+                overflow: "hidden",
+                transition: theme.custom.transitions.smooth,
                 "&:hover": {
-                  transform: "translateY(-8px) scale(1.02)",
-                  boxShadow: `0 20px 40px rgba(65, 42, 145, 0.15)`,
-                  "& .experience-icon": {
-                    transform: "scale(1.1) rotate(5deg)",
-                  },
-                  "& .experience-title": {
-                    color: theme.palette.primary.main,
-                  },
-                  ...(theme.palette.mode === "dark" && {
-                    background:
-                      "linear-gradient(145deg, rgba(50,50,50,0.95) 0%, rgba(60,60,60,0.95) 100%)",
-                  }),
+                  boxShadow: theme.custom.shadows.card.hover[theme.palette.mode],
                 },
                 "&::before": {
                   content: '""',
@@ -189,6 +172,7 @@ const DevelopmentExperience: React.FC = () => {
                             : experience.color === "error"
                               ? `linear-gradient(90deg, ${theme.palette.error.main}, ${theme.palette.error.light})`
                               : `linear-gradient(90deg, ${theme.palette.info.main}, ${theme.palette.info.light})`,
+                  borderRadius: 4,
                 },
               }}
             >

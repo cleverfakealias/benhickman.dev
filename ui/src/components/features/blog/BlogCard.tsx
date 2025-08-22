@@ -43,15 +43,11 @@ export default function BlogCard({ post }: BlogCardProps): React.ReactElement {
     height: "100%",
     display: "flex",
     flexDirection: "column",
-    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-    background:
-      theme.palette.mode === "dark"
-        ? "linear-gradient(145deg, rgba(30,30,30,0.95) 0%, rgba(40,40,40,0.95) 100%)"
-        : "linear-gradient(145deg, rgba(255,255,255,0.96) 0%, rgba(248,250,252,0.96) 100%)",
-    backdropFilter: "blur(10px)",
-    border: `1px solid ${theme.palette.divider}`,
-    borderRadius: "16px",
-    boxShadow: "0 8px 24px rgba(65, 42, 145, 0.10)",
+    transition: theme.custom.transitions.smooth,
+    background: theme.custom.gradients.hero[theme.palette.mode],
+    border: theme.custom.borders.card[theme.palette.mode],
+    borderRadius: 4,
+    boxShadow: theme.custom.shadows.card[theme.palette.mode],
     overflow: "hidden",
     position: "relative",
     "& .MuiCardMedia-root": {

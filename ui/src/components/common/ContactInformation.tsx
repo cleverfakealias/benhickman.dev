@@ -9,11 +9,20 @@ const ContactInformation: React.FC = () => {
     <Box sx={{ mt: 2, mb: 2 }}>
       {/* Call to Action Section */}
       <Paper
-        elevation={2}
+        elevation={3}
         sx={{
           p: 4,
           textAlign: "center",
-          ...theme.custom.getCallToActionStyles(),
+          borderRadius: 4,
+          background: theme.custom.gradients.hero[theme.palette.mode],
+          border: theme.custom.borders.card[theme.palette.mode],
+          boxShadow: theme.custom.shadows.card[theme.palette.mode],
+          transition: theme.custom.transitions.smooth,
+          position: "relative",
+          overflow: "hidden",
+          "&:hover": {
+            boxShadow: theme.custom.shadows.card.hover[theme.palette.mode],
+          },
         }}
       >
         <Typography

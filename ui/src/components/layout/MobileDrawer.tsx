@@ -40,11 +40,17 @@ const MobileDrawer: React.FC<Props> = ({
     };
   }, [open, onClose]);
 
-  if (!open) return null;
+  // Animate drawer and backdrop
+  const [visible, setVisible] = React.useState(open);
+  React.useEffect(() => {
+    if (open) setVisible(true);
+  }, [open]);
+
+  if (!visible) return null;
 
   return (
     <>
-      {/* Backdrop for click outside */}
+      {/* Animated Backdrop */}
       <div
         style={{
           position: "fixed",
@@ -56,6 +62,9 @@ const MobileDrawer: React.FC<Props> = ({
           zIndex: 1999,
           backdropFilter: "blur(4px)",
           cursor: "pointer",
+          opacity: open ? 1 : 0,
+          transition: "opacity 300ms cubic-bezier(0.4,0,0.2,1)",
+          pointerEvents: open ? "auto" : "none",
         }}
         onClick={onClose}
         onTouchEnd={onClose}
@@ -77,11 +86,15 @@ const MobileDrawer: React.FC<Props> = ({
             color: "#ffffff",
             padding: "1rem",
             zIndex: 2000,
-            transform: "translateY(0)",
-            transition: "transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+            transform: open ? "translateY(0)" : "translateY(-32px)",
+            opacity: open ? 1 : 0,
+            transition: "transform 300ms cubic-bezier(0.4,0,0.2,1), opacity 300ms cubic-bezier(0.4,0,0.2,1)",
             boxShadow: "0 8px 32px rgba(0, 0, 0, 0.3)",
             maxHeight: "100vh",
             overflowY: "auto",
+          }}
+          onTransitionEnd={() => {
+            if (!open) setVisible(false);
           }}
           onClick={(e) => e.stopPropagation()}
         >
@@ -177,38 +190,29 @@ const MobileDrawer: React.FC<Props> = ({
                       alignItems: "center",
                       padding: "1rem",
                       color: isActiveLink(link.href) ? "#8CD2EF" : "#ffffff",
-                      fontWeight: isActiveLink(link.href) ? "600" : "400",
+                      fontWeight: isActiveLink(link.href) ? "700" : "400",
                       textDecoration: "none",
                       borderRadius: "8px",
                       transition: "all 0.2s ease",
                       fontSize: "1.1rem",
                       minHeight: "44px",
-                    }}
-                    onMouseEnter={(e) => {
-                      if (!isActiveLink(link.href)) {
-                        e.currentTarget.style.backgroundColor =
-                          "rgba(255, 255, 255, 0.05)";
-                      }
-                    }}
-                    onMouseLeave={(e) => {
-                      if (!isActiveLink(link.href)) {
-                        e.currentTarget.style.backgroundColor = "transparent";
-                      }
+                      position: "relative",
                     }}
                   >
-                    {link.name}
                     {isActiveLink(link.href) && (
                       <span
                         style={{
-                          marginLeft: "auto",
                           width: "8px",
                           height: "8px",
                           borderRadius: "50%",
                           backgroundColor: "#8CD2EF",
                           boxShadow: "0 0 8px rgba(140, 210, 239, 0.5)",
+                          marginRight: "0.75rem",
+                          display: "inline-block",
                         }}
                       />
                     )}
+                    {link.name}
                   </Link>
                 </li>
               ))}
