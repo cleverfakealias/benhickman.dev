@@ -41,26 +41,19 @@ const FormspreeContactForm: React.FC<FormspreeContactFormProps> = () => {
   const [isFormValid, setIsFormValid] = useState(false);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [captchaVerified, setCaptchaVerified] = useState(false);
-  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
-  // Early guard if config is missing
-  const configError =
-    !formspreeUrl
-      ? "Missing Formspree URL in configuration."
-      : !recaptchaSiteKey
-        ? "Missing reCAPTCHA site key in configuration."
-        : null;
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
 
-  const onCaptchaVerified = (token: string | null) => {
-    setCaptchaToken(token);
-    setCaptchaVerified(!!token);
-  };
-  const onCaptchaExpired = () => {
-    setCaptchaToken(null);
-    setCaptchaVerified(false);
-  };
+const onCaptchaVerified = (token: string | null) => {
+  setCaptchaToken(token);
+  setCaptchaVerified(!!token);
+};
+const onCaptchaExpired = () => {
+  setCaptchaToken(null);
+  setCaptchaVerified(false);
+};
 
   const validateEmail = (email: string): boolean => {
     const re =
@@ -71,10 +64,19 @@ const FormspreeContactForm: React.FC<FormspreeContactFormProps> = () => {
   const validateForm = (): boolean => {
     const newErrors: Partial<FormData> = {};
 
-    if (!formData.name.trim()) newErrors.name = "Name is required";
-    if (!formData.email.trim()) newErrors.email = "Email is required";
-    else if (!validateEmail(formData.email)) newErrors.email = "Valid email is required";
-    if (!formData.message.trim()) newErrors.message = "Message is required";
+    if (!formData.name.trim()) {
+      newErrors.name = "Name is required";
+    }
+
+    if (!formData.email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!validateEmail(formData.email)) {
+      newErrors.email = "Valid email is required";
+    }
+
+    if (!formData.message.trim()) {
+      newErrors.message = "Message is required";
+    }
 
     setErrors(newErrors);
     const isValid = Object.keys(newErrors).length === 0;
@@ -84,114 +86,152 @@ const FormspreeContactForm: React.FC<FormspreeContactFormProps> = () => {
 
   const handleInputChange =
     (field: keyof FormData) =>
-      (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const value = e.target.value;
-        setFormData((prev) => ({ ...prev, [field]: value }));
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      const value = e.target.value;
+      setFormData((prev) => ({
+        ...prev,
+        [field]: value,
+      }));
 
-        // Clear field-specific error as user types
-        if (errors[field]) {
-          setErrors((prev) => ({ ...prev, [field]: undefined }));
-        }
+      // Clear specific field error when user starts typing
+      if (errors[field]) {
+        setErrors((prev) => ({
+          ...prev,
+          [field]: undefined,
+        }));
+      }
 
-        // Debounced-ish validation
-        setTimeout(() => validateForm(), 80);
-      };
+      // Validate form
+      setTimeout(() => validateForm(), 100);
+    };
+    
+    const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setSubmitError(null);
 
-  const resetCaptcha = () => {
-    if (recaptchaRef.current) recaptchaRef.current.reset();
-    setCaptchaVerified(false);
-    setCaptchaToken(null);
-  };
+  // 1) Client-side validation + captcha token guard
+  const formOk = validateForm();
+  if (!formOk) return;
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSubmitError(null);
+  if (!captchaVerified || !captchaToken) {
+    setSubmitError("Please complete the CAPTCHA before submitting.");
+    return;
+  }
 
-    if (configError) {
-      setSubmitError(configError);
+  setIsSubmitting(true);
+
+  // 2) Build urlencoded body (Formspree-friendly) and include the reCAPTCHA token
+  const params = new URLSearchParams();
+  Object.entries(formData).forEach(([k, v]) => params.append(k, String(v)));
+  params.append("g-recaptcha-response", captchaToken);
+
+  // 3) Add a timeout so the UI isn't stuck if the network hangs
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 15000); // 15s cap
+
+  try {
+    const response = await fetch(formspreeUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+        "Accept": "application/json",
+      },
+      body: params.toString(),
+      // CORS-safe defaults; Formspree doesn’t need cookies
+      credentials: "omit",
+      signal: controller.signal,
+      cache: "no-store",
+      referrerPolicy: "no-referrer",
+    });
+
+    // 4) Handle success / error robustly (Formspree often returns JSON, but be defensive)
+    if (response.ok) {
+      setFormSubmitted(true);
+
+      // Reset form fields
+      setFormData({ name: "", email: "", phone: "", message: "" });
+
+      // Reset CAPTCHA widget and token
+      if (recaptchaRef.current) recaptchaRef.current.reset();
+      setCaptchaVerified(false);
+      setCaptchaToken?.(null); // make sure you have setCaptchaToken in state
       return;
     }
 
-    // 1) Client-side validation + captcha token guard
-    const formOk = validateForm();
-    if (!formOk) return;
-
-    if (!captchaVerified || !captchaToken) {
-      setSubmitError("Please complete the CAPTCHA before submitting.");
-      return;
-    }
-
-    if (isSubmitting) return; // double-click guard
-    setIsSubmitting(true);
-
-    // 2) Build urlencoded body (Formspree-friendly) and include the reCAPTCHA token
-    const params = new URLSearchParams();
-    Object.entries(formData).forEach(([k, v]) => params.append(k, String(v)));
-    params.append("g-recaptcha-response", captchaToken);
-
-    // 3) Add a timeout so the UI isn't stuck if the network hangs
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 15000); // 15s cap
-
+    // Try to parse JSON error, else fall back to text/status
+    let errMsg = `Form submission failed: ${response.status} ${response.statusText}`;
     try {
-      const response = await fetch(formspreeUrl!, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-          Accept: "application/json",
-        },
-        body: params.toString(),
-        // CORS-safe defaults; Formspree doesn’t need cookies
-        credentials: "omit",
-        signal: controller.signal,
-        cache: "no-store",
-        referrerPolicy: "no-referrer",
-      });
-
-      // 4) Handle success / error robustly (Formspree often returns JSON, but be defensive)
-      if (response.ok) {
-        setFormSubmitted(true);
-        setFormData({ name: "", email: "", phone: "", message: "" });
-        resetCaptcha();
-        return;
+      const errorData = await response.json();
+      if (errorData?.message) errMsg = errorData.message;
+      // Formspree sometimes returns field errors:
+      if (errorData?.errors?.length) {
+        errMsg = errorData.errors.map((e: any) => e.message).join("; ");
       }
-
-      // Try to parse JSON error, else fall back to text/status
-      let errMsg = `Form submission failed: ${response.status} ${response.statusText}`;
+    } catch {
       try {
-        const errorData = await response.json();
-        if (errorData?.message) errMsg = errorData.message;
-        // Formspree sometimes returns field errors:
-        if (Array.isArray(errorData?.errors) && errorData.errors.length) {
-          errMsg = errorData.errors.map((e: any) => e.message).join("; ");
-        }
-      } catch {
-        try {
-          const text = await response.text();
-          if (text) errMsg = text;
-        } catch {
-          /* ignore */
-        }
-      }
-
-      // If the error likely relates to captcha, reset it so user can retry with a fresh token
-      if (/captcha|recaptcha|token/i.test(errMsg)) resetCaptcha();
-
-      setSubmitError(errMsg);
-    } catch (err: any) {
-      if (err?.name === "AbortError") {
-        setSubmitError(
-          "The request timed out. Please check your connection and try again."
-        );
-      } else {
-        console.error("Form submission error:", err);
-        setSubmitError("A network error occurred. Please try again.");
-      }
-    } finally {
-      clearTimeout(timeoutId);
-      setIsSubmitting(false);
+        const text = await response.text();
+        if (text) errMsg = text;
+      } catch { /* ignore */ }
     }
-  };
+    setSubmitError(errMsg);
+  } catch (err: any) {
+    if (err?.name === "AbortError") {
+      setSubmitError("The request timed out. Please check your connection and try again.");
+    } else {
+      console.error("Form submission error:", err);
+      setSubmitError("A network error occurred. Please try again.");
+    }
+  } finally {
+    clearTimeout(timeoutId);
+    setIsSubmitting(false);
+  }
+};
+
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   setSubmitError(null);
+
+  //   if (!validateForm() || !captchaVerified) {
+  //     return;
+  //   }
+
+  //   setIsSubmitting(true);
+
+  //   try {
+  //     const response = await fetch(formspreeUrl, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify(formData),
+  //     });
+
+  //     if (response.ok) {
+  //       setFormSubmitted(true);
+  //       // Reset form
+  //       setFormData({
+  //         name: "",
+  //         email: "",
+  //         phone: "",
+  //         message: "",
+  //       });
+  //       setCaptchaVerified(false);
+  //       if (recaptchaRef.current) {
+  //         recaptchaRef.current.reset();
+  //       }
+  //     } else {
+  //       const errorData = await response.json().catch(() => ({}));
+  //       setSubmitError(
+  //         errorData.message || `Form submission failed: ${response.statusText}`,
+  //       );
+  //     }
+  //   } catch (error) {
+  //     console.error("Form submission error:", error);
+  //     setSubmitError("Network error occurred. Please try again.");
+  //   } finally {
+  //     setIsSubmitting(false);
+  //   }
+  // };
 
   if (formSubmitted) {
     return (
@@ -248,17 +288,17 @@ const FormspreeContactForm: React.FC<FormspreeContactFormProps> = () => {
         >
           Get in Touch
         </Typography>
-        <Typography variant="subtitle1" sx={{ color: theme.palette.text.secondary, mb: 2 }}>
+        <Typography
+          variant="subtitle1"
+          sx={{ color: theme.palette.text.secondary, mb: 2 }}
+        >
           I’d love to hear from you! Fill out the form below and I’ll get back
           to you as soon as possible.
         </Typography>
       </Box>
-
       <Box
         component="form"
         onSubmit={handleSubmit}
-        noValidate
-        aria-busy={isSubmitting ? "true" : "false"}
         sx={{
           backgroundColor: "transparent",
           padding: { xs: 1, sm: 2, md: 3 },
@@ -266,12 +306,11 @@ const FormspreeContactForm: React.FC<FormspreeContactFormProps> = () => {
           boxShadow: "none",
         }}
       >
-        {(submitError || configError) && (
+        {submitError && (
           <Alert severity="error" sx={{ mb: 3 }}>
-            {submitError || configError}
+            {submitError}
           </Alert>
         )}
-
         <Grid2 container spacing={3}>
           <Grid2 size={{ xs: 12 }}>
             <TextField
@@ -284,11 +323,13 @@ const FormspreeContactForm: React.FC<FormspreeContactFormProps> = () => {
               helperText={errors.name || "Enter your full name"}
               required
               InputProps={{
-                startAdornment: <Person sx={{ mr: 1, color: "action.active" }} />,
+                startAdornment: (
+                  <Person sx={{ mr: 1, color: "action.active" }} />
+                ),
               }}
               sx={{
                 "& .MuiOutlinedInput-root": {
-                  borderRadius: "4px",
+                  borderRadius: "4px", // Explicitly use the same rounding as the rest of the app
                   background: theme.palette.background.paper,
                   boxShadow: "0 1px 4px 0 rgba(31,38,135,0.07)",
                   "&.Mui-focused fieldset": {
@@ -312,11 +353,13 @@ const FormspreeContactForm: React.FC<FormspreeContactFormProps> = () => {
               helperText={errors.email || "Enter your email address"}
               required
               InputProps={{
-                startAdornment: <Email sx={{ mr: 1, color: "action.active" }} />,
+                startAdornment: (
+                  <Email sx={{ mr: 1, color: "action.active" }} />
+                ),
               }}
               sx={{
                 "& .MuiOutlinedInput-root": {
-                  borderRadius: `${theme.shape.borderRadius}px`,
+                  borderRadius: `${theme.shape.borderRadius}px`, // Explicitly use the same rounding as the rest of the app
                   background: theme.palette.background.paper,
                   boxShadow: "0 1px 4px 0 rgba(31,38,135,0.07)",
                   "&.Mui-focused fieldset": {
@@ -338,11 +381,13 @@ const FormspreeContactForm: React.FC<FormspreeContactFormProps> = () => {
               onChange={handleInputChange("phone")}
               helperText="Enter your phone number"
               InputProps={{
-                startAdornment: <Phone sx={{ mr: 1, color: "action.active" }} />,
+                startAdornment: (
+                  <Phone sx={{ mr: 1, color: "action.active" }} />
+                ),
               }}
               sx={{
                 "& .MuiOutlinedInput-root": {
-                  borderRadius: `${theme.shape.borderRadius}px`,
+                  borderRadius: `${theme.shape.borderRadius}px`, // Explicitly use the same rounding as the rest of the app
                   background: theme.palette.background.paper,
                   boxShadow: "0 1px 4px 0 rgba(31,38,135,0.07)",
                   "&.Mui-focused fieldset": {
@@ -380,7 +425,7 @@ const FormspreeContactForm: React.FC<FormspreeContactFormProps> = () => {
               }}
               sx={{
                 "& .MuiOutlinedInput-root": {
-                  borderRadius: `${theme.shape.borderRadius}px`,
+                  borderRadius: `${theme.shape.borderRadius}px`, // Explicitly use the same rounding as the rest of the app
                   background: theme.palette.background.paper,
                   boxShadow: "0 1px 4px 0 rgba(31,38,135,0.07)",
                   "&.Mui-focused fieldset": {
@@ -396,7 +441,7 @@ const FormspreeContactForm: React.FC<FormspreeContactFormProps> = () => {
             <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
               <ReCAPTCHA
                 ref={recaptchaRef}
-                sitekey={recaptchaSiteKey!}
+                sitekey={recaptchaSiteKey}
                 onChange={onCaptchaVerified}
                 onExpired={onCaptchaExpired}
                 theme={theme.palette.mode === "dark" ? "dark" : "light"}
@@ -410,8 +455,10 @@ const FormspreeContactForm: React.FC<FormspreeContactFormProps> = () => {
                 type="submit"
                 variant="contained"
                 size="large"
-                disabled={!isFormValid || !captchaVerified || isSubmitting || !!configError}
-                startIcon={isSubmitting ? <CircularProgress size={20} /> : <Send />}
+                disabled={!isFormValid || !captchaVerified || isSubmitting}
+                startIcon={
+                  isSubmitting ? <CircularProgress size={20} /> : <Send />
+                }
                 sx={{
                   minWidth: 220,
                   px: 5,
@@ -420,7 +467,9 @@ const FormspreeContactForm: React.FC<FormspreeContactFormProps> = () => {
                   fontWeight: theme.typography.fontWeightBold,
                   fontSize: theme.typography.body1?.fontSize,
                   background: `linear-gradient(90deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
-                  color: theme.palette.getContrastText(theme.palette.primary.main),
+                  color: theme.palette.getContrastText(
+                    theme.palette.primary.main,
+                  ),
                   boxShadow: "0 2px 8px 0 rgba(31, 38, 135, 0.18)",
                   "&:hover": {
                     background: `linear-gradient(90deg, ${theme.palette.primary.dark} 0%, ${theme.palette.secondary.dark} 100%)`,
