@@ -1,19 +1,16 @@
-import React from "react";
-import { BlogPost } from "../sanity/types";
-import BlogCard from "./BlogCard";
-import BlogSkeleton from "./BlogSkeleton";
-import BlogEmptyState from "./BlogEmptyState";
-import Grid2 from "@mui/material/Grid2";
+import React from 'react';
+import { BlogPost } from '../sanity/types';
+import BlogCard from './BlogCard';
+import BlogSkeleton from './BlogSkeleton';
+import BlogEmptyState from './BlogEmptyState';
+import Grid2 from '@mui/material/Grid2';
 
 interface BlogGridProps {
   posts: BlogPost[];
   loading: boolean;
 }
 
-export default function BlogGrid({
-  posts,
-  loading,
-}: BlogGridProps): React.ReactElement {
+export default function BlogGrid({ posts, loading }: BlogGridProps): React.ReactElement {
   if (loading) {
     return (
       <Grid2
@@ -21,9 +18,9 @@ export default function BlogGrid({
         spacing={4}
         direction="row"
         sx={{
-          display: "flex",
-          flexDirection: "row",
-          flexWrap: "wrap",
+          display: 'flex',
+          flexDirection: 'row',
+          flexWrap: 'wrap',
         }}
       >
         {Array.from(new Array(6)).map((_, index) => (
@@ -40,9 +37,9 @@ export default function BlogGrid({
         spacing={4}
         direction="row"
         sx={{
-          display: "flex",
-          flexDirection: "row",
-          flexWrap: "wrap",
+          display: 'flex',
+          flexDirection: 'row',
+          flexWrap: 'wrap',
         }}
       >
         <BlogEmptyState />

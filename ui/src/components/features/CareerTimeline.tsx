@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Typography,
   Card,
@@ -9,14 +9,14 @@ import {
   Avatar,
   Chip,
   styled,
-} from "@mui/material";
+} from '@mui/material';
 
 export interface TimelineItemData {
   title: string;
   subtitle: string;
   description: string;
   timestamp: string;
-  color: "primary" | "secondary" | "success" | "warning" | "error";
+  color: 'primary' | 'secondary' | 'success' | 'warning' | 'error';
   icon: React.ReactNode;
   startDate: string; // For sorting
 }
@@ -29,33 +29,33 @@ interface CareerTimelineProps {
 }
 
 const TimelineContainer = styled(Box)(({ theme }) => ({
-  position: "relative",
+  position: 'relative',
   padding: theme.spacing(2, 0),
-  "&::before": {
+  '&::before': {
     content: '""',
-    position: "absolute",
-    left: "50%",
+    position: 'absolute',
+    left: '50%',
     top: 0,
     bottom: 0,
-    width: "2px",
+    width: '2px',
     backgroundColor: theme.palette.divider,
-    transform: "translateX(-50%)",
-    [theme.breakpoints.down("md")]: {
-      left: "0.75rem",
+    transform: 'translateX(-50%)',
+    [theme.breakpoints.down('md')]: {
+      left: '0.75rem',
     },
-    [theme.breakpoints.down("sm")]: {
-      left: "0.5rem",
+    [theme.breakpoints.down('sm')]: {
+      left: '0.5rem',
     },
   },
 }));
 
 const TimelineItem = styled(Box)<{ index: number }>(({ theme, index }) => ({
-  display: "flex",
-  alignItems: "center",
+  display: 'flex',
+  alignItems: 'center',
   marginBottom: theme.spacing(4),
-  flexDirection: index % 2 === 0 ? "row" : "row-reverse",
-  [theme.breakpoints.down("md")]: {
-    flexDirection: "row",
+  flexDirection: index % 2 === 0 ? 'row' : 'row-reverse',
+  [theme.breakpoints.down('md')]: {
+    flexDirection: 'row',
     paddingLeft: {
       xs: theme.spacing(1),
       sm: theme.spacing(1.5),
@@ -70,9 +70,9 @@ const TimelineItem = styled(Box)<{ index: number }>(({ theme, index }) => ({
 }));
 
 const TimelineContent = styled(Box)<{ index: number }>(({ theme, index }) => ({
-  width: "45%",
-  [theme.breakpoints.down("md")]: {
-    width: "calc(100vw - 4rem)",
+  width: '45%',
+  [theme.breakpoints.down('md')]: {
+    width: 'calc(100vw - 4rem)',
     marginLeft: { xs: theme.spacing(0.5), sm: theme.spacing(1) },
     paddingRight: 0,
     paddingLeft: 0,
@@ -80,53 +80,53 @@ const TimelineContent = styled(Box)<{ index: number }>(({ theme, index }) => ({
   ...(index % 2 === 0
     ? {
         paddingRight: theme.spacing(4),
-        [theme.breakpoints.down("md")]: {
+        [theme.breakpoints.down('md')]: {
           paddingRight: 0,
         },
       }
     : {
         paddingLeft: theme.spacing(4),
-        [theme.breakpoints.down("md")]: {
+        [theme.breakpoints.down('md')]: {
           paddingLeft: 0,
         },
       }),
 }));
 
 const TimelineDot = styled(Avatar)<{ color: string }>(({ theme, color }) => ({
-  position: "absolute",
-  left: "50%",
-  transform: "translateX(-50%)",
-  width: "3.5rem",
-  height: "3.5rem",
+  position: 'absolute',
+  left: '50%',
+  transform: 'translateX(-50%)',
+  width: '3.5rem',
+  height: '3.5rem',
   zIndex: 2,
   boxShadow: theme.shadows[4],
-  [theme.breakpoints.down("md")]: {
-    left: "0.75rem",
-    width: "1.5rem",
-    height: "1.5rem",
+  [theme.breakpoints.down('md')]: {
+    left: '0.75rem',
+    width: '1.5rem',
+    height: '1.5rem',
   },
-  [theme.breakpoints.down("sm")]: {
-    left: "0.5rem",
-    width: "1.25rem",
-    height: "1.25rem",
+  [theme.breakpoints.down('sm')]: {
+    left: '0.5rem',
+    width: '1.25rem',
+    height: '1.25rem',
   },
-  ...(color === "primary" && {
+  ...(color === 'primary' && {
     backgroundColor: theme.palette.primary.main,
     color: theme.palette.primary.contrastText,
   }),
-  ...(color === "secondary" && {
+  ...(color === 'secondary' && {
     backgroundColor: theme.palette.secondary.main,
     color: theme.palette.secondary.contrastText,
   }),
-  ...(color === "success" && {
+  ...(color === 'success' && {
     backgroundColor: theme.palette.success.main,
     color: theme.palette.success.contrastText,
   }),
-  ...(color === "warning" && {
+  ...(color === 'warning' && {
     backgroundColor: theme.palette.warning.main,
     color: theme.palette.warning.contrastText,
   }),
-  ...(color === "error" && {
+  ...(color === 'error' && {
     backgroundColor: theme.palette.error.main,
     color: theme.palette.error.contrastText,
   }),
@@ -140,7 +140,7 @@ const CareerTimeline: React.FC<CareerTimelineProps> = ({
 }) => {
   const theme = useTheme();
   const sortedTimelineData = [...timelineData].sort(
-    (a, b) => parseInt(b.startDate) - parseInt(a.startDate),
+    (a, b) => parseInt(b.startDate) - parseInt(a.startDate)
   );
   return (
     <Container
@@ -151,17 +151,17 @@ const CareerTimeline: React.FC<CareerTimelineProps> = ({
       }}
     >
       {(title || description || header) && (
-        <Box sx={{ textAlign: "center", mb: { xs: 3, sm: 4, md: 6 } }}>
+        <Box sx={{ textAlign: 'center', mb: { xs: 3, sm: 4, md: 6 } }}>
           {title && (
             <Typography
               variant="h2"
               component="h1"
               gutterBottom
               sx={{
-                fontWeight: "bold",
+                fontWeight: 'bold',
                 color: theme.palette.primary.main,
                 mb: { xs: 1, sm: 2 },
-                fontSize: { xs: "1.5rem", sm: "1.75rem", md: "2rem" },
+                fontSize: { xs: '1.5rem', sm: '1.75rem', md: '2rem' },
               }}
             >
               {title}
@@ -172,9 +172,9 @@ const CareerTimeline: React.FC<CareerTimelineProps> = ({
               variant="h5"
               color="text.secondary"
               sx={{
-                maxWidth: "600px",
-                mx: "auto",
-                fontSize: { xs: "0.875rem", sm: "1rem", md: "1.25rem" },
+                maxWidth: '600px',
+                mx: 'auto',
+                fontSize: { xs: '0.875rem', sm: '1rem', md: '1.25rem' },
               }}
             >
               {description}
@@ -191,13 +191,12 @@ const CareerTimeline: React.FC<CareerTimelineProps> = ({
               <Card
                 elevation={3}
                 sx={{
-                  width: "100%",
-                  minWidth: "100%",
-                  maxWidth: "100%",
-                  transition:
-                    "transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out",
-                  "&:hover": {
-                    transform: "translateY(-2px)",
+                  width: '100%',
+                  minWidth: '100%',
+                  maxWidth: '100%',
+                  transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
+                  '&:hover': {
+                    transform: 'translateY(-2px)',
                     boxShadow: theme.shadows[8],
                   },
                   border: `1px solid ${theme.palette.divider}`,
@@ -206,7 +205,7 @@ const CareerTimeline: React.FC<CareerTimelineProps> = ({
                 <CardContent
                   sx={{
                     p: { xs: 1, sm: 1.5, md: 2 },
-                    "&:last-child": { pb: { xs: 1, sm: 1.5, md: 2 } },
+                    '&:last-child': { pb: { xs: 1, sm: 1.5, md: 2 } },
                   }}
                 >
                   <Chip
@@ -216,7 +215,7 @@ const CareerTimeline: React.FC<CareerTimelineProps> = ({
                     size="small"
                     sx={{
                       mb: { xs: 1, sm: 1.5 },
-                      fontSize: { xs: "0.7rem", sm: "0.75rem", md: "0.875rem" },
+                      fontSize: { xs: '0.7rem', sm: '0.75rem', md: '0.875rem' },
                     }}
                   />
                   <Typography
@@ -226,7 +225,7 @@ const CareerTimeline: React.FC<CareerTimelineProps> = ({
                     sx={{
                       fontWeight: 600,
                       color: theme.palette.text.primary,
-                      fontSize: { xs: "1rem", sm: "1.1rem", md: "1.25rem" },
+                      fontSize: { xs: '1rem', sm: '1.1rem', md: '1.25rem' },
                       lineHeight: { xs: 1.3, sm: 1.4 },
                     }}
                   >
@@ -238,7 +237,7 @@ const CareerTimeline: React.FC<CareerTimelineProps> = ({
                     sx={{
                       mb: { xs: 1, sm: 1.5 },
                       fontWeight: 500,
-                      fontSize: { xs: "0.875rem", sm: "0.9rem", md: "1rem" },
+                      fontSize: { xs: '0.875rem', sm: '0.9rem', md: '1rem' },
                     }}
                   >
                     {item.subtitle}
@@ -248,8 +247,8 @@ const CareerTimeline: React.FC<CareerTimelineProps> = ({
                     color="text.secondary"
                     sx={{
                       lineHeight: 1.5,
-                      textAlign: "left",
-                      fontSize: { xs: "0.8rem", sm: "0.875rem", md: "1rem" },
+                      textAlign: 'left',
+                      fontSize: { xs: '0.8rem', sm: '0.875rem', md: '1rem' },
                     }}
                   >
                     {item.description}

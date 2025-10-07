@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
-import "./TypewriterCode.css";
+import React, { useEffect, useRef, useState } from 'react';
+import './TypewriterCode.css';
 
 interface TypewriterCodeProps {
   code: string;
@@ -8,18 +8,15 @@ interface TypewriterCodeProps {
 
 const BLINK_INTERVAL = 500;
 
-const TypewriterCode: React.FC<TypewriterCodeProps> = ({
-  code,
-  typingSpeed = 40,
-}) => {
-  const [displayed, setDisplayed] = useState("");
+const TypewriterCode: React.FC<TypewriterCodeProps> = ({ code, typingSpeed = 40 }) => {
+  const [displayed, setDisplayed] = useState('');
   const [showCursor, setShowCursor] = useState(true);
   const indexRef = useRef(0);
   const codeContainerRef = useRef<HTMLPreElement>(null);
 
   // Typing effect
   useEffect(() => {
-    setDisplayed("");
+    setDisplayed('');
     indexRef.current = 0;
 
     const type = () => {

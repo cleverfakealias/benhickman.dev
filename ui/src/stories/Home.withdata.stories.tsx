@@ -1,13 +1,13 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { ThemeProvider } from "@mui/material/styles";
-import CssBaseline from "@mui/material/CssBaseline";
-import HomeWrapper from "./HomeWrapper";
-import { createMnTheme } from "../styles/theme";
-import { mockBlogPosts } from "./mocks/sanityMocks";
+import type { Meta, StoryObj } from '@storybook/react';
+import { ThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import HomeWrapper from './HomeWrapper';
+import { createMnTheme } from '../styles/theme';
+import { mockBlogPosts } from './mocks/sanityMocks';
 
 // Use your actual theme creation function
-const lightTheme = createMnTheme("light");
-const darkTheme = createMnTheme("dark");
+const lightTheme = createMnTheme('light');
+const darkTheme = createMnTheme('dark');
 
 // Decorator to provide theme context
 const withLightTheme = (Story: any) => {
@@ -30,11 +30,11 @@ const withDarkTheme = (Story: any) => {
 };
 
 const meta: Meta<typeof HomeWrapper> = {
-  title: "Pages/Home/With Data",
+  title: 'Pages/Home/With Data',
   component: HomeWrapper,
   decorators: [withLightTheme],
   parameters: {
-    layout: "fullscreen",
+    layout: 'fullscreen',
     docs: {
       description: {
         component: `
@@ -57,15 +57,15 @@ This allows you to see how the component looks with actual content loaded.
       },
     },
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
   argTypes: {
     showMockData: {
-      control: "boolean",
-      description: "Whether to use mock data instead of real API calls",
+      control: 'boolean',
+      description: 'Whether to use mock data instead of real API calls',
     },
     mockPosts: {
-      control: "object",
-      description: "Array of mock blog posts to display",
+      control: 'object',
+      description: 'Array of mock blog posts to display',
     },
   },
 } satisfies Meta<typeof HomeWrapper>;
@@ -85,7 +85,7 @@ export const EmptyState: Story = {
     docs: {
       description: {
         story:
-          "Home page when no blog posts are available. Shows the layout structure with an empty blog card area.",
+          'Home page when no blog posts are available. Shows the layout structure with an empty blog card area.',
       },
     },
   },
@@ -103,7 +103,7 @@ export const WithFeaturedPost: Story = {
     docs: {
       description: {
         story:
-          "Home page displaying a featured blog post in the blog card section. This is the typical user experience.",
+          'Home page displaying a featured blog post in the blog card section. This is the typical user experience.',
       },
     },
   },
@@ -121,7 +121,7 @@ export const WithMultiplePosts: Story = {
     docs: {
       description: {
         story:
-          "Home page with multiple blog posts available. The component automatically displays the most recently published post.",
+          'Home page with multiple blog posts available. The component automatically displays the most recently published post.',
       },
     },
   },
@@ -140,7 +140,7 @@ export const DarkThemeWithPost: Story = {
     docs: {
       description: {
         story:
-          "Home page with dark theme and a featured blog post, showing the full theming capabilities.",
+          'Home page with dark theme and a featured blog post, showing the full theming capabilities.',
       },
     },
   },
@@ -158,7 +158,7 @@ export const ProductionBehavior: Story = {
     docs: {
       description: {
         story:
-          "Home page using real API calls (will likely show empty state in Storybook due to missing Sanity configuration).",
+          'Home page using real API calls (will likely show empty state in Storybook due to missing Sanity configuration).',
       },
     },
   },

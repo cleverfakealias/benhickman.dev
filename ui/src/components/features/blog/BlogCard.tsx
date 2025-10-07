@@ -1,5 +1,5 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React from 'react';
+import { Link } from 'react-router-dom';
 import {
   Card,
   CardContent,
@@ -9,10 +9,10 @@ import {
   Box,
   Chip,
   useTheme,
-} from "@mui/material";
-import { AccessTime, Person } from "@mui/icons-material";
-import imageUrlBuilder from "../sanity/imageUrl";
-import { BlogPost } from "../sanity/types";
+} from '@mui/material';
+import { AccessTime, Person } from '@mui/icons-material';
+import imageUrlBuilder from '../sanity/imageUrl';
+import { BlogPost } from '../sanity/types';
 
 interface BlogCardProps {
   post: BlogPost;
@@ -22,53 +22,52 @@ export default function BlogCard({ post }: BlogCardProps): React.ReactElement {
   const theme = useTheme();
 
   const formatDate = (dateString?: string) => {
-    if (!dateString) return "Recently";
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
+    if (!dateString) return 'Recently';
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
     });
   };
 
   const imageSrc = (() => {
     if (!post.mainImage) return undefined;
     const builder = imageUrlBuilder(post.mainImage);
-    if ("width" in builder && typeof builder.width === "function") {
+    if ('width' in builder && typeof builder.width === 'function') {
       return builder.width(400).height(200).url();
     }
     return builder.url();
   })();
 
   const cardSx = {
-    height: "100%",
-    display: "flex",
-    flexDirection: "column",
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
     transition: theme.custom.transitions.smooth,
     background: theme.custom.gradients.hero[theme.palette.mode],
     border: theme.custom.borders.card[theme.palette.mode],
     borderRadius: 4,
     boxShadow: theme.custom.shadows.card[theme.palette.mode],
-    overflow: "hidden",
-    position: "relative",
-    "& .MuiCardMedia-root": {
+    overflow: 'hidden',
+    position: 'relative',
+    '& .MuiCardMedia-root': {
       borderTopLeftRadius: 0,
       borderTopRightRadius: 0,
     },
-    "&:hover": {
-      transform: "translateY(-8px) scale(1.02)",
-      boxShadow: "0 20px 40px rgba(65, 42, 145, 0.15)",
-      ...(theme.palette.mode === "dark" && {
-        background:
-          "linear-gradient(145deg, rgba(50,50,50,0.95) 0%, rgba(60,60,60,0.95) 100%)",
+    '&:hover': {
+      transform: 'translateY(-8px) scale(1.02)',
+      boxShadow: '0 20px 40px rgba(65, 42, 145, 0.15)',
+      ...(theme.palette.mode === 'dark' && {
+        background: 'linear-gradient(145deg, rgba(50,50,50,0.95) 0%, rgba(60,60,60,0.95) 100%)',
       }),
     },
-    "&::before": {
+    '&::before': {
       content: '""',
-      position: "absolute",
+      position: 'absolute',
       top: 0,
       left: 0,
       right: 0,
-      height: "4px",
+      height: '4px',
       background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
     },
   };
@@ -79,10 +78,10 @@ export default function BlogCard({ post }: BlogCardProps): React.ReactElement {
         component={Link}
         to={`/blog/post/${post.slug.current}`}
         sx={{
-          height: "100%",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "stretch",
+          height: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'stretch',
         }}
       >
         {post.mainImage && (
@@ -90,9 +89,9 @@ export default function BlogCard({ post }: BlogCardProps): React.ReactElement {
             component="img"
             height="200"
             image={imageSrc}
-            alt={post.mainImage?.alt || post.title || "Blog image"}
+            alt={post.mainImage?.alt || post.title || 'Blog image'}
             sx={{
-              objectFit: "cover",
+              objectFit: 'cover',
               borderTopLeftRadius: 0,
               borderTopRightRadius: 0,
             }}
@@ -119,20 +118,20 @@ export default function BlogCard({ post }: BlogCardProps): React.ReactElement {
               variant="body2"
               sx={{
                 mb: 3,
-                display: "-webkit-box",
+                display: '-webkit-box',
                 WebkitLineClamp: 3,
-                WebkitBoxOrient: "vertical",
-                overflow: "hidden",
+                WebkitBoxOrient: 'vertical',
+                overflow: 'hidden',
                 lineHeight: theme.typography.body2?.lineHeight || 1.5,
                 color: theme.palette.text.secondary,
-                opacity: theme.palette.mode === "dark" ? 0.9 : 0.8,
+                opacity: theme.palette.mode === 'dark' ? 0.9 : 0.8,
               }}
             >
               {post.excerpt}
             </Typography>
           )}
 
-          <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1, mt: "auto" }}>
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 'auto' }}>
             <Chip
               icon={<AccessTime />}
               label={formatDate(post.publishedAt)}
@@ -149,12 +148,7 @@ export default function BlogCard({ post }: BlogCardProps): React.ReactElement {
             )}
 
             {post.author && (
-              <Chip
-                icon={<Person />}
-                label={post.author}
-                size="small"
-                variant="outlined"
-              />
+              <Chip icon={<Person />} label={post.author} size="small" variant="outlined" />
             )}
           </Box>
         </CardContent>

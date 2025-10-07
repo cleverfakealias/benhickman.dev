@@ -1,20 +1,17 @@
-import { useState, useRef } from "react";
-import HCaptcha from "@hcaptcha/react-hcaptcha";
-import { FormData, FormErrors } from "./types";
-import { validateForm, isFormValid } from "./validation";
-import { submitForm } from "./api";
+import { useState, useRef } from 'react';
+import HCaptcha from '@hcaptcha/react-hcaptcha';
+import { FormData, FormErrors } from './types';
+import { validateForm, isFormValid } from './validation';
+import { submitForm } from './api';
 
 const initialFormData: FormData = {
-  name: "",
-  email: "",
-  phone: "",
-  message: "",
+  name: '',
+  email: '',
+  phone: '',
+  message: '',
 };
 
-export const useFormspreeForm = (
-  formspreeUrl?: string,
-  hCaptchaSiteKey?: string,
-) => {
+export const useFormspreeForm = (formspreeUrl?: string, hCaptchaSiteKey?: string) => {
   const captchaRef = useRef<HCaptcha>(null);
 
   const [formData, setFormData] = useState<FormData>(initialFormData);
@@ -27,9 +24,9 @@ export const useFormspreeForm = (
   const [submitError, setSubmitError] = useState<string | null>(null);
 
   const configError = !formspreeUrl
-    ? "Missing Formspree URL in configuration."
+    ? 'Missing Formspree URL in configuration.'
     : !hCaptchaSiteKey
-      ? "Missing hCaptcha site key in configuration."
+      ? 'Missing hCaptcha site key in configuration.'
       : null;
 
   const onCaptchaVerified = (token: string | null) => {
@@ -57,8 +54,7 @@ export const useFormspreeForm = (
   };
 
   const handleInputChange =
-    (field: keyof FormData) =>
-    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    (field: keyof FormData) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       const value = e.target.value;
       setFormData((prev) => ({ ...prev, [field]: value }));
 
@@ -85,7 +81,7 @@ export const useFormspreeForm = (
     if (!formOk) return;
 
     if (!captchaVerified || !captchaToken) {
-      setSubmitError("Please complete the CAPTCHA before submitting.");
+      setSubmitError('Please complete the CAPTCHA before submitting.');
       return;
     }
 
@@ -108,7 +104,7 @@ export const useFormspreeForm = (
         if (result.error && /captcha|recaptcha|token/i.test(result.error)) {
           resetCaptcha();
         }
-        setSubmitError(result.error || "An unknown error occurred");
+        setSubmitError(result.error || 'An unknown error occurred');
       }
     } finally {
       setIsSubmitting(false);

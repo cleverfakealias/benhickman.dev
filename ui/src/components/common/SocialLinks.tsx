@@ -1,6 +1,6 @@
-import React from "react";
-import { Typography, Box, Link, useTheme, Fade } from "@mui/material";
-import { LinkedIn, GitHub } from "@mui/icons-material";
+import React from 'react';
+import { Typography, Box, Link, useTheme, Fade } from '@mui/material';
+import { LinkedIn, GitHub } from '@mui/icons-material';
 
 interface SocialLinksProps {
   showTitle?: boolean;
@@ -8,37 +8,34 @@ interface SocialLinksProps {
   compact?: boolean;
 }
 
-const SocialLinks: React.FC<SocialLinksProps> = ({
-  centered = true,
-  compact = false,
-}) => {
+const SocialLinks: React.FC<SocialLinksProps> = ({ centered = true, compact = false }) => {
   const theme = useTheme();
 
   const socialLinks = [
     {
       icon: <LinkedIn />,
-      name: "LinkedIn",
-      url: "https://linkedin.benhickman.dev",
-      color: "#0077b5",
-      description: "Professional profile",
+      name: 'LinkedIn',
+      url: 'https://linkedin.benhickman.dev',
+      color: '#0077b5',
+      description: 'Professional profile',
     },
     {
       icon: <GitHub />,
-      name: "GitHub",
-      url: "https://github.benhickman.dev",
-      color: "#24292f",
-      description: "Code repositories",
+      name: 'GitHub',
+      url: 'https://github.benhickman.dev',
+      color: '#24292f',
+      description: 'Code repositories',
     },
   ];
 
   return (
-    <Box sx={{ textAlign: centered ? "center" : "left" }}>
+    <Box sx={{ textAlign: centered ? 'center' : 'left' }}>
       <Box
         sx={{
-          display: "flex",
-          justifyContent: centered ? "center" : "flex-start",
+          display: 'flex',
+          justifyContent: centered ? 'center' : 'flex-start',
           gap: compact ? 1.5 : 2,
-          flexWrap: "wrap",
+          flexWrap: 'wrap',
         }}
       >
         {socialLinks.map((social, idx) => (
@@ -49,14 +46,14 @@ const SocialLinks: React.FC<SocialLinksProps> = ({
               target="_blank"
               rel="noopener noreferrer"
               sx={{
-                display: "inline-flex",
-                flexDirection: "column",
-                alignItems: "center",
+                display: 'inline-flex',
+                flexDirection: 'column',
+                alignItems: 'center',
                 p: compact ? 1.5 : 2,
-                borderRadius: "4px",
-                textDecoration: "none",
+                borderRadius: '4px',
+                textDecoration: 'none',
                 borderColor: social.color,
-                "&:hover": {
+                '&:hover': {
                   borderColor: social.color,
                   boxShadow: `0 4px 16px 0 ${social.color}30`,
                 },
@@ -65,25 +62,25 @@ const SocialLinks: React.FC<SocialLinksProps> = ({
             >
               <Box
                 sx={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  justifyContent: "center",
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
                   width: compact ? 40 : 48,
                   height: compact ? 40 : 48,
-                  borderRadius: "50%",
+                  borderRadius: '50%',
                   background: social.color,
                   mb: compact ? 0.5 : 1,
-                  transition: "all 0.3s ease",
-                  "&:hover": {
-                    transform: "scale(1.1)",
+                  transition: 'all 0.3s ease',
+                  '&:hover': {
+                    transform: 'scale(1.1)',
                   },
                 }}
               >
                 {React.cloneElement(social.icon, {
                   sx: {
-                    color: "#fff",
+                    color: '#fff',
                     fontSize: compact ? 20 : 24,
-                    filter: "drop-shadow(0 1px 2px rgba(0,0,0,0.2))",
+                    filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.2))',
                   },
                 })}
               </Box>
@@ -92,7 +89,7 @@ const SocialLinks: React.FC<SocialLinksProps> = ({
                 sx={{
                   fontWeight: 500,
                   color: theme.palette.text.primary,
-                  fontSize: compact ? "0.8rem" : "0.85rem",
+                  fontSize: compact ? '0.8rem' : '0.85rem',
                 }}
               >
                 {social.name}
@@ -102,7 +99,7 @@ const SocialLinks: React.FC<SocialLinksProps> = ({
                   variant="caption"
                   sx={{
                     color: theme.palette.text.secondary,
-                    fontSize: "0.75rem",
+                    fontSize: '0.75rem',
                     mt: 0.5,
                   }}
                 >

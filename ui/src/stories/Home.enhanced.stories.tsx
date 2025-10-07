@@ -1,12 +1,12 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { ThemeProvider } from "@mui/material/styles";
-import CssBaseline from "@mui/material/CssBaseline";
-import Home from "../pages/Home";
-import { createMnTheme } from "../styles/theme";
+import type { Meta, StoryObj } from '@storybook/react';
+import { ThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import Home from '../pages/Home';
+import { createMnTheme } from '../styles/theme';
 
 // Use your actual theme creation function
-const lightTheme = createMnTheme("light");
-const darkTheme = createMnTheme("dark");
+const lightTheme = createMnTheme('light');
+const darkTheme = createMnTheme('dark');
 
 // Theme decorators
 const withLightTheme = (Story: any) => (
@@ -24,11 +24,11 @@ const withDarkTheme = (Story: any) => (
 );
 
 const meta: Meta<typeof Home> = {
-  title: "Pages/Home/Enhanced",
+  title: 'Pages/Home/Enhanced',
   component: Home,
   decorators: [withLightTheme],
   parameters: {
-    layout: "fullscreen",
+    layout: 'fullscreen',
     docs: {
       description: {
         component: `
@@ -49,7 +49,7 @@ themes, and accessibility testing scenarios.
       },
     },
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
 } satisfies Meta<typeof Home>;
 
 export default meta;
@@ -143,7 +143,7 @@ Focuses on the layout structure showing:
 export const MobileView: Story = {
   parameters: {
     viewport: {
-      defaultViewport: "mobile1",
+      defaultViewport: 'mobile1',
     },
     docs: {
       description: {
@@ -168,7 +168,7 @@ The content automatically reflows for optimal mobile viewing experience.
 export const TabletView: Story = {
   parameters: {
     viewport: {
-      defaultViewport: "tablet",
+      defaultViewport: 'tablet',
     },
     docs: {
       description: {

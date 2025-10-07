@@ -1,6 +1,6 @@
-import React from "react";
-import { Button, CircularProgress, useTheme } from "@mui/material";
-import { Send } from "@mui/icons-material";
+import React from 'react';
+import { Button, CircularProgress, useTheme } from '@mui/material';
+import { Send } from '@mui/icons-material';
 
 interface SubmitButtonProps {
   isFormValid: boolean;
@@ -22,9 +22,7 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
       type="submit"
       variant="contained"
       size="large"
-      disabled={
-        !isFormValid || !captchaVerified || isSubmitting || !!configError
-      }
+      disabled={!isFormValid || !captchaVerified || isSubmitting || !!configError}
       startIcon={isSubmitting ? <CircularProgress size={20} /> : <Send />}
       sx={{
         minWidth: 220,
@@ -35,17 +33,17 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
         fontSize: theme.typography.body1?.fontSize,
         background: `linear-gradient(90deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
         color: theme.palette.getContrastText(theme.palette.primary.main),
-        boxShadow: "0 2px 8px 0 rgba(31, 38, 135, 0.18)",
-        "&:hover": {
+        boxShadow: '0 2px 8px 0 rgba(31, 38, 135, 0.18)',
+        '&:hover': {
           background: `linear-gradient(90deg, ${theme.palette.primary.dark} 0%, ${theme.palette.secondary.dark} 100%)`,
         },
-        "&:disabled": {
+        '&:disabled': {
           background: theme.palette.grey[400],
           color: theme.palette.text.disabled,
         },
       }}
     >
-      {isSubmitting ? "Submitting..." : "Submit"}
+      {isSubmitting ? 'Submitting...' : 'Submit'}
     </Button>
   );
 };

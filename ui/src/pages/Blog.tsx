@@ -1,9 +1,9 @@
-import React from "react";
-import { Box, Container } from "@mui/material";
-import { useBlogPosts } from "../hooks/useBlogPosts";
-import BlogHeader from "../components/features/blog/BlogHeader";
-import BlogGrid from "../components/features/blog/BlogGrid";
-import GradientDivider from "../components/common/GradientDivider";
+import React from 'react';
+import { Box, Container } from '@mui/material';
+import { useBlogPosts } from '../hooks/useBlogPosts';
+import BlogHeader from '../components/features/blog/BlogHeader';
+import BlogGrid from '../components/features/blog/BlogGrid';
+import GradientDivider from '../components/common/GradientDivider';
 
 export default function Blog(): React.ReactElement {
   const { posts, loading } = useBlogPosts();

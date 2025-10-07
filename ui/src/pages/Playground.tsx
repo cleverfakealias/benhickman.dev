@@ -1,15 +1,15 @@
-import { useRef, useState, useEffect } from "react";
-import Editor from "@monaco-editor/react";
-import { Paper, Button, Typography, useTheme, Box } from "@mui/material";
-import AccentBar from "../components/common/AccentBar";
-import HCaptcha from "@hcaptcha/react-hcaptcha";
-import { getDomainConfig } from "../config/domainConfig";
+import { useRef, useState, useEffect } from 'react';
+import Editor from '@monaco-editor/react';
+import { Paper, Button, Typography, useTheme, Box } from '@mui/material';
+import AccentBar from '../components/common/AccentBar';
+import HCaptcha from '@hcaptcha/react-hcaptcha';
+import { getDomainConfig } from '../config/domainConfig';
 
 const DEFAULT_CODE = `console.log('Hello, world!');`;
 
 export default function Playground() {
   const [code, setCode] = useState(DEFAULT_CODE);
-  const [output, setOutput] = useState("");
+  const [output, setOutput] = useState('');
   const [captchaVerified, setCaptchaVerified] = useState(false);
   const theme = useTheme();
   const workerRef = useRef<Worker | null>(null);
@@ -18,7 +18,7 @@ export default function Playground() {
 
   const runCode = () => {
     if (!captchaVerified) {
-      setOutput("Please verify that you are human before running code.\n");
+      setOutput('Please verify that you are human before running code.\n');
       return;
     }
 
@@ -66,19 +66,19 @@ export default function Playground() {
       };
     `;
 
-    const blob = new Blob([script], { type: "application/javascript" });
+    const blob = new Blob([script], { type: 'application/javascript' });
     const worker = new Worker(URL.createObjectURL(blob));
     workerRef.current = worker;
-    setOutput("");
+    setOutput('');
 
     worker.onmessage = (e) => {
       const { type, message } = e.data;
-      if (type === "log" || type === "warn" || type === "info") {
-        console[type as "log" | "warn" | "info"](message);
-        setOutput((prev) => prev + message + "\n");
-      } else if (type === "error") {
+      if (type === 'log' || type === 'warn' || type === 'info') {
+        console[type as 'log' | 'warn' | 'info'](message);
+        setOutput((prev) => prev + message + '\n');
+      } else if (type === 'error') {
         console.error(message);
-        setOutput((prev) => prev + "Error: " + message + "\n");
+        setOutput((prev) => prev + 'Error: ' + message + '\n');
       }
     };
 
@@ -107,37 +107,31 @@ export default function Playground() {
       sx={{
         p: { xs: 2, md: 4 },
         background:
-          theme.custom?.gradients?.hero?.[theme.palette.mode] ||
-          theme.palette.background.paper,
+          theme.custom?.gradients?.hero?.[theme.palette.mode] || theme.palette.background.paper,
         boxShadow: theme.custom?.shadows?.card?.[theme.palette.mode] || 3,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "stretch",
-        justifyContent: "center",
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'stretch',
+        justifyContent: 'center',
         gap: 3,
-        position: "relative",
-        overflow: "hidden",
+        position: 'relative',
+        overflow: 'hidden',
         minHeight: 480,
         maxWidth: 900,
-        margin: "32px auto",
-        width: "100%",
+        margin: '32px auto',
+        width: '100%',
       }}
     >
       <AccentBar />
-      <Typography
-        variant="h4"
-        sx={{ fontWeight: 700, mb: 2, color: theme.palette.text.primary }}
-      >
+      <Typography variant="h4" sx={{ fontWeight: 700, mb: 2, color: theme.palette.text.primary }}>
         Just a place to play with JavaScript
       </Typography>
-      <Box
-        sx={{ flex: 1, minHeight: 0, display: "flex", flexDirection: "column" }}
-      >
+      <Box sx={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column' }}>
         <Editor
           height="40vh"
           defaultLanguage="javascript"
           value={code}
-          onChange={(value) => setCode(value || "")}
+          onChange={(value) => setCode(value || '')}
           theme="vs-dark"
           options={{ fontSize: 16, minimap: { enabled: false } }}
         />
@@ -146,11 +140,11 @@ export default function Playground() {
         onClick={runCode}
         variant="contained"
         color="primary"
-        sx={{ alignSelf: "flex-start", mt: 1, mb: 1 }}
+        sx={{ alignSelf: 'flex-start', mt: 1, mb: 1 }}
       >
         Run
       </Button>
-      <Box sx={{ alignSelf: "flex-start", mb: 2 }}>
+      <Box sx={{ alignSelf: 'flex-start', mb: 2 }}>
         <HCaptcha
           ref={captchaRef}
           sitekey={hCaptchaSiteKey}
@@ -161,20 +155,17 @@ export default function Playground() {
       </Box>
       <Box
         sx={{
-          background: "#222",
-          color: "#fff",
+          background: '#222',
+          color: '#fff',
           minHeight: 80,
           padding: 2,
-          fontFamily: "monospace",
-          width: "100%",
-          overflowX: "auto",
+          fontFamily: 'monospace',
+          width: '100%',
+          overflowX: 'auto',
           borderRadius: 1,
         }}
       >
-        <Typography
-          variant="subtitle1"
-          sx={{ color: "#8CD2EF", fontWeight: 600 }}
-        >
+        <Typography variant="subtitle1" sx={{ color: '#8CD2EF', fontWeight: 600 }}>
           Output:
         </Typography>
         <pre style={{ margin: 0 }}>{output}</pre>

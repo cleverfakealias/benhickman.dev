@@ -1,4 +1,4 @@
-import { FormData } from "./types";
+import { FormData } from './types';
 
 export interface SubmitFormOptions {
   formData: FormData;
@@ -14,7 +14,7 @@ export const submitForm = async ({
   // Build urlencoded body (Formspree-friendly) and include the reCAPTCHA token
   const params = new URLSearchParams();
   Object.entries(formData).forEach(([k, v]) => params.append(k, String(v)));
-  params.append("g-recaptcha-response", captchaToken);
+  params.append('g-recaptcha-response', captchaToken);
 
   // Add a timeout so the UI isn't stuck if the network hangs
   const controller = new AbortController();
@@ -22,17 +22,17 @@ export const submitForm = async ({
 
   try {
     const response = await fetch(formspreeUrl, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-        Accept: "application/json",
+        'Content-Type': 'application/x-www-form-urlencoded',
+        Accept: 'application/json',
       },
       body: params.toString(),
       // CORS-safe defaults; Formspree doesn't need cookies
-      credentials: "omit",
+      credentials: 'omit',
       signal: controller.signal,
-      cache: "no-store",
-      referrerPolicy: "no-referrer",
+      cache: 'no-store',
+      referrerPolicy: 'no-referrer',
     });
 
     // Handle success / error robustly (Formspree often returns JSON, but be defensive)
@@ -47,7 +47,7 @@ export const submitForm = async ({
       if (errorData?.message) errMsg = errorData.message;
       // Formspree sometimes returns field errors:
       if (Array.isArray(errorData?.errors) && errorData.errors.length) {
-        errMsg = errorData.errors.map((e: any) => e.message).join("; ");
+        errMsg = errorData.errors.map((e: any) => e.message).join('; ');
       }
     } catch {
       try {
@@ -60,17 +60,16 @@ export const submitForm = async ({
 
     return { success: false, error: errMsg };
   } catch (err: any) {
-    if (err?.name === "AbortError") {
+    if (err?.name === 'AbortError') {
       return {
         success: false,
-        error:
-          "The request timed out. Please check your connection and try again.",
+        error: 'The request timed out. Please check your connection and try again.',
       };
     } else {
-      console.error("Form submission error:", err);
+      console.error('Form submission error:', err);
       return {
         success: false,
-        error: "A network error occurred. Please try again.",
+        error: 'A network error occurred. Please try again.',
       };
     }
   } finally {

@@ -1,14 +1,8 @@
-import React from "react";
-import {
-  Typography,
-  Box,
-  useTheme,
-  useMediaQuery,
-  styled,
-} from "@mui/material";
-import { PortableText, PortableTextReactComponents } from "@portabletext/react";
-import { TypedObject } from "@portabletext/types";
-import imageUrlBuilder from "../sanity/imageUrl";
+import React from 'react';
+import { Typography, Box, useTheme, useMediaQuery, styled } from '@mui/material';
+import { PortableText, PortableTextReactComponents } from '@portabletext/react';
+import { TypedObject } from '@portabletext/types';
+import imageUrlBuilder from '../sanity/imageUrl';
 
 interface BlogBodyProps {
   content: TypedObject[];
@@ -16,99 +10,95 @@ interface BlogBodyProps {
 
 // Styled components for blog content
 const BlogContent = styled(Box)(({ theme }) => ({
-  "& h1, & h2, & h3, & h4, & h5, & h6": {
+  '& h1, & h2, & h3, & h4, & h5, & h6': {
     marginTop: theme.spacing(4),
     marginBottom: theme.spacing(2),
     fontWeight: theme.typography.fontWeightBold,
     lineHeight: theme.typography.h1?.lineHeight,
   },
-  "& h1": {
+  '& h1': {
     fontSize: theme.typography.h1?.fontSize,
     color: theme.palette.primary.main,
-    [theme.breakpoints.down("md")]: {
+    [theme.breakpoints.down('md')]: {
       fontSize: theme.typography.h2?.fontSize,
     },
   },
-  "& h2": {
+  '& h2': {
     fontSize: theme.typography.h2?.fontSize,
     color: theme.palette.primary.main,
-    [theme.breakpoints.down("md")]: {
+    [theme.breakpoints.down('md')]: {
       fontSize: theme.typography.h3?.fontSize,
     },
   },
-  "& h3": {
+  '& h3': {
     fontSize: theme.typography.h3?.fontSize,
-    [theme.breakpoints.down("md")]: {
+    [theme.breakpoints.down('md')]: {
       fontSize: theme.typography.h4?.fontSize,
     },
   },
-  "& p": {
+  '& p': {
     marginBottom: theme.spacing(2),
     lineHeight: theme.typography.body1?.lineHeight,
     fontSize: theme.typography.body1?.fontSize,
     color: theme.palette.text.primary,
   },
-  "& ul, & ol": {
+  '& ul, & ol': {
     marginBottom: theme.spacing(2),
     paddingLeft: theme.spacing(3),
   },
-  "& li": {
+  '& li': {
     marginBottom: theme.spacing(1),
     lineHeight: 1.6,
   },
-  "& blockquote": {
+  '& blockquote': {
     borderLeft: `4px solid ${theme.palette.primary.main}`,
     paddingLeft: theme.spacing(2),
     margin: theme.spacing(3, 0),
-    fontStyle: "italic",
+    fontStyle: 'italic',
     backgroundColor:
-      theme.palette.mode === "dark"
-        ? theme.palette.grey[800]
-        : theme.palette.grey[200],
+      theme.palette.mode === 'dark' ? theme.palette.grey[800] : theme.palette.grey[200],
     padding: theme.spacing(2),
-    borderRadius: "4px",
+    borderRadius: '4px',
     color: theme.palette.text.primary,
   },
-  "& pre": {
+  '& pre': {
     backgroundColor: theme.palette.grey[900],
     color: theme.palette.common.white,
     padding: theme.spacing(2),
-    borderRadius: "4px",
-    overflow: "auto",
+    borderRadius: '4px',
+    overflow: 'auto',
     fontSize: theme.typography.body2?.fontSize,
     fontFamily: 'Monaco, "Lucida Console", monospace',
   },
-  "& code": {
+  '& code': {
     backgroundColor:
-      theme.palette.mode === "dark"
-        ? theme.palette.grey[700]
-        : theme.palette.grey[200],
+      theme.palette.mode === 'dark' ? theme.palette.grey[700] : theme.palette.grey[200],
     color: theme.palette.text.primary,
-    padding: "2px 6px",
-    borderRadius: "4px",
+    padding: '2px 6px',
+    borderRadius: '4px',
     fontSize: theme.typography.caption?.fontSize,
     fontFamily: 'Monaco, "Lucida Console", monospace',
   },
-  "& img": {
-    maxWidth: "100%",
-    height: "auto",
-    borderRadius: "4px",
+  '& img': {
+    maxWidth: '100%',
+    height: 'auto',
+    borderRadius: '4px',
     margin: theme.spacing(2, 0),
     boxShadow: theme.shadows[2],
   },
-  "& a": {
+  '& a': {
     color: theme.palette.primary.main,
-    textDecoration: "none",
+    textDecoration: 'none',
     fontWeight: 500,
-    "&:hover": {
-      textDecoration: "underline",
+    '&:hover': {
+      textDecoration: 'underline',
     },
   },
 }));
 
 const BlogBody: React.FC<BlogBodyProps> = ({ content }) => {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   if (!content || !Array.isArray(content)) {
     return (
@@ -197,14 +187,12 @@ const BlogBody: React.FC<BlogBodyProps> = ({ content }) => {
             borderLeft: `4px solid ${theme.palette.primary.main}`,
             paddingLeft: theme.spacing(2),
             margin: theme.spacing(3, 0),
-            fontStyle: "italic",
+            fontStyle: 'italic',
             backgroundColor:
-              theme.palette.mode === "dark"
-                ? theme.palette.grey[800]
-                : theme.palette.grey[200],
+              theme.palette.mode === 'dark' ? theme.palette.grey[800] : theme.palette.grey[200],
             padding: theme.spacing(2),
             borderRadius: theme.shape.borderRadius,
-            "& .MuiTypography-root": {
+            '& .MuiTypography-root': {
               color: theme.palette.text.primary,
             },
           }}
@@ -253,13 +241,11 @@ const BlogBody: React.FC<BlogBodyProps> = ({ content }) => {
           component="code"
           sx={{
             backgroundColor:
-              theme.palette.mode === "dark"
-                ? theme.palette.grey[700]
-                : theme.palette.grey[200],
+              theme.palette.mode === 'dark' ? theme.palette.grey[700] : theme.palette.grey[200],
             color: theme.palette.text.primary,
-            padding: "2px 6px",
-            borderRadius: "4px",
-            fontSize: "0.9em",
+            padding: '2px 6px',
+            borderRadius: '4px',
+            fontSize: '0.9em',
             fontFamily: 'Monaco, "Lucida Console", monospace',
           }}
         >
@@ -279,46 +265,41 @@ const BlogBody: React.FC<BlogBodyProps> = ({ content }) => {
         };
       }) => {
         // Debug: Log the image value to see what we're working with
-        console.log("Image value in BlogBody:", value);
+        console.log('Image value in BlogBody:', value);
 
         // Use Sanity image URL builder for proper image rendering
-        let imageUrl = "";
+        let imageUrl = '';
 
         if (value.asset) {
           try {
             const urlBuilder = imageUrlBuilder(value);
             imageUrl = urlBuilder.url();
           } catch (error) {
-            console.error("Error building image URL:", error);
-            imageUrl = value.asset.url || "";
+            console.error('Error building image URL:', error);
+            imageUrl = value.asset.url || '';
           }
         } else {
-          imageUrl = value.url || "";
+          imageUrl = value.url || '';
         }
 
-        console.log("Final image URL:", imageUrl);
+        console.log('Final image URL:', imageUrl);
 
         return (
-          <Box sx={{ textAlign: "center", my: 3 }}>
+          <Box sx={{ textAlign: 'center', my: 3 }}>
             <img
               src={imageUrl}
-              alt={value.alt || "Blog image"}
+              alt={value.alt || 'Blog image'}
               style={{
-                maxWidth: "100%",
-                height: "auto",
-                borderRadius: "4px",
+                maxWidth: '100%',
+                height: 'auto',
+                borderRadius: '4px',
                 boxShadow: theme.shadows[2],
               }}
-              onError={(e) =>
-                console.error("Image failed to load:", e.currentTarget.src)
-              }
-              onLoad={() => console.log("Image loaded successfully:", imageUrl)}
+              onError={(e) => console.error('Image failed to load:', e.currentTarget.src)}
+              onLoad={() => console.log('Image loaded successfully:', imageUrl)}
             />
             {value.caption && (
-              <Typography
-                variant="caption"
-                sx={{ display: "block", mt: 1, fontStyle: "italic" }}
-              >
+              <Typography variant="caption" sx={{ display: 'block', mt: 1, fontStyle: 'italic' }}>
                 {value.caption}
               </Typography>
             )}
@@ -333,8 +314,8 @@ const BlogBody: React.FC<BlogBodyProps> = ({ content }) => {
             color: theme.palette.common.white,
             padding: theme.spacing(2),
             borderRadius: theme.shape.borderRadius,
-            overflow: "auto",
-            fontSize: "0.9rem",
+            overflow: 'auto',
+            fontSize: '0.9rem',
             fontFamily: 'Monaco, "Lucida Console", monospace',
             my: 2,
           }}
@@ -348,8 +329,8 @@ const BlogBody: React.FC<BlogBodyProps> = ({ content }) => {
   return (
     <BlogContent
       sx={{
-        maxWidth: "100%",
-        fontSize: isMobile ? "1rem" : "1.1rem",
+        maxWidth: '100%',
+        fontSize: isMobile ? '1rem' : '1.1rem',
       }}
     >
       <PortableText value={content} components={portableTextComponents} />

@@ -3,7 +3,7 @@
   color: var(--footer-text);
   padding: 0.5rem 0;
   text-align: center;
-  font-family: "Segoe UI", Arial, sans-serif;
+  font-family: 'Segoe UI', Arial, sans-serif;
   box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
   position: fixed;
   bottom: 0;
@@ -22,7 +22,7 @@
   padding-right: 1rem;
 }
 
-.footer-cell-left span[aria-label="Mission statement"] {
+.footer-cell-left span[aria-label='Mission statement'] {
   font-size: 1.1rem;
   font-weight: 600;
   letter-spacing: 1.2px;
@@ -49,7 +49,7 @@
     margin-bottom: 0.25rem;
   }
 
-  .footer-cell-left span[aria-label="Mission statement"] {
+  .footer-cell-left span[aria-label='Mission statement'] {
     font-size: 0.95rem;
     letter-spacing: 0.5px;
   }

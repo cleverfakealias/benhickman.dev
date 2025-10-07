@@ -1,28 +1,21 @@
-import React from "react";
-import FormspreeContactForm from "../components/common/FormspreeContactForm";
-import ContactInformation from "../components/common/ContactInformation";
-import {
-  Card,
-  CardContent,
-  useTheme,
-  Container,
-  Box,
-  Typography,
-} from "@mui/material";
-import { Theme } from "@mui/material/styles";
+import React from 'react';
+import FormspreeContactForm from '../components/common/FormspreeContactForm';
+import ContactInformation from '../components/common/ContactInformation';
+import { Card, CardContent, useTheme, Container, Box, Typography } from '@mui/material';
+import { Theme } from '@mui/material/styles';
 
 const Contact: React.FC = () => {
   const theme = useTheme() as Theme;
   return (
     <Container maxWidth="md" sx={{ py: 8 }}>
       {/* Header Section */}
-      <Box sx={{ textAlign: "center", mb: 6 }}>
+      <Box sx={{ textAlign: 'center', mb: 6 }}>
         <Typography
           variant="h2"
           component="h1"
           gutterBottom
           sx={{
-            fontWeight: "bold",
+            fontWeight: 'bold',
             color: theme.palette.primary.main,
             mb: 2,
           }}
@@ -32,14 +25,13 @@ const Contact: React.FC = () => {
         <Typography
           variant="h5"
           sx={{
-            maxWidth: "600px",
-            mx: "auto",
+            maxWidth: '600px',
+            mx: 'auto',
             color: theme.palette.text.secondary,
-            opacity: theme.palette.mode === "dark" ? 0.9 : 0.7,
+            opacity: theme.palette.mode === 'dark' ? 0.9 : 0.7,
           }}
         >
-          Get in touch for project inquiries, collaboration, or just to say
-          hello!
+          Get in touch for project inquiries, collaboration, or just to say hello!
         </Typography>
       </Box>
       {/* Contact Card */}
@@ -50,21 +42,21 @@ const Contact: React.FC = () => {
             background: theme.custom.gradients.hero[theme.palette.mode],
             border: theme.custom.borders.card[theme.palette.mode],
             boxShadow: theme.custom.shadows.card[theme.palette.mode],
-            position: "relative",
-            overflow: "hidden",
+            position: 'relative',
+            overflow: 'hidden',
             mb: 4,
-            width: "100%",
+            width: '100%',
             transition: theme.custom.transitions.smooth,
-            "&:hover": {
+            '&:hover': {
               boxShadow: theme.custom.shadows.card.hover[theme.palette.mode],
             },
-            "&::before": {
+            '&::before': {
               content: '""',
-              position: "absolute",
+              position: 'absolute',
               top: 0,
               left: 0,
               right: 0,
-              height: "4px",
+              height: '4px',
               background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
               borderRadius: 4,
             },

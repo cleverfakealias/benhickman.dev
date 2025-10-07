@@ -1,17 +1,17 @@
-import { createClient } from "@sanity/client";
+import { createClient } from '@sanity/client';
 
 // Fallback configuration for development
 const clientConfig = {
-  projectId: import.meta.env.VITE_SANITY_PROJECT_ID || "your-project-id",
-  dataset: import.meta.env.VITE_SANITY_DATASET || "production",
-  apiVersion: "2023-09-01",
+  projectId: import.meta.env.VITE_SANITY_PROJECT_ID || 'your-project-id',
+  dataset: import.meta.env.VITE_SANITY_DATASET || 'production',
+  apiVersion: '2023-09-01',
   useCdn: true,
 };
 
 // Only create client if we have a valid project ID
 const hasValidConfig =
   clientConfig.projectId &&
-  clientConfig.projectId !== "your-project-id" &&
+  clientConfig.projectId !== 'your-project-id' &&
   /^[a-z0-9-]+$/.test(clientConfig.projectId);
 
 export const sanityClient = hasValidConfig ? createClient(clientConfig) : null;
@@ -19,7 +19,7 @@ export const sanityClient = hasValidConfig ? createClient(clientConfig) : null;
 export async function fetchPosts() {
   if (!sanityClient) {
     console.warn(
-      "Sanity client not configured. Please set VITE_SANITY_PROJECT_ID and VITE_SANITY_DATASET environment variables.",
+      'Sanity client not configured. Please set VITE_SANITY_PROJECT_ID and VITE_SANITY_DATASET environment variables.'
     );
     return [];
   }
@@ -39,7 +39,7 @@ export async function fetchPosts() {
 
 export async function getAllPostSlugs() {
   if (!sanityClient) {
-    console.warn("Sanity client not configured.");
+    console.warn('Sanity client not configured.');
     return [];
   }
 
@@ -49,7 +49,7 @@ export async function getAllPostSlugs() {
 
 export async function getPostBySlug(slug: string) {
   if (!sanityClient) {
-    console.warn("Sanity client not configured.");
+    console.warn('Sanity client not configured.');
     return null;
   }
 

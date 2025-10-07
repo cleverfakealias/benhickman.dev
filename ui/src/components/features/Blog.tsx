@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { fetchPosts } from "./sanity/sanityClient";
-import BlogSkeleton from "./BlogSkeleton";
-import { BlogPost } from "./sanity/types";
-import { Box, Container, Grid2, Typography, useTheme } from "@mui/material";
-import BlogCard from "./blog/BlogCard";
+import React, { useEffect, useState } from 'react';
+import { fetchPosts } from './sanity/sanityClient';
+import BlogSkeleton from './BlogSkeleton';
+import { BlogPost } from './sanity/types';
+import { Box, Container, Grid2, Typography, useTheme } from '@mui/material';
+import BlogCard from './blog/BlogCard';
 
 export default function Blog(): React.ReactElement {
   const [posts, setPosts] = useState<BlogPost[]>([]);
@@ -24,16 +24,16 @@ export default function Blog(): React.ReactElement {
         setLoading(false);
       })
       .catch((error) => {
-        setError("Failed to load blog posts. Please try again later.");
+        setError('Failed to load blog posts. Please try again later.');
         setLoading(false);
-        console.error("Error fetching posts:", error);
+        console.error('Error fetching posts:', error);
       });
   }, []);
 
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
       {/* Header Section */}
-      <Box sx={{ textAlign: "center", mb: 6 }}>
+      <Box sx={{ textAlign: 'center', mb: 6 }}>
         <Typography
           variant="h2"
           component="h1"
@@ -49,28 +49,27 @@ export default function Blog(): React.ReactElement {
         <Typography
           variant="h5"
           sx={{
-            maxWidth: "600px",
-            mx: "auto",
+            maxWidth: '600px',
+            mx: 'auto',
             color: theme.palette.text.secondary,
-            opacity: theme.palette.mode === "dark" ? 0.9 : 0.7,
+            opacity: theme.palette.mode === 'dark' ? 0.9 : 0.7,
           }}
         >
-          Insights on software architecture, cloud technologies, and building
-          scalable applications
+          Insights on software architecture, cloud technologies, and building scalable applications
         </Typography>
 
         {/* Decorative line */}
         <Box
           sx={{
             mt: 3,
-            width: { xs: "100px", md: "150px" },
-            height: "4px",
+            width: { xs: '100px', md: '150px' },
+            height: '4px',
             background:
-              theme.palette.mode === "dark"
-                ? "linear-gradient(90deg, #7C4DFF, #448AFF)"
-                : "linear-gradient(90deg, #412A91, #002B5C)",
+              theme.palette.mode === 'dark'
+                ? 'linear-gradient(90deg, #7C4DFF, #448AFF)'
+                : 'linear-gradient(90deg, #412A91, #002B5C)',
             borderRadius: theme.shape.borderRadius,
-            mx: "auto",
+            mx: 'auto',
           }}
         />
       </Box>
@@ -80,18 +79,16 @@ export default function Blog(): React.ReactElement {
         container
         spacing={4}
         sx={{
-          display: "flex",
-          flexDirection: "row",
-          flexWrap: "wrap",
+          display: 'flex',
+          flexDirection: 'row',
+          flexWrap: 'wrap',
         }}
       >
         {loading ? (
-          Array.from(new Array(6)).map((_, index) => (
-            <BlogSkeleton key={index} />
-          ))
+          Array.from(new Array(6)).map((_, index) => <BlogSkeleton key={index} />)
         ) : error ? (
           <Grid2 size={{ xs: 12 }}>
-            <Box sx={{ textAlign: "center", py: 8 }}>
+            <Box sx={{ textAlign: 'center', py: 8 }}>
               <Typography variant="h5" color="error" gutterBottom>
                 {error}
               </Typography>
@@ -99,7 +96,7 @@ export default function Blog(): React.ReactElement {
           </Grid2>
         ) : posts.length === 0 ? (
           <Grid2 size={{ xs: 12 }}>
-            <Box sx={{ textAlign: "center", py: 8 }}>
+            <Box sx={{ textAlign: 'center', py: 8 }}>
               <Typography variant="h5" color="text.secondary" gutterBottom>
                 No blog posts yet
               </Typography>

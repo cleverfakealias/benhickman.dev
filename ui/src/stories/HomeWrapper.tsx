@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { Container } from "@mui/material";
-import HeroBanner from "../components/common/HeroBanner";
-import HomeSummary from "../components/features/HomeSummary";
-import BlogCard from "../components/features/blog/BlogCard";
-import TypewriterCode from "../components/features/TypewriterCode";
-import { BlogPost } from "../components/features/sanity/types";
+import React, { useEffect, useState } from 'react';
+import { Container } from '@mui/material';
+import HeroBanner from '../components/common/HeroBanner';
+import HomeSummary from '../components/features/HomeSummary';
+import BlogCard from '../components/features/blog/BlogCard';
+import TypewriterCode from '../components/features/TypewriterCode';
+import { BlogPost } from '../components/features/sanity/types';
 
 interface HomeWrapperProps {
   mockPosts?: BlogPost[];
@@ -26,26 +26,24 @@ export default function HomeWrapper({
       // Use mock data for Storybook
       const sorted = mockPosts.sort(
         (a: BlogPost, b: BlogPost) =>
-          new Date(b.publishedAt || b._createdAt || "").getTime() -
-          new Date(a.publishedAt || a._createdAt || "").getTime(),
+          new Date(b.publishedAt || b._createdAt || '').getTime() -
+          new Date(a.publishedAt || a._createdAt || '').getTime()
       );
       setFirstPost(sorted[0]);
     } else if (!showMockData) {
       // Use real API call for production (will likely fail in Storybook)
-      import("../components/features/sanity/sanityClient").then(
-        ({ fetchPosts }) => {
-          fetchPosts().then((posts) => {
-            if (posts && posts.length > 0) {
-              const sorted = posts.sort(
-                (a: BlogPost, b: BlogPost) =>
-                  new Date(b.publishedAt || b._createdAt || "").getTime() -
-                  new Date(a.publishedAt || a._createdAt || "").getTime(),
-              );
-              setFirstPost(sorted[0]);
-            }
-          });
-        },
-      );
+      import('../components/features/sanity/sanityClient').then(({ fetchPosts }) => {
+        fetchPosts().then((posts) => {
+          if (posts && posts.length > 0) {
+            const sorted = posts.sort(
+              (a: BlogPost, b: BlogPost) =>
+                new Date(b.publishedAt || b._createdAt || '').getTime() -
+                new Date(a.publishedAt || a._createdAt || '').getTime()
+            );
+            setFirstPost(sorted[0]);
+          }
+        });
+      });
     }
   }, [mockPosts, showMockData]);
 
@@ -54,11 +52,11 @@ export default function HomeWrapper({
       <HeroBanner />
       <div
         style={{
-          display: "flex",
+          display: 'flex',
           gap: 32,
-          alignItems: "center",
-          justifyContent: "center",
-          flexWrap: "wrap",
+          alignItems: 'center',
+          justifyContent: 'center',
+          flexWrap: 'wrap',
           minHeight: 400,
         }}
       >
@@ -66,9 +64,9 @@ export default function HomeWrapper({
           style={{
             flex: 1,
             minWidth: 320,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
           }}
         >
           {firstPost && <BlogCard post={firstPost} />}
@@ -77,9 +75,9 @@ export default function HomeWrapper({
           style={{
             flex: 1,
             minWidth: 320,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
           }}
         >
           <TypewriterCode code={codeText} />

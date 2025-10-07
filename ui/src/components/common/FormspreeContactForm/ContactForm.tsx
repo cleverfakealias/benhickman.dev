@@ -1,11 +1,11 @@
-import React from "react";
-import { Box, Alert, useTheme } from "@mui/material";
-import { Person, Email, Phone, Message } from "@mui/icons-material";
-import Grid2 from "@mui/material/Grid2";
-import HCaptcha from "@hcaptcha/react-hcaptcha";
-import FormField from "./FormField";
-import SubmitButton from "./SubmitButton";
-import { FormData } from "./types";
+import React from 'react';
+import { Box, Alert, useTheme } from '@mui/material';
+import { Person, Email, Phone, Message } from '@mui/icons-material';
+import Grid2 from '@mui/material/Grid2';
+import HCaptcha from '@hcaptcha/react-hcaptcha';
+import FormField from './FormField';
+import SubmitButton from './SubmitButton';
+import { FormData } from './types';
 
 interface ContactFormProps {
   formData: FormData;
@@ -23,7 +23,7 @@ interface ContactFormProps {
   hCaptchaSiteKey: string;
   captchaRef: React.RefObject<HCaptcha>;
   onInputChange: (
-    field: keyof FormData,
+    field: keyof FormData
   ) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   onSubmit: (e: React.FormEvent) => void;
   onCaptchaVerified: (token: string | null) => void;
@@ -52,12 +52,12 @@ const ContactForm: React.FC<ContactFormProps> = ({
       component="form"
       onSubmit={onSubmit}
       noValidate
-      aria-busy={isSubmitting ? "true" : "false"}
+      aria-busy={isSubmitting ? 'true' : 'false'}
       sx={{
-        backgroundColor: "transparent",
+        backgroundColor: 'transparent',
         padding: { xs: 1, sm: 2, md: 3 },
-        borderRadius: "4px",
-        boxShadow: "none",
+        borderRadius: '4px',
+        boxShadow: 'none',
       }}
     >
       {(submitError || configError) && (
@@ -71,7 +71,7 @@ const ContactForm: React.FC<ContactFormProps> = ({
           label="Name"
           name="name"
           value={formData.name}
-          onChange={onInputChange("name")}
+          onChange={onInputChange('name')}
           error={errors.name}
           helperText="Enter your full name"
           required
@@ -83,7 +83,7 @@ const ContactForm: React.FC<ContactFormProps> = ({
           name="email"
           type="email"
           value={formData.email}
-          onChange={onInputChange("email")}
+          onChange={onInputChange('email')}
           error={errors.email}
           helperText="Enter your email address"
           required
@@ -95,7 +95,7 @@ const ContactForm: React.FC<ContactFormProps> = ({
           name="phone"
           type="tel"
           value={formData.phone}
-          onChange={onInputChange("phone")}
+          onChange={onInputChange('phone')}
           helperText="Enter your phone number"
           startIcon={<Phone />}
         />
@@ -104,7 +104,7 @@ const ContactForm: React.FC<ContactFormProps> = ({
           label="Message"
           name="message"
           value={formData.message}
-          onChange={onInputChange("message")}
+          onChange={onInputChange('message')}
           error={errors.message}
           helperText="Enter your message"
           required
@@ -114,19 +114,19 @@ const ContactForm: React.FC<ContactFormProps> = ({
         />
 
         <Grid2 size={{ xs: 12 }}>
-          <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
+          <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
             <HCaptcha
               ref={captchaRef}
               sitekey={hCaptchaSiteKey}
               onVerify={onCaptchaVerified}
               onExpire={onCaptchaExpired}
-              theme={theme.palette.mode === "dark" ? "dark" : "light"}
+              theme={theme.palette.mode === 'dark' ? 'dark' : 'light'}
             />
           </Box>
         </Grid2>
 
         <Grid2 size={{ xs: 12 }}>
-          <Box sx={{ display: "flex", justifyContent: "center" }}>
+          <Box sx={{ display: 'flex', justifyContent: 'center' }}>
             <SubmitButton
               isFormValid={formValid}
               captchaVerified={captchaVerified}

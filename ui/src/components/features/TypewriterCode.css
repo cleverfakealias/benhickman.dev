@@ -2,7 +2,7 @@
   --terminal-bg: #1e1e2f;
   --terminal-header-bg: #12121b;
   --terminal-border: #2c2f36;
-  --font-code: "JetBrains Mono", "Fira Mono", "Menlo", monospace;
+  --font-code: 'JetBrains Mono', 'Fira Mono', 'Menlo', monospace;
 
   --dot-red: #ff5f56;
   --dot-yellow: #ffbd2e;

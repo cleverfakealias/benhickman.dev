@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   Container,
   Drawer,
@@ -7,33 +7,27 @@ import {
   ListItem,
   ListItemText,
   Divider,
-} from "@mui/material";
-import { Close as CloseIcon, Menu as MenuIcon } from "@mui/icons-material";
+} from '@mui/material';
+import { Close as CloseIcon, Menu as MenuIcon } from '@mui/icons-material';
 
 const NavigationDrawer: React.FC = () => {
   const [open, setOpen] = useState(false);
 
-  const toggleDrawer =
-    (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
-      if (
-        event.type === "keydown" &&
-        ((event as React.KeyboardEvent).key === "Tab" ||
-          (event as React.KeyboardEvent).key === "Shift")
-      ) {
-        return;
-      }
-      setOpen(open);
-    };
+  const toggleDrawer = (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
+    if (
+      event.type === 'keydown' &&
+      ((event as React.KeyboardEvent).key === 'Tab' ||
+        (event as React.KeyboardEvent).key === 'Shift')
+    ) {
+      return;
+    }
+    setOpen(open);
+  };
 
   return (
     <Container>
       <div className="menu-button">
-        <IconButton
-          edge="start"
-          color="inherit"
-          aria-label="menu"
-          onClick={toggleDrawer(true)}
-        >
+        <IconButton edge="start" color="inherit" aria-label="menu" onClick={toggleDrawer(true)}>
           <MenuIcon />
         </IconButton>
       </div>
@@ -49,8 +43,8 @@ const NavigationDrawer: React.FC = () => {
           </IconButton>
           <Divider />
           <List>
-            {["Home", "About", "Contact"].map((text) => (
-              <ListItem key={text} component={"li"}>
+            {['Home', 'About', 'Contact'].map((text) => (
+              <ListItem key={text} component={'li'}>
                 <ListItemText primary={text} />
               </ListItem>
             ))}

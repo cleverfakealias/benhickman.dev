@@ -1,14 +1,12 @@
-import React from "react";
-import { TextField, useTheme } from "@mui/material";
-import Grid2 from "@mui/material/Grid2";
+import React from 'react';
+import { TextField, useTheme } from '@mui/material';
+import Grid2 from '@mui/material/Grid2';
 
 interface FormFieldProps {
   label: string;
   name: string;
   value: string;
-  onChange: (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => void;
+  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   error?: string;
   helperText?: string;
   required?: boolean;
@@ -26,7 +24,7 @@ const FormField: React.FC<FormFieldProps> = ({
   error,
   helperText,
   required = false,
-  type = "text",
+  type = 'text',
   multiline = false,
   rows,
   startIcon,
@@ -39,13 +37,13 @@ const FormField: React.FC<FormFieldProps> = ({
           ? React.cloneElement(startIcon as React.ReactElement, {
               sx: {
                 mr: 1,
-                color: "action.active",
-                alignSelf: "flex-start",
+                color: 'action.active',
+                alignSelf: 'flex-start',
                 mt: 1,
               },
             })
           : React.cloneElement(startIcon as React.ReactElement, {
-              sx: { mr: 1, color: "action.active" },
+              sx: { mr: 1, color: 'action.active' },
             }),
       }
     : undefined;
@@ -66,11 +64,11 @@ const FormField: React.FC<FormFieldProps> = ({
         rows={rows}
         InputProps={inputProps}
         sx={{
-          "& .MuiOutlinedInput-root": {
+          '& .MuiOutlinedInput-root': {
             borderRadius: `${theme.shape.borderRadius}px`,
             background: theme.palette.background.paper,
-            boxShadow: "0 1px 4px 0 rgba(31,38,135,0.07)",
-            "&.Mui-focused fieldset": {
+            boxShadow: '0 1px 4px 0 rgba(31,38,135,0.07)',
+            '&.Mui-focused fieldset': {
               borderColor: theme.palette.primary.main,
               boxShadow: `0 0 8px ${theme.palette.primary.main}40`,
             },

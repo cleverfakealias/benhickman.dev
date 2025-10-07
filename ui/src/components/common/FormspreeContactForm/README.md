@@ -25,7 +25,7 @@ FormspreeContactForm/
 ### Basic Usage
 
 ```tsx
-import FormspreeContactForm from "./components/common/FormspreeContactForm";
+import FormspreeContactForm from './components/common/FormspreeContactForm';
 
 // Use in your component
 <FormspreeContactForm />;
@@ -38,7 +38,7 @@ import {
   ContactForm,
   FormField,
   useFormspreeForm,
-} from "./components/common/FormspreeContactForm/exports";
+} from './components/common/FormspreeContactForm/exports';
 
 // Custom implementation using the hook and components
 const MyCustomForm = () => {

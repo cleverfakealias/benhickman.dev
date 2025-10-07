@@ -1,5 +1,5 @@
-import React from "react";
-import { Box, useTheme } from "@mui/material";
+import React from 'react';
+import { Box, useTheme } from '@mui/material';
 
 interface GradientDividerProps {
   width?: string | number | { xs: string | number; md: string | number };
@@ -9,9 +9,9 @@ interface GradientDividerProps {
 }
 
 const GradientDivider: React.FC<GradientDividerProps> = ({
-  width = { xs: "80%", md: "400px" },
-  height = "5px",
-  margin = "auto",
+  width = { xs: '80%', md: '400px' },
+  height = '5px',
+  margin = 'auto',
   gradient,
 }) => {
   const theme = useTheme();
@@ -22,7 +22,7 @@ const GradientDivider: React.FC<GradientDividerProps> = ({
         width,
         height,
         background: gradient || theme.custom.gradients.primary,
-        borderRadius: "4px",
+        borderRadius: '4px',
         mx: margin,
       }}
     />

@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
-import { fetchPosts } from "../components/features/sanity/sanityClient";
-import { BlogPost } from "../components/features/sanity/types";
+import { useState, useEffect } from 'react';
+import { fetchPosts } from '../components/features/sanity/sanityClient';
+import { BlogPost } from '../components/features/sanity/types';
 
 export function useBlogPosts() {
   const [posts, setPosts] = useState<BlogPost[]>([]);
@@ -19,7 +19,7 @@ export function useBlogPosts() {
         setLoading(false);
       })
       .catch((error) => {
-        console.error("Error fetching posts:", error);
+        console.error('Error fetching posts:', error);
         setLoading(false);
       });
   }, []);

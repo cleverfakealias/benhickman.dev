@@ -1,25 +1,17 @@
-import React, { useState } from "react";
-import {
-  Avatar,
-  Box,
-  Typography,
-  Menu,
-  MenuItem,
-  IconButton,
-  Tooltip,
-} from "@mui/material";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import "./Footer.css";
-import Socials from "./Socials";
+import React, { useState } from 'react';
+import { Avatar, Box, Typography, Menu, MenuItem, IconButton, Tooltip } from '@mui/material';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import './Footer.css';
+import Socials from './Socials';
 
 // Quick Links Dropdown Component and navLinks must be outside Footer
 const navLinks = [
-  { name: "Home", href: "/" },
-  { name: "Experience", href: "/experience" },
-  { name: "Career", href: "/career" },
-  { name: "About", href: "/about" },
-  { name: "Contact", href: "/contact" },
-  { name: "Blog", href: "/blog" },
+  { name: 'Home', href: '/' },
+  { name: 'Experience', href: '/experience' },
+  { name: 'Career', href: '/career' },
+  { name: 'About', href: '/about' },
+  { name: 'Contact', href: '/contact' },
+  { name: 'Blog', href: '/blog' },
 ];
 
 const FooterQuickLinks: React.FC = () => {
@@ -36,12 +28,12 @@ const FooterQuickLinks: React.FC = () => {
       <Tooltip title="Quick Links">
         <IconButton
           aria-label="quick links"
-          aria-controls={open ? "footer-quick-links-menu" : undefined}
+          aria-controls={open ? 'footer-quick-links-menu' : undefined}
           aria-haspopup="true"
-          aria-expanded={open ? "true" : undefined}
+          aria-expanded={open ? 'true' : undefined}
           onClick={handleClick}
           size="small"
-          sx={{ color: "text.secondary" }}
+          sx={{ color: 'text.secondary' }}
         >
           <MoreVertIcon />
         </IconButton>
@@ -51,9 +43,9 @@ const FooterQuickLinks: React.FC = () => {
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
-        MenuListProps={{ "aria-labelledby": "footer-quick-links-button" }}
-        anchorOrigin={{ vertical: "top", horizontal: "right" }}
-        transformOrigin={{ vertical: "bottom", horizontal: "right" }}
+        MenuListProps={{ 'aria-labelledby': 'footer-quick-links-button' }}
+        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+        transformOrigin={{ vertical: 'bottom', horizontal: 'right' }}
       >
         {navLinks.map((link) => (
           <MenuItem
@@ -61,7 +53,7 @@ const FooterQuickLinks: React.FC = () => {
             component="a"
             href={link.href}
             onClick={handleClose}
-            sx={{ fontSize: "0.95rem", minWidth: 120 }}
+            sx={{ fontSize: '0.95rem', minWidth: 120 }}
           >
             {link.name}
           </MenuItem>
@@ -71,46 +63,46 @@ const FooterQuickLinks: React.FC = () => {
   );
 };
 
-import { FaSun, FaMoon } from "react-icons/fa";
+import { FaSun, FaMoon } from 'react-icons/fa';
 
 interface FooterProps {
   themeMode: string;
   setThemeMode: (mode: string) => void;
 }
 
-import { getDomainConfig } from "../../config/domainConfig";
+import { getDomainConfig } from '../../config/domainConfig';
 
 const Footer: React.FC<FooterProps> = ({ themeMode, setThemeMode }) => {
   const { branding: brand } = getDomainConfig();
-  const isDark = themeMode === "dark";
+  const isDark = themeMode === 'dark';
   return (
     <footer
       className="footer"
       role="contentinfo"
       aria-label="Site footer"
-      style={{ padding: "0 16px" }}
+      style={{ padding: '0 16px' }}
     >
       <Box
         className="footer-content"
         sx={{
-          display: "flex",
-          flexDirection: { xs: "column", md: "row" },
-          alignItems: "center",
-          justifyContent: "space-between",
-          width: "100%",
+          display: 'flex',
+          flexDirection: { xs: 'column', md: 'row' },
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          width: '100%',
           maxWidth: 1200,
-          margin: "0 auto",
-          boxSizing: "border-box",
-          padding: { xs: "8px 0", md: "8px 0" },
+          margin: '0 auto',
+          boxSizing: 'border-box',
+          padding: { xs: '8px 0', md: '8px 0' },
           gap: { xs: 0.5, md: 0 },
         }}
       >
         {/* Left side - Logo and mission */}
         <Box
           sx={{
-            display: "flex",
-            alignItems: "center",
-            gap: "0.5rem",
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.5rem',
             order: { xs: 1, md: 1 },
           }}
         >
@@ -120,17 +112,17 @@ const Footer: React.FC<FooterProps> = ({ themeMode, setThemeMode }) => {
             sx={{
               width: { xs: 20, md: 20 },
               height: { xs: 20, md: 20 },
-              border: "1.5px solid #8CD2EF",
-              boxShadow: "0 2px 8px 0 rgba(140,210,239,0.10)",
-              bgcolor: "#fff",
+              border: '1.5px solid #8CD2EF',
+              boxShadow: '0 2px 8px 0 rgba(140,210,239,0.10)',
+              bgcolor: '#fff',
             }}
           />
           <Typography
             sx={{
               fontWeight: 600,
-              fontSize: { xs: "0.8rem", md: "0.85rem" },
-              color: "#8CD2EF",
-              letterSpacing: "0.04em",
+              fontSize: { xs: '0.8rem', md: '0.85rem' },
+              color: '#8CD2EF',
+              letterSpacing: '0.04em',
             }}
             aria-label="Mission statement"
           >
@@ -141,11 +133,11 @@ const Footer: React.FC<FooterProps> = ({ themeMode, setThemeMode }) => {
         {/* Center - Copyright (desktop only) */}
         <Typography
           sx={{
-            textAlign: "center",
-            fontSize: "0.85rem",
-            color: "#fff",
+            textAlign: 'center',
+            fontSize: '0.85rem',
+            color: '#fff',
             opacity: 0.85,
-            display: { xs: "none", md: "block" },
+            display: { xs: 'none', md: 'block' },
             order: { xs: 3, md: 2 },
           }}
         >
@@ -155,26 +147,24 @@ const Footer: React.FC<FooterProps> = ({ themeMode, setThemeMode }) => {
         {/* Right side - Actions */}
         <Box
           sx={{
-            display: "flex",
-            alignItems: "center",
-            gap: { xs: "0.25rem", md: "0.5rem" },
+            display: 'flex',
+            alignItems: 'center',
+            gap: { xs: '0.25rem', md: '0.5rem' },
             order: { xs: 2, md: 3 },
           }}
         >
           <FooterQuickLinks />
           <Socials />
           <IconButton
-            aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
-            onClick={() => setThemeMode(isDark ? "light" : "dark")}
+            aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+            onClick={() => setThemeMode(isDark ? 'light' : 'dark')}
             sx={{
-              color: isDark ? "#FFD600" : "#1976d2",
-              background: isDark
-                ? "rgba(255,255,255,0.08)"
-                : "rgba(140,210,239,0.10)",
-              border: "1.5px solid #8CD2EF",
+              color: isDark ? '#FFD600' : '#1976d2',
+              background: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(140,210,239,0.10)',
+              border: '1.5px solid #8CD2EF',
               width: { xs: 28, md: 28 },
               height: { xs: 28, md: 28 },
-              transition: "background 0.3s, color 0.3s",
+              transition: 'background 0.3s, color 0.3s',
             }}
             size="small"
           >
@@ -185,13 +175,13 @@ const Footer: React.FC<FooterProps> = ({ themeMode, setThemeMode }) => {
         {/* Mobile copyright (bottom) */}
         <Typography
           sx={{
-            textAlign: "center",
-            fontSize: "0.75rem",
-            color: "#fff",
+            textAlign: 'center',
+            fontSize: '0.75rem',
+            color: '#fff',
             opacity: 0.75,
-            display: { xs: "block", md: "none" },
+            display: { xs: 'block', md: 'none' },
             order: { xs: 3, md: 4 },
-            marginTop: "2px",
+            marginTop: '2px',
           }}
         >
           &copy; {new Date().getFullYear()} Ben Hickman

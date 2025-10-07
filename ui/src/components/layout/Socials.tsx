@@ -1,16 +1,16 @@
-import React from "react";
-import "./Socials.css";
-import { FaLinkedin, FaGithub } from "react-icons/fa";
+import React from 'react';
+import './Socials.css';
+import { FaLinkedin, FaGithub } from 'react-icons/fa';
 
 const socials = [
   {
-    name: "LinkedIn",
-    url: "https://linkedin.benhickman.dev",
+    name: 'LinkedIn',
+    url: 'https://linkedin.benhickman.dev',
     icon: <FaLinkedin size={24} />,
   },
   {
-    name: "GitHub",
-    url: "https://github.benhickman.dev",
+    name: 'GitHub',
+    url: 'https://github.benhickman.dev',
     icon: <FaGithub size={24} />,
   },
 ];
@@ -20,11 +20,11 @@ const Socials: React.FC = () => {
     <div
       className="socials"
       style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        gap: "1rem",
-        width: "100%",
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        gap: '1rem',
+        width: '100%',
       }}
     >
       {socials.map((social) => (
@@ -35,12 +35,12 @@ const Socials: React.FC = () => {
           rel="noopener noreferrer"
           aria-label={social.name}
           style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: "0.5rem",
-            borderRadius: "4px",
-            transition: "all 0.2s ease",
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: '0.5rem',
+            borderRadius: '4px',
+            transition: 'all 0.2s ease',
           }}
         >
           {social.icon}

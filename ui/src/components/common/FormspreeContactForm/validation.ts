@@ -1,4 +1,4 @@
-import { FormData, FormErrors } from "./types";
+import { FormData, FormErrors } from './types';
 
 export const validateEmail = (email: string): boolean => {
   const re =
@@ -9,11 +9,10 @@ export const validateEmail = (email: string): boolean => {
 export const validateForm = (formData: FormData): FormErrors => {
   const errors: FormErrors = {};
 
-  if (!formData.name.trim()) errors.name = "Name is required";
-  if (!formData.email.trim()) errors.email = "Email is required";
-  else if (!validateEmail(formData.email))
-    errors.email = "Valid email is required";
-  if (!formData.message.trim()) errors.message = "Message is required";
+  if (!formData.name.trim()) errors.name = 'Name is required';
+  if (!formData.email.trim()) errors.email = 'Email is required';
+  else if (!validateEmail(formData.email)) errors.email = 'Valid email is required';
+  if (!formData.message.trim()) errors.message = 'Message is required';
 
   return errors;
 };

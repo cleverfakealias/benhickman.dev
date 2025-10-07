@@ -1,8 +1,8 @@
-import React, { useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
-import { Avatar } from "@mui/material";
-import FocusTrap from "focus-trap-react";
-import Socials from "./Socials";
+import React, { useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
+import { Avatar } from '@mui/material';
+import FocusTrap from 'focus-trap-react';
+import Socials from './Socials';
 
 interface Props {
   open: boolean;
@@ -12,31 +12,25 @@ interface Props {
   isActiveLink: (href: string) => boolean;
 }
 
-const MobileDrawer: React.FC<Props> = ({
-  open,
-  onClose,
-  navLinks,
-  brand,
-  isActiveLink,
-}) => {
+const MobileDrawer: React.FC<Props> = ({ open, onClose, navLinks, brand, isActiveLink }) => {
   const drawerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
+      if (e.key === 'Escape') {
         onClose();
       }
     };
 
     if (open) {
-      document.addEventListener("keydown", handleEscape);
+      document.addEventListener('keydown', handleEscape);
       // Prevent body scroll when menu is open
-      document.body.style.overflow = "hidden";
+      document.body.style.overflow = 'hidden';
     }
 
     return () => {
-      document.removeEventListener("keydown", handleEscape);
-      document.body.style.overflow = "";
+      document.removeEventListener('keydown', handleEscape);
+      document.body.style.overflow = '';
     };
   }, [open, onClose]);
 
@@ -53,18 +47,18 @@ const MobileDrawer: React.FC<Props> = ({
       {/* Animated Backdrop */}
       <div
         style={{
-          position: "fixed",
+          position: 'fixed',
           top: 0,
           left: 0,
           right: 0,
           bottom: 0,
-          background: "rgba(0, 0, 0, 0.6)",
+          background: 'rgba(0, 0, 0, 0.6)',
           zIndex: 1999,
-          backdropFilter: "blur(4px)",
-          cursor: "pointer",
+          backdropFilter: 'blur(4px)',
+          cursor: 'pointer',
           opacity: open ? 1 : 0,
-          transition: "opacity 300ms cubic-bezier(0.4,0,0.2,1)",
-          pointerEvents: open ? "auto" : "none",
+          transition: 'opacity 300ms cubic-bezier(0.4,0,0.2,1)',
+          pointerEvents: open ? 'auto' : 'none',
         }}
         onClick={onClose}
         onTouchEnd={onClose}
@@ -78,21 +72,21 @@ const MobileDrawer: React.FC<Props> = ({
           aria-modal="true"
           aria-label="Mobile navigation menu"
           style={{
-            position: "fixed",
+            position: 'fixed',
             top: 0,
             left: 0,
             right: 0,
-            background: "#412A91",
-            color: "#ffffff",
-            padding: "1rem",
+            background: '#412A91',
+            color: '#ffffff',
+            padding: '1rem',
             zIndex: 2000,
-            transform: open ? "translateY(0)" : "translateY(-32px)",
+            transform: open ? 'translateY(0)' : 'translateY(-32px)',
             opacity: open ? 1 : 0,
             transition:
-              "transform 300ms cubic-bezier(0.4,0,0.2,1), opacity 300ms cubic-bezier(0.4,0,0.2,1)",
-            boxShadow: "0 8px 32px rgba(0, 0, 0, 0.3)",
-            maxHeight: "100vh",
-            overflowY: "auto",
+              'transform 300ms cubic-bezier(0.4,0,0.2,1), opacity 300ms cubic-bezier(0.4,0,0.2,1)',
+            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+            maxHeight: '100vh',
+            overflowY: 'auto',
           }}
           onTransitionEnd={() => {
             if (!open) setVisible(false);
@@ -102,25 +96,25 @@ const MobileDrawer: React.FC<Props> = ({
           {/* Header with close button */}
           <div
             style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              paddingBottom: "1rem",
-              borderBottom: "1px solid rgba(255, 255, 255, 0.1)",
-              marginBottom: "1.5rem",
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              paddingBottom: '1rem',
+              borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+              marginBottom: '1.5rem',
             }}
           >
             <Link
               to="/"
               onClick={onClose}
               style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "0.75rem",
-                textDecoration: "none",
-                color: "#ffffff",
-                fontSize: "1.1rem",
-                fontWeight: "600",
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.75rem',
+                textDecoration: 'none',
+                color: '#ffffff',
+                fontSize: '1.1rem',
+                fontWeight: '600',
               }}
               aria-label={`Go to ${brand.name} home page`}
             >
@@ -130,9 +124,9 @@ const MobileDrawer: React.FC<Props> = ({
                 sx={{
                   width: 32,
                   height: 32,
-                  border: "2px solid #8CD2EF",
-                  boxShadow: "0 2px 12px 0 rgba(140, 210, 239, 0.15)",
-                  bgcolor: "background.paper",
+                  border: '2px solid #8CD2EF',
+                  boxShadow: '0 2px 12px 0 rgba(140, 210, 239, 0.15)',
+                  bgcolor: 'background.paper',
                 }}
               />
               <span>{brand.name}</span>
@@ -142,26 +136,25 @@ const MobileDrawer: React.FC<Props> = ({
               onClick={onClose}
               aria-label="Close navigation menu"
               style={{
-                background: "none",
-                border: "none",
-                color: "#ffffff",
-                fontSize: "1.5rem",
-                cursor: "pointer",
-                padding: "0.5rem",
-                borderRadius: "4px",
-                transition: "background-color 0.2s ease",
-                minWidth: "44px",
-                minHeight: "44px",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
+                background: 'none',
+                border: 'none',
+                color: '#ffffff',
+                fontSize: '1.5rem',
+                cursor: 'pointer',
+                padding: '0.5rem',
+                borderRadius: '4px',
+                transition: 'background-color 0.2s ease',
+                minWidth: '44px',
+                minHeight: '44px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor =
-                  "rgba(255, 255, 255, 0.1)";
+                e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = "transparent";
+                e.currentTarget.style.backgroundColor = 'transparent';
               }}
             >
               ✕
@@ -172,12 +165,12 @@ const MobileDrawer: React.FC<Props> = ({
           <nav aria-label="Mobile navigation">
             <ul
               style={{
-                listStyle: "none",
+                listStyle: 'none',
                 padding: 0,
                 margin: 0,
-                display: "flex",
-                flexDirection: "column",
-                gap: "0.5rem",
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '0.5rem',
               }}
             >
               {navLinks.map((link) => (
@@ -185,31 +178,31 @@ const MobileDrawer: React.FC<Props> = ({
                   <Link
                     to={link.href}
                     onClick={onClose}
-                    aria-current={isActiveLink(link.href) ? "page" : undefined}
+                    aria-current={isActiveLink(link.href) ? 'page' : undefined}
                     style={{
-                      display: "flex",
-                      alignItems: "center",
-                      padding: "1rem",
-                      color: isActiveLink(link.href) ? "#8CD2EF" : "#ffffff",
-                      fontWeight: isActiveLink(link.href) ? "700" : "400",
-                      textDecoration: "none",
-                      borderRadius: "8px",
-                      transition: "all 0.2s ease",
-                      fontSize: "1.1rem",
-                      minHeight: "44px",
-                      position: "relative",
+                      display: 'flex',
+                      alignItems: 'center',
+                      padding: '1rem',
+                      color: isActiveLink(link.href) ? '#8CD2EF' : '#ffffff',
+                      fontWeight: isActiveLink(link.href) ? '700' : '400',
+                      textDecoration: 'none',
+                      borderRadius: '8px',
+                      transition: 'all 0.2s ease',
+                      fontSize: '1.1rem',
+                      minHeight: '44px',
+                      position: 'relative',
                     }}
                   >
                     {isActiveLink(link.href) && (
                       <span
                         style={{
-                          width: "8px",
-                          height: "8px",
-                          borderRadius: "50%",
-                          backgroundColor: "#8CD2EF",
-                          boxShadow: "0 0 8px rgba(140, 210, 239, 0.5)",
-                          marginRight: "0.75rem",
-                          display: "inline-block",
+                          width: '8px',
+                          height: '8px',
+                          borderRadius: '50%',
+                          backgroundColor: '#8CD2EF',
+                          boxShadow: '0 0 8px rgba(140, 210, 239, 0.5)',
+                          marginRight: '0.75rem',
+                          display: 'inline-block',
                         }}
                       />
                     )}
@@ -223,10 +216,10 @@ const MobileDrawer: React.FC<Props> = ({
           {/* Social Links */}
           <div
             style={{
-              marginTop: "2rem",
-              paddingTop: "1.5rem",
-              borderTop: "1px solid rgba(255, 255, 255, 0.1)",
-              textAlign: "center",
+              marginTop: '2rem',
+              paddingTop: '1.5rem',
+              borderTop: '1px solid rgba(255, 255, 255, 0.1)',
+              textAlign: 'center',
             }}
           >
             <Socials />

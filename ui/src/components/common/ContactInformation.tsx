@@ -1,6 +1,6 @@
-import React from "react";
-import { Typography, Box, useTheme, Paper } from "@mui/material";
-import SocialLinks from "./SocialLinks";
+import React from 'react';
+import { Typography, Box, useTheme, Paper } from '@mui/material';
+import SocialLinks from './SocialLinks';
 
 const ContactInformation: React.FC = () => {
   const theme = useTheme();
@@ -12,15 +12,15 @@ const ContactInformation: React.FC = () => {
         elevation={3}
         sx={{
           p: 4,
-          textAlign: "center",
+          textAlign: 'center',
           borderRadius: 4,
           background: theme.custom.gradients.hero[theme.palette.mode],
           border: theme.custom.borders.card[theme.palette.mode],
           boxShadow: theme.custom.shadows.card[theme.palette.mode],
           transition: theme.custom.transitions.smooth,
-          position: "relative",
-          overflow: "hidden",
-          "&:hover": {
+          position: 'relative',
+          overflow: 'hidden',
+          '&:hover': {
             boxShadow: theme.custom.shadows.card.hover[theme.palette.mode],
           },
         }}
@@ -40,14 +40,14 @@ const ContactInformation: React.FC = () => {
           sx={{
             color: theme.palette.text.secondary,
             lineHeight: 1.6,
-            maxWidth: "600px",
-            mx: "auto",
+            maxWidth: '600px',
+            mx: 'auto',
             pb: 2,
           }}
         >
-          Whether you have a project in mind, want to discuss collaboration
-          opportunities, or just want to connect, I'd love to hear from you.
-          Feel free to reach out through any of the channels below!
+          Whether you have a project in mind, want to discuss collaboration opportunities, or just
+          want to connect, I'd love to hear from you. Feel free to reach out through any of the
+          channels below!
         </Typography>
 
         <SocialLinks />

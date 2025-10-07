@@ -1,11 +1,11 @@
-import React from "react";
-import { Box } from "@mui/material";
-import { getDomainConfig } from "../../../config/domainConfig";
-import { FormspreeContactFormProps } from "./types";
-import { useFormspreeForm } from "./useFormspreeForm";
-import FormHeader from "./FormHeader";
-import ContactForm from "./ContactForm";
-import SuccessScreen from "./SuccessScreen";
+import React from 'react';
+import { Box } from '@mui/material';
+import { getDomainConfig } from '../../../config/domainConfig';
+import { FormspreeContactFormProps } from './types';
+import { useFormspreeForm } from './useFormspreeForm';
+import FormHeader from './FormHeader';
+import ContactForm from './ContactForm';
+import SuccessScreen from './SuccessScreen';
 
 const FormspreeContactForm: React.FC<FormspreeContactFormProps> = () => {
   const { formspreeUrl, hCaptchaSiteKey } = getDomainConfig();
