@@ -4,4 +4,4 @@ Disallow: /assets/
 Disallow: /src/
 Disallow: /node_modules/
 
-Sitemap: https://zengineer.cloud/sitemap.xml
+Sitemap: https://benhickman.dev/sitemap.xml

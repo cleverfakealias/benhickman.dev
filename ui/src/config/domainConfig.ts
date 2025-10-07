@@ -72,8 +72,8 @@ export const domainConfigs: Record<string, DomainConfig> = {
 
 export const getDomainConfig = (hostname?: string) => {
   const host =
-    hostname || (typeof window !== 'undefined' ? window.location.hostname : 'zengineer.cloud');
-  return domainConfigs[host] || domainConfigs['zengineer.cloud'];
+    hostname || (typeof window !== 'undefined' ? window.location.hostname : 'benhickman.dev');
+  return domainConfigs[host] || domainConfigs['benhickman.dev'];
 };
 
 export const updateMetaTags = (hostname?: string) => {
