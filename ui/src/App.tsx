@@ -1,6 +1,5 @@
 import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
-import { Container } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { useTheme } from "./hooks/useTheme";
@@ -13,7 +12,7 @@ import Playground from "./pages/Playground";
 import { BrowserRouter as Router, Route, Routes, useLocation } from "react-router-dom";
 import Home from "./pages/Home";
 import { createMnTheme } from "./styles/theme";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { getDomainConfig } from "./config/domainConfig";
 
 function AnimatedPageContainer() {

@@ -2,7 +2,7 @@ import { useRef, useState, useEffect } from "react";
 import Editor from "@monaco-editor/react";
 import { Paper, Button, Typography, useTheme, Box } from "@mui/material";
 import AccentBar from "../components/common/AccentBar";
-import ReCAPTCHA from "react-google-recaptcha";
+import HCaptcha from "@hcaptcha/react-hcaptcha";
 import { getDomainConfig } from "../config/domainConfig";
 
 const DEFAULT_CODE = `console.log('Hello, world!');`;
@@ -13,8 +13,8 @@ export default function Playground() {
   const [captchaVerified, setCaptchaVerified] = useState(false);
   const theme = useTheme();
   const workerRef = useRef<Worker | null>(null);
-  const recaptchaRef = useRef<ReCAPTCHA>(null);
-  const { recaptchaSiteKey } = getDomainConfig();
+  const captchaRef = useRef<HCaptcha>(null);
+  const { hCaptchaSiteKey } = getDomainConfig();
 
   const runCode = () => {
     if (!captchaVerified) {
@@ -144,11 +144,11 @@ export default function Playground() {
         Run
       </Button>
       <Box sx={{ alignSelf: "flex-start", mb: 2 }}>
-        <ReCAPTCHA
-          ref={recaptchaRef}
-          sitekey={recaptchaSiteKey}
-          onChange={onCaptchaVerified}
-          onExpired={onCaptchaExpired}
+        <HCaptcha
+          ref={captchaRef}
+          sitekey={hCaptchaSiteKey}
+          onVerify={onCaptchaVerified}
+          onExpire={onCaptchaExpired}
           theme={theme.palette.mode}
         />
       </Box>

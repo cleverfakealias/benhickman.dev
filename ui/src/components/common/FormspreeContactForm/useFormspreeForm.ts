@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import ReCAPTCHA from "react-google-recaptcha";
+import HCaptcha from "@hcaptcha/react-hcaptcha";
 import { FormData, FormErrors } from "./types";
 import { validateForm, isFormValid } from "./validation";
 import { submitForm } from "./api";
@@ -11,8 +11,8 @@ const initialFormData: FormData = {
   message: "",
 };
 
-export const useFormspreeForm = (formspreeUrl?: string, recaptchaSiteKey?: string) => {
-  const recaptchaRef = useRef<ReCAPTCHA>(null);
+export const useFormspreeForm = (formspreeUrl?: string, hCaptchaSiteKey?: string) => {
+  const captchaRef = useRef<HCaptcha>(null);
   
   const [formData, setFormData] = useState<FormData>(initialFormData);
   const [errors, setErrors] = useState<FormErrors>({});
@@ -25,8 +25,8 @@ export const useFormspreeForm = (formspreeUrl?: string, recaptchaSiteKey?: strin
 
   const configError = !formspreeUrl
     ? "Missing Formspree URL in configuration."
-    : !recaptchaSiteKey
-    ? "Missing reCAPTCHA site key in configuration."
+    : !hCaptchaSiteKey
+    ? "Missing hCaptcha site key in configuration."
     : null;
 
   const onCaptchaVerified = (token: string | null) => {
@@ -40,7 +40,7 @@ export const useFormspreeForm = (formspreeUrl?: string, recaptchaSiteKey?: strin
   };
 
   const resetCaptcha = () => {
-    if (recaptchaRef.current) recaptchaRef.current.reset();
+    if (captchaRef.current) captchaRef.current.resetCaptcha();
     setCaptchaVerified(false);
     setCaptchaToken(null);
   };
@@ -134,7 +134,7 @@ export const useFormspreeForm = (formspreeUrl?: string, recaptchaSiteKey?: strin
     configError,
     
     // Refs
-    recaptchaRef,
+    captchaRef,
     
     // Handlers
     handleInputChange,

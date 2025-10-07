@@ -11,14 +11,14 @@ export interface BrandInfo {
 
 export interface DomainConfig {
   formspreeUrl: string;
-  recaptchaSiteKey: string;
+  hCaptchaSiteKey: string;
   branding: BrandInfo;
 }
 
 export const domainConfigs: Record<string, DomainConfig> = {
   "zengineer.cloud": {
     formspreeUrl: import.meta.env.VITE_FORMSPREE_URL || "",
-    recaptchaSiteKey: import.meta.env.VITE_RECAPTCHA_ZENGINEER,
+    hCaptchaSiteKey: import.meta.env.VITE_HCAPTCHA_SITEKEY || "",
     branding: {
       name: "Zengineer",
       logo: "/images/zengineer dark logo 2.png",
@@ -31,7 +31,7 @@ export const domainConfigs: Record<string, DomainConfig> = {
   },
   "zennlogic.com": {
     formspreeUrl: import.meta.env.VITE_FORMSPREE_URL || "",
-    recaptchaSiteKey: import.meta.env.VITE_RECAPTCHA_ZENNLOGIC,
+    hCaptchaSiteKey: import.meta.env.VITE_HCAPTCHA_SITEKEY || "",
     branding: {
       name: "ZennLogic",
       logo: "/images/ZL monogram.png",
@@ -44,7 +44,7 @@ export const domainConfigs: Record<string, DomainConfig> = {
   },
   "benhickman.dev": {
     formspreeUrl: import.meta.env.VITE_FORMSPREE_URL || "",
-    recaptchaSiteKey: import.meta.env.VITE_RECAPTCHA_OTHER,
+    hCaptchaSiteKey: import.meta.env.VITE_HCAPTCHA_SITEKEY || "",
     branding: {
       name: "Ben Hickman",
       logo: "/images/BH monogram.png",

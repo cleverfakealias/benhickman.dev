@@ -6,7 +6,7 @@ import {
 } from "@mui/material";
 import { Person, Email, Phone, Message } from "@mui/icons-material";
 import Grid2 from "@mui/material/Grid2";
-import ReCAPTCHA from "react-google-recaptcha";
+import HCaptcha from "@hcaptcha/react-hcaptcha";
 import FormField from "./FormField";
 import SubmitButton from "./SubmitButton";
 import { FormData } from "./types";
@@ -24,8 +24,8 @@ interface ContactFormProps {
   isSubmitting: boolean;
   submitError: string | null;
   configError: string | null;
-  recaptchaSiteKey: string;
-  recaptchaRef: React.RefObject<ReCAPTCHA>;
+  hCaptchaSiteKey: string;
+  captchaRef: React.RefObject<HCaptcha>;
   onInputChange: (field: keyof FormData) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   onSubmit: (e: React.FormEvent) => void;
   onCaptchaVerified: (token: string | null) => void;
@@ -40,8 +40,8 @@ const ContactForm: React.FC<ContactFormProps> = ({
   isSubmitting,
   submitError,
   configError,
-  recaptchaSiteKey,
-  recaptchaRef,
+  hCaptchaSiteKey,
+  captchaRef,
   onInputChange,
   onSubmit,
   onCaptchaVerified,
@@ -117,11 +117,11 @@ const ContactForm: React.FC<ContactFormProps> = ({
 
         <Grid2 size={{ xs: 12 }}>
           <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
-            <ReCAPTCHA
-              ref={recaptchaRef}
-              sitekey={recaptchaSiteKey}
-              onChange={onCaptchaVerified}
-              onExpired={onCaptchaExpired}
+            <HCaptcha
+              ref={captchaRef}
+              sitekey={hCaptchaSiteKey}
+              onVerify={onCaptchaVerified}
+              onExpire={onCaptchaExpired}
               theme={theme.palette.mode === "dark" ? "dark" : "light"}
             />
           </Box>

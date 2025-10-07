@@ -8,7 +8,7 @@ import ContactForm from "./ContactForm";
 import SuccessScreen from "./SuccessScreen";
 
 const FormspreeContactForm: React.FC<FormspreeContactFormProps> = () => {
-  const { formspreeUrl, recaptchaSiteKey } = getDomainConfig();
+  const { formspreeUrl, hCaptchaSiteKey } = getDomainConfig();
 
   const {
     // Form state
@@ -22,7 +22,7 @@ const FormspreeContactForm: React.FC<FormspreeContactFormProps> = () => {
     configError,
     
     // Refs
-    recaptchaRef,
+    captchaRef,
     
     // Handlers
     handleInputChange,
@@ -30,7 +30,7 @@ const FormspreeContactForm: React.FC<FormspreeContactFormProps> = () => {
     onCaptchaVerified,
     onCaptchaExpired,
     resetForm,
-  } = useFormspreeForm(formspreeUrl, recaptchaSiteKey);
+  } = useFormspreeForm(formspreeUrl, hCaptchaSiteKey);
 
   if (formSubmitted) {
     return <SuccessScreen onSendAnother={resetForm} />;
@@ -47,8 +47,8 @@ const FormspreeContactForm: React.FC<FormspreeContactFormProps> = () => {
         isSubmitting={isSubmitting}
         submitError={submitError}
         configError={configError}
-        recaptchaSiteKey={recaptchaSiteKey!}
-        recaptchaRef={recaptchaRef}
+        hCaptchaSiteKey={hCaptchaSiteKey!}
+        captchaRef={captchaRef}
         onInputChange={handleInputChange}
         onSubmit={handleSubmit}
         onCaptchaVerified={onCaptchaVerified}

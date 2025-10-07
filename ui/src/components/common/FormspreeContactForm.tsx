@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import { getDomainConfig } from "../../config/domainConfig";
-import ReCAPTCHA from "react-google-recaptcha";
+import HCaptcha from "@hcaptcha/react-hcaptcha";
 import {
   Box,
   TextField,
@@ -22,13 +22,13 @@ interface FormData {
 
 interface FormspreeContactFormProps {
   formspreeUrl?: string;
-  recaptchaSiteKey?: string;
+  hCaptchaSiteKey?: string;
 }
 
 const FormspreeContactForm: React.FC<FormspreeContactFormProps> = () => {
-  const { formspreeUrl, recaptchaSiteKey } = getDomainConfig();
+  const { formspreeUrl, hCaptchaSiteKey } = getDomainConfig();
   const theme = useTheme();
-  const recaptchaRef = useRef<ReCAPTCHA>(null);
+  const captchaRef = useRef<HCaptcha>(null);
 
   const [formData, setFormData] = useState<FormData>({
     name: "",
@@ -49,13 +49,13 @@ const FormspreeContactForm: React.FC<FormspreeContactFormProps> = () => {
   const configError =
     !formspreeUrl
       ? "Missing Formspree URL in configuration."
-      : !recaptchaSiteKey
-        ? "Missing reCAPTCHA site key in configuration."
+      : !hCaptchaSiteKey
+        ? "Missing hCaptcha site key in configuration."
         : null;
 
-  const onCaptchaVerified = (token: string | null) => {
+  const onCaptchaVerified = (token: string) => {
     setCaptchaToken(token);
-    setCaptchaVerified(!!token);
+    setCaptchaVerified(true);
   };
   const onCaptchaExpired = () => {
     setCaptchaToken(null);
@@ -98,7 +98,7 @@ const FormspreeContactForm: React.FC<FormspreeContactFormProps> = () => {
       };
 
   const resetCaptcha = () => {
-    if (recaptchaRef.current) recaptchaRef.current.reset();
+    if (captchaRef.current) captchaRef.current.resetCaptcha();
     setCaptchaVerified(false);
     setCaptchaToken(null);
   };
@@ -124,10 +124,10 @@ const FormspreeContactForm: React.FC<FormspreeContactFormProps> = () => {
     if (isSubmitting) return; // double-click guard
     setIsSubmitting(true);
 
-    // 2) Build urlencoded body (Formspree-friendly) and include the reCAPTCHA token
+    // 2) Build urlencoded body (Formspree-friendly) and include the hCaptcha token
     const params = new URLSearchParams();
     Object.entries(formData).forEach(([k, v]) => params.append(k, String(v)));
-    params.append("g-recaptcha-response", captchaToken);
+    params.append("h-captcha-response", captchaToken);
 
     // 3) Add a timeout so the UI isn't stuck if the network hangs
     const controller = new AbortController();
@@ -175,7 +175,7 @@ const FormspreeContactForm: React.FC<FormspreeContactFormProps> = () => {
       }
 
       // If the error likely relates to captcha, reset it so user can retry with a fresh token
-      if (/captcha|recaptcha|token/i.test(errMsg)) resetCaptcha();
+      if (/captcha|hcaptcha|token/i.test(errMsg)) resetCaptcha();
 
       setSubmitError(errMsg);
     } catch (err: any) {
@@ -394,11 +394,11 @@ const FormspreeContactForm: React.FC<FormspreeContactFormProps> = () => {
 
           <Grid2 size={{ xs: 12 }}>
             <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
-              <ReCAPTCHA
-                ref={recaptchaRef}
-                sitekey={recaptchaSiteKey!}
-                onChange={onCaptchaVerified}
-                onExpired={onCaptchaExpired}
+              <HCaptcha
+                ref={captchaRef}
+                sitekey={hCaptchaSiteKey!}
+                onVerify={onCaptchaVerified}
+                onExpire={onCaptchaExpired}
                 theme={theme.palette.mode === "dark" ? "dark" : "light"}
               />
             </Box>
