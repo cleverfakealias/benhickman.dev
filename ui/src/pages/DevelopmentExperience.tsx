@@ -151,7 +151,8 @@ const DevelopmentExperience: React.FC = () => {
                 overflow: "hidden",
                 transition: theme.custom.transitions.smooth,
                 "&:hover": {
-                  boxShadow: theme.custom.shadows.card.hover[theme.palette.mode],
+                  boxShadow:
+                    theme.custom.shadows.card.hover[theme.palette.mode],
                 },
                 "&::before": {
                   content: '""',

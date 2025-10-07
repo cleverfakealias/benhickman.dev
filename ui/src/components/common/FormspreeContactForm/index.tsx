@@ -20,10 +20,10 @@ const FormspreeContactForm: React.FC<FormspreeContactFormProps> = () => {
     isSubmitting,
     submitError,
     configError,
-    
+
     // Refs
     captchaRef,
-    
+
     // Handlers
     handleInputChange,
     handleSubmit,

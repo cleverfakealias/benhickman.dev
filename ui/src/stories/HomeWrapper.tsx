@@ -14,9 +14,9 @@ interface HomeWrapperProps {
 /**
  * Wrapper component for Home that allows injecting mock data for Storybook
  */
-export default function HomeWrapper({ 
-  mockPosts = [], 
-  showMockData = false 
+export default function HomeWrapper({
+  mockPosts = [],
+  showMockData = false,
 }: HomeWrapperProps): React.ReactElement {
   const [firstPost, setFirstPost] = useState<BlogPost | null>(null);
   const codeText = `// Welcome, curious coder!\nfunction greet(name) {\n  console.log(\`👋 Hi \${name},\nglad you're here!\`);\n}\n// Let's see who's visiting...\nconst visitor = 'awesome guest';\n// Say hello!\ngreet(visitor);\n// Output:\n// 👋 Hi awesome guest, glad you're here!\n// Want to learn, build, and explore?\n// Click the blog card on the left! <-`;
@@ -32,18 +32,20 @@ export default function HomeWrapper({
       setFirstPost(sorted[0]);
     } else if (!showMockData) {
       // Use real API call for production (will likely fail in Storybook)
-      import("../components/features/sanity/sanityClient").then(({ fetchPosts }) => {
-        fetchPosts().then((posts) => {
-          if (posts && posts.length > 0) {
-            const sorted = posts.sort(
-              (a: BlogPost, b: BlogPost) =>
-                new Date(b.publishedAt || b._createdAt || "").getTime() -
-                new Date(a.publishedAt || a._createdAt || "").getTime(),
-            );
-            setFirstPost(sorted[0]);
-          }
-        });
-      });
+      import("../components/features/sanity/sanityClient").then(
+        ({ fetchPosts }) => {
+          fetchPosts().then((posts) => {
+            if (posts && posts.length > 0) {
+              const sorted = posts.sort(
+                (a: BlogPost, b: BlogPost) =>
+                  new Date(b.publishedAt || b._createdAt || "").getTime() -
+                  new Date(a.publishedAt || a._createdAt || "").getTime(),
+              );
+              setFirstPost(sorted[0]);
+            }
+          });
+        },
+      );
     }
   }, [mockPosts, showMockData]);
 

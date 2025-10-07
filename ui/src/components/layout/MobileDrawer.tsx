@@ -88,7 +88,8 @@ const MobileDrawer: React.FC<Props> = ({
             zIndex: 2000,
             transform: open ? "translateY(0)" : "translateY(-32px)",
             opacity: open ? 1 : 0,
-            transition: "transform 300ms cubic-bezier(0.4,0,0.2,1), opacity 300ms cubic-bezier(0.4,0,0.2,1)",
+            transition:
+              "transform 300ms cubic-bezier(0.4,0,0.2,1), opacity 300ms cubic-bezier(0.4,0,0.2,1)",
             boxShadow: "0 8px 32px rgba(0, 0, 0, 0.3)",
             maxHeight: "100vh",
             overflowY: "auto",

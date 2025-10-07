@@ -10,26 +10,27 @@ import { BlogPost } from "../components/features/sanity/types";
 const mockBlogPost: BlogPost = {
   title: "Getting Started with React and TypeScript",
   slug: {
-    current: "react-typescript-guide"
+    current: "react-typescript-guide",
   },
-  excerpt: "Learn how to build modern web applications using React with TypeScript. This comprehensive guide covers everything from setup to advanced patterns.",
+  excerpt:
+    "Learn how to build modern web applications using React with TypeScript. This comprehensive guide covers everything from setup to advanced patterns.",
   publishedAt: "2024-01-15T10:00:00Z",
   _createdAt: "2024-01-15T09:30:00Z",
   mainImage: {
     asset: {
       _ref: "image-abc123",
-      _type: "reference"
+      _type: "reference",
     },
-    alt: "React and TypeScript logos"
+    alt: "React and TypeScript logos",
   },
   estimatedReadingTime: 8,
   author: "Ben Hostetler",
-  body: []
+  body: [],
 };
 
 // Use your actual theme creation function
-const lightTheme = createMnTheme('light');
-const darkTheme = createMnTheme('dark');
+const lightTheme = createMnTheme("light");
+const darkTheme = createMnTheme("dark");
 
 // Theme decorators
 const withLightTheme = (Story: any) => (
@@ -54,11 +55,12 @@ const HomeWithBlogDemo = () => (
         Home Page with Blog Post Preview
       </Typography>
       <Typography variant="body2">
-        This shows how the Home component appears when blog posts are loaded from Sanity CMS.
-        The actual Home component includes the hero banner, this blog card, typewriter animation, and summary.
+        This shows how the Home component appears when blog posts are loaded
+        from Sanity CMS. The actual Home component includes the hero banner,
+        this blog card, typewriter animation, and summary.
       </Typography>
     </Alert>
-    
+
     <Paper
       elevation={3}
       sx={{
@@ -96,7 +98,7 @@ const HomeWithBlogDemo = () => (
       >
         <BlogCard post={mockBlogPost} />
       </Box>
-      
+
       <Box
         sx={{
           flex: 1,
@@ -109,7 +111,8 @@ const HomeWithBlogDemo = () => (
         <Paper
           sx={{
             p: 3,
-            background: (theme) => theme.custom.gradients.card[theme.palette.mode],
+            background: (theme) =>
+              theme.custom.gradients.card[theme.palette.mode],
             minHeight: 200,
             display: "flex",
             alignItems: "center",
@@ -117,7 +120,8 @@ const HomeWithBlogDemo = () => (
           }}
         >
           <Typography variant="body1" align="center">
-            🔄 TypewriterCode Animation<br />
+            🔄 TypewriterCode Animation
+            <br />
             Interactive welcome message
           </Typography>
         </Paper>
@@ -126,8 +130,9 @@ const HomeWithBlogDemo = () => (
 
     <Alert severity="success" sx={{ mt: 4 }}>
       <Typography variant="body2">
-        <strong>To see the actual Home component:</strong> Configure Sanity CMS with your project ID and dataset, 
-        then the Home component will automatically load and display your latest blog posts.
+        <strong>To see the actual Home component:</strong> Configure Sanity CMS
+        with your project ID and dataset, then the Home component will
+        automatically load and display your latest blog posts.
       </Typography>
     </Alert>
   </Container>
@@ -180,7 +185,8 @@ export const WithBlogPost: Story = {
   parameters: {
     docs: {
       description: {
-        story: "Preview of the Home page layout when a blog post is successfully loaded from Sanity CMS.",
+        story:
+          "Preview of the Home page layout when a blog post is successfully loaded from Sanity CMS.",
       },
     },
   },
@@ -194,7 +200,8 @@ export const DarkThemeWithBlogPost: Story = {
   parameters: {
     docs: {
       description: {
-        story: "Dark theme version showing how the blog post card adapts to the dark theme styling.",
+        story:
+          "Dark theme version showing how the blog post card adapts to the dark theme styling.",
       },
     },
   },

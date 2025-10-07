@@ -17,9 +17,12 @@ const FormHeader: React.FC = () => {
       >
         Get in Touch
       </Typography>
-      <Typography variant="subtitle1" sx={{ color: theme.palette.text.secondary, mb: 2 }}>
-        I'd love to hear from you! Fill out the form below and I'll get back
-        to you as soon as possible.
+      <Typography
+        variant="subtitle1"
+        sx={{ color: theme.palette.text.secondary, mb: 2 }}
+      >
+        I'd love to hear from you! Fill out the form below and I'll get back to
+        you as soon as possible.
       </Typography>
     </Box>
   );

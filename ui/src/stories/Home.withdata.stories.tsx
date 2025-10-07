@@ -6,8 +6,8 @@ import { createMnTheme } from "../styles/theme";
 import { mockBlogPosts } from "./mocks/sanityMocks";
 
 // Use your actual theme creation function
-const lightTheme = createMnTheme('light');
-const darkTheme = createMnTheme('dark');
+const lightTheme = createMnTheme("light");
+const darkTheme = createMnTheme("dark");
 
 // Decorator to provide theme context
 const withLightTheme = (Story: any) => {
@@ -61,12 +61,12 @@ This allows you to see how the component looks with actual content loaded.
   argTypes: {
     showMockData: {
       control: "boolean",
-      description: "Whether to use mock data instead of real API calls"
+      description: "Whether to use mock data instead of real API calls",
     },
     mockPosts: {
       control: "object",
-      description: "Array of mock blog posts to display"
-    }
+      description: "Array of mock blog posts to display",
+    },
   },
 } satisfies Meta<typeof HomeWrapper>;
 
@@ -79,12 +79,13 @@ type Story = StoryObj<typeof meta>;
 export const EmptyState: Story = {
   args: {
     showMockData: true,
-    mockPosts: []
+    mockPosts: [],
   },
   parameters: {
     docs: {
       description: {
-        story: "Home page when no blog posts are available. Shows the layout structure with an empty blog card area.",
+        story:
+          "Home page when no blog posts are available. Shows the layout structure with an empty blog card area.",
       },
     },
   },
@@ -96,12 +97,13 @@ export const EmptyState: Story = {
 export const WithFeaturedPost: Story = {
   args: {
     showMockData: true,
-    mockPosts: [mockBlogPosts[0]]
+    mockPosts: [mockBlogPosts[0]],
   },
   parameters: {
     docs: {
       description: {
-        story: "Home page displaying a featured blog post in the blog card section. This is the typical user experience.",
+        story:
+          "Home page displaying a featured blog post in the blog card section. This is the typical user experience.",
       },
     },
   },
@@ -113,12 +115,13 @@ export const WithFeaturedPost: Story = {
 export const WithMultiplePosts: Story = {
   args: {
     showMockData: true,
-    mockPosts: mockBlogPosts
+    mockPosts: mockBlogPosts,
   },
   parameters: {
     docs: {
       description: {
-        story: "Home page with multiple blog posts available. The component automatically displays the most recently published post.",
+        story:
+          "Home page with multiple blog posts available. The component automatically displays the most recently published post.",
       },
     },
   },
@@ -131,12 +134,13 @@ export const DarkThemeWithPost: Story = {
   decorators: [withDarkTheme],
   args: {
     showMockData: true,
-    mockPosts: [mockBlogPosts[0]]
+    mockPosts: [mockBlogPosts[0]],
   },
   parameters: {
     docs: {
       description: {
-        story: "Home page with dark theme and a featured blog post, showing the full theming capabilities.",
+        story:
+          "Home page with dark theme and a featured blog post, showing the full theming capabilities.",
       },
     },
   },
@@ -148,12 +152,13 @@ export const DarkThemeWithPost: Story = {
 export const ProductionBehavior: Story = {
   args: {
     showMockData: false,
-    mockPosts: []
+    mockPosts: [],
   },
   parameters: {
     docs: {
       description: {
-        story: "Home page using real API calls (will likely show empty state in Storybook due to missing Sanity configuration).",
+        story:
+          "Home page using real API calls (will likely show empty state in Storybook due to missing Sanity configuration).",
       },
     },
   },

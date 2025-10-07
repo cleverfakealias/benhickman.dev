@@ -1,4 +1,4 @@
-import { FormData } from './types';
+import { FormData } from "./types";
 
 export interface SubmitFormOptions {
   formData: FormData;
@@ -63,7 +63,8 @@ export const submitForm = async ({
     if (err?.name === "AbortError") {
       return {
         success: false,
-        error: "The request timed out. Please check your connection and try again.",
+        error:
+          "The request timed out. Please check your connection and try again.",
       };
     } else {
       console.error("Form submission error:", err);

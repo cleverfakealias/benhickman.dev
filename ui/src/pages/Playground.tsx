@@ -66,7 +66,7 @@ export default function Playground() {
       };
     `;
 
-    const blob = new Blob([script], { type: 'application/javascript' });
+    const blob = new Blob([script], { type: "application/javascript" });
     const worker = new Worker(URL.createObjectURL(blob));
     workerRef.current = worker;
     setOutput("");
@@ -74,7 +74,7 @@ export default function Playground() {
     worker.onmessage = (e) => {
       const { type, message } = e.data;
       if (type === "log" || type === "warn" || type === "info") {
-        (console[type as "log" | "warn" | "info"])(message);
+        console[type as "log" | "warn" | "info"](message);
         setOutput((prev) => prev + message + "\n");
       } else if (type === "error") {
         console.error(message);
@@ -106,7 +106,9 @@ export default function Playground() {
       elevation={3}
       sx={{
         p: { xs: 2, md: 4 },
-        background: theme.custom?.gradients?.hero?.[theme.palette.mode] || theme.palette.background.paper,
+        background:
+          theme.custom?.gradients?.hero?.[theme.palette.mode] ||
+          theme.palette.background.paper,
         boxShadow: theme.custom?.shadows?.card?.[theme.palette.mode] || 3,
         display: "flex",
         flexDirection: "column",
@@ -122,10 +124,15 @@ export default function Playground() {
       }}
     >
       <AccentBar />
-      <Typography variant="h4" sx={{ fontWeight: 700, mb: 2, color: theme.palette.text.primary }}>
+      <Typography
+        variant="h4"
+        sx={{ fontWeight: 700, mb: 2, color: theme.palette.text.primary }}
+      >
         Just a place to play with JavaScript
       </Typography>
-      <Box sx={{ flex: 1, minHeight: 0, display: "flex", flexDirection: "column" }}>
+      <Box
+        sx={{ flex: 1, minHeight: 0, display: "flex", flexDirection: "column" }}
+      >
         <Editor
           height="40vh"
           defaultLanguage="javascript"
@@ -164,7 +171,10 @@ export default function Playground() {
           borderRadius: 1,
         }}
       >
-        <Typography variant="subtitle1" sx={{ color: "#8CD2EF", fontWeight: 600 }}>
+        <Typography
+          variant="subtitle1"
+          sx={{ color: "#8CD2EF", fontWeight: 600 }}
+        >
           Output:
         </Typography>
         <pre style={{ margin: 0 }}>{output}</pre>

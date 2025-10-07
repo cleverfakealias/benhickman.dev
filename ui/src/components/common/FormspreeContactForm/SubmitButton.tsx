@@ -22,7 +22,9 @@ const SubmitButton: React.FC<SubmitButtonProps> = ({
       type="submit"
       variant="contained"
       size="large"
-      disabled={!isFormValid || !captchaVerified || isSubmitting || !!configError}
+      disabled={
+        !isFormValid || !captchaVerified || isSubmitting || !!configError
+      }
       startIcon={isSubmitting ? <CircularProgress size={20} /> : <Send />}
       sx={{
         minWidth: 220,

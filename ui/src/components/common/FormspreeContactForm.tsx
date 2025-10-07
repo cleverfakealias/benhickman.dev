@@ -46,12 +46,11 @@ const FormspreeContactForm: React.FC<FormspreeContactFormProps> = () => {
   const [submitError, setSubmitError] = useState<string | null>(null);
 
   // Early guard if config is missing
-  const configError =
-    !formspreeUrl
-      ? "Missing Formspree URL in configuration."
-      : !hCaptchaSiteKey
-        ? "Missing hCaptcha site key in configuration."
-        : null;
+  const configError = !formspreeUrl
+    ? "Missing Formspree URL in configuration."
+    : !hCaptchaSiteKey
+      ? "Missing hCaptcha site key in configuration."
+      : null;
 
   const onCaptchaVerified = (token: string) => {
     setCaptchaToken(token);
@@ -73,7 +72,8 @@ const FormspreeContactForm: React.FC<FormspreeContactFormProps> = () => {
 
     if (!formData.name.trim()) newErrors.name = "Name is required";
     if (!formData.email.trim()) newErrors.email = "Email is required";
-    else if (!validateEmail(formData.email)) newErrors.email = "Valid email is required";
+    else if (!validateEmail(formData.email))
+      newErrors.email = "Valid email is required";
     if (!formData.message.trim()) newErrors.message = "Message is required";
 
     setErrors(newErrors);
@@ -84,18 +84,18 @@ const FormspreeContactForm: React.FC<FormspreeContactFormProps> = () => {
 
   const handleInputChange =
     (field: keyof FormData) =>
-      (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const value = e.target.value;
-        setFormData((prev) => ({ ...prev, [field]: value }));
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      const value = e.target.value;
+      setFormData((prev) => ({ ...prev, [field]: value }));
 
-        // Clear field-specific error as user types
-        if (errors[field]) {
-          setErrors((prev) => ({ ...prev, [field]: undefined }));
-        }
+      // Clear field-specific error as user types
+      if (errors[field]) {
+        setErrors((prev) => ({ ...prev, [field]: undefined }));
+      }
 
-        // Debounced-ish validation
-        setTimeout(() => validateForm(), 80);
-      };
+      // Debounced-ish validation
+      setTimeout(() => validateForm(), 80);
+    };
 
   const resetCaptcha = () => {
     if (captchaRef.current) captchaRef.current.resetCaptcha();
@@ -181,7 +181,7 @@ const FormspreeContactForm: React.FC<FormspreeContactFormProps> = () => {
     } catch (err: any) {
       if (err?.name === "AbortError") {
         setSubmitError(
-          "The request timed out. Please check your connection and try again."
+          "The request timed out. Please check your connection and try again.",
         );
       } else {
         console.error("Form submission error:", err);
@@ -248,7 +248,10 @@ const FormspreeContactForm: React.FC<FormspreeContactFormProps> = () => {
         >
           Get in Touch
         </Typography>
-        <Typography variant="subtitle1" sx={{ color: theme.palette.text.secondary, mb: 2 }}>
+        <Typography
+          variant="subtitle1"
+          sx={{ color: theme.palette.text.secondary, mb: 2 }}
+        >
           I’d love to hear from you! Fill out the form below and I’ll get back
           to you as soon as possible.
         </Typography>
@@ -284,7 +287,9 @@ const FormspreeContactForm: React.FC<FormspreeContactFormProps> = () => {
               helperText={errors.name || "Enter your full name"}
               required
               InputProps={{
-                startAdornment: <Person sx={{ mr: 1, color: "action.active" }} />,
+                startAdornment: (
+                  <Person sx={{ mr: 1, color: "action.active" }} />
+                ),
               }}
               sx={{
                 "& .MuiOutlinedInput-root": {
@@ -312,7 +317,9 @@ const FormspreeContactForm: React.FC<FormspreeContactFormProps> = () => {
               helperText={errors.email || "Enter your email address"}
               required
               InputProps={{
-                startAdornment: <Email sx={{ mr: 1, color: "action.active" }} />,
+                startAdornment: (
+                  <Email sx={{ mr: 1, color: "action.active" }} />
+                ),
               }}
               sx={{
                 "& .MuiOutlinedInput-root": {
@@ -338,7 +345,9 @@ const FormspreeContactForm: React.FC<FormspreeContactFormProps> = () => {
               onChange={handleInputChange("phone")}
               helperText="Enter your phone number"
               InputProps={{
-                startAdornment: <Phone sx={{ mr: 1, color: "action.active" }} />,
+                startAdornment: (
+                  <Phone sx={{ mr: 1, color: "action.active" }} />
+                ),
               }}
               sx={{
                 "& .MuiOutlinedInput-root": {
@@ -410,8 +419,15 @@ const FormspreeContactForm: React.FC<FormspreeContactFormProps> = () => {
                 type="submit"
                 variant="contained"
                 size="large"
-                disabled={!isFormValid || !captchaVerified || isSubmitting || !!configError}
-                startIcon={isSubmitting ? <CircularProgress size={20} /> : <Send />}
+                disabled={
+                  !isFormValid ||
+                  !captchaVerified ||
+                  isSubmitting ||
+                  !!configError
+                }
+                startIcon={
+                  isSubmitting ? <CircularProgress size={20} /> : <Send />
+                }
                 sx={{
                   minWidth: 220,
                   px: 5,
@@ -420,7 +436,9 @@ const FormspreeContactForm: React.FC<FormspreeContactFormProps> = () => {
                   fontWeight: theme.typography.fontWeightBold,
                   fontSize: theme.typography.body1?.fontSize,
                   background: `linear-gradient(90deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
-                  color: theme.palette.getContrastText(theme.palette.primary.main),
+                  color: theme.palette.getContrastText(
+                    theme.palette.primary.main,
+                  ),
                   boxShadow: "0 2px 8px 0 rgba(31, 38, 135, 0.18)",
                   "&:hover": {
                     background: `linear-gradient(90deg, ${theme.palette.primary.dark} 0%, ${theme.palette.secondary.dark} 100%)`,

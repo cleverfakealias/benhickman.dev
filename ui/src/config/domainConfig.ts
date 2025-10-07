@@ -55,6 +55,19 @@ export const domainConfigs: Record<string, DomainConfig> = {
         "Ben Hickman specializes in cloud architecture and engineering, offering tailored solutions for modern businesses.",
     },
   },
+  localhost: {
+    formspreeUrl: import.meta.env.VITE_FORMSPREE_URL || "",
+    hCaptchaSiteKey: import.meta.env.VITE_HCAPTCHA_SITEKEY || "",
+    branding: {
+      name: "Localhost",
+      logo: "/images/BH monogram.png",
+      alt: "Ben Hickman logo",
+      subtitle: "Localhost Running",
+      title: "Localhost | Cloud Architecture and Engineering",
+      description:
+        "Ben Hickman specializes in cloud architecture and engineering, offering tailored solutions for modern businesses.",
+    },
+  },
 };
 
 export const getDomainConfig = (hostname?: string) => {

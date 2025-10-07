@@ -44,32 +44,32 @@ const Contact: React.FC = () => {
       </Box>
       {/* Contact Card */}
       <Box>
-          <Card
-            sx={{
+        <Card
+          sx={{
+            borderRadius: 4,
+            background: theme.custom.gradients.hero[theme.palette.mode],
+            border: theme.custom.borders.card[theme.palette.mode],
+            boxShadow: theme.custom.shadows.card[theme.palette.mode],
+            position: "relative",
+            overflow: "hidden",
+            mb: 4,
+            width: "100%",
+            transition: theme.custom.transitions.smooth,
+            "&:hover": {
+              boxShadow: theme.custom.shadows.card.hover[theme.palette.mode],
+            },
+            "&::before": {
+              content: '""',
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              height: "4px",
+              background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
               borderRadius: 4,
-              background: theme.custom.gradients.hero[theme.palette.mode],
-              border: theme.custom.borders.card[theme.palette.mode],
-              boxShadow: theme.custom.shadows.card[theme.palette.mode],
-              position: "relative",
-              overflow: "hidden",
-              mb: 4,
-              width: "100%",
-              transition: theme.custom.transitions.smooth,
-              "&:hover": {
-                boxShadow: theme.custom.shadows.card.hover[theme.palette.mode],
-              },
-              "&::before": {
-                content: '""',
-                position: "absolute",
-                top: 0,
-                left: 0,
-                right: 0,
-                height: "4px",
-                background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
-                borderRadius: 4,
-              },
-            }}
-          >
+            },
+          }}
+        >
           <CardContent sx={{ p: { xs: 2, sm: 4 } }}>
             <Box sx={{ borderRadius: 0, p: 0 }}>
               <ContactInformation />

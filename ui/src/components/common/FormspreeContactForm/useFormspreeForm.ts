@@ -11,9 +11,12 @@ const initialFormData: FormData = {
   message: "",
 };
 
-export const useFormspreeForm = (formspreeUrl?: string, hCaptchaSiteKey?: string) => {
+export const useFormspreeForm = (
+  formspreeUrl?: string,
+  hCaptchaSiteKey?: string,
+) => {
   const captchaRef = useRef<HCaptcha>(null);
-  
+
   const [formData, setFormData] = useState<FormData>(initialFormData);
   const [errors, setErrors] = useState<FormErrors>({});
   const [formValid, setFormValid] = useState(false);
@@ -26,8 +29,8 @@ export const useFormspreeForm = (formspreeUrl?: string, hCaptchaSiteKey?: string
   const configError = !formspreeUrl
     ? "Missing Formspree URL in configuration."
     : !hCaptchaSiteKey
-    ? "Missing hCaptcha site key in configuration."
-    : null;
+      ? "Missing hCaptcha site key in configuration."
+      : null;
 
   const onCaptchaVerified = (token: string | null) => {
     setCaptchaToken(token);
@@ -132,10 +135,10 @@ export const useFormspreeForm = (formspreeUrl?: string, hCaptchaSiteKey?: string
     isSubmitting,
     submitError,
     configError,
-    
+
     // Refs
     captchaRef,
-    
+
     // Handlers
     handleInputChange,
     handleSubmit,

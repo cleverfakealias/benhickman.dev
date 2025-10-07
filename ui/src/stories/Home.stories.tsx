@@ -5,8 +5,8 @@ import Home from "../pages/Home";
 import { createMnTheme } from "../styles/theme";
 
 // Use your actual theme creation function
-const lightTheme = createMnTheme('light');
-const darkTheme = createMnTheme('dark');
+const lightTheme = createMnTheme("light");
+const darkTheme = createMnTheme("dark");
 
 // Decorator to provide theme context
 const withMuiTheme = (Story: any) => {
@@ -36,7 +36,8 @@ const meta: Meta<typeof Home> = {
     layout: "fullscreen",
     docs: {
       description: {
-        component: "The main home page component featuring a hero banner, blog preview, interactive code typewriter, and summary section.",
+        component:
+          "The main home page component featuring a hero banner, blog preview, interactive code typewriter, and summary section.",
       },
     },
   },
@@ -51,7 +52,8 @@ export const Default: Story = {
   parameters: {
     docs: {
       description: {
-        story: "The default home page state when no blog posts are available or API calls fail. Shows the layout structure without blog content.",
+        story:
+          "The default home page state when no blog posts are available or API calls fail. Shows the layout structure without blog content.",
       },
     },
   },
@@ -63,7 +65,8 @@ export const DarkTheme: Story = {
   parameters: {
     docs: {
       description: {
-        story: "Home page with dark theme applied, showing layout without blog posts.",
+        story:
+          "Home page with dark theme applied, showing layout without blog posts.",
       },
     },
   },
@@ -74,7 +77,8 @@ export const ComponentLayout: Story = {
   parameters: {
     docs: {
       description: {
-        story: "Showcases the layout and structure of the home page components including hero banner, blog card area, typewriter code, and summary section.",
+        story:
+          "Showcases the layout and structure of the home page components including hero banner, blog card area, typewriter code, and summary section.",
       },
     },
   },

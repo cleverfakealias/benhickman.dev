@@ -168,7 +168,8 @@ const Header: React.FC<HeaderProps> = ({ themeMode, setThemeMode }) => {
                           bottom: -6,
                           width: "100%",
                           height: "3px",
-                          background: "linear-gradient(90deg, #8CD2EF, #5DADE2)",
+                          background:
+                            "linear-gradient(90deg, #8CD2EF, #5DADE2)",
                           borderRadius: "2px",
                           transition: "all 0.3s cubic-bezier(0.4,0,0.2,1)",
                           boxShadow: "0 2px 8px 0 rgba(140, 210, 239, 0.15)",

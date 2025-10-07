@@ -9,7 +9,12 @@ import Contact from "./pages/Contact";
 import About from "./pages/About";
 import DevelopmentExperience from "./pages/DevelopmentExperience";
 import Playground from "./pages/Playground";
-import { BrowserRouter as Router, Route, Routes, useLocation } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  useLocation,
+} from "react-router-dom";
 import Home from "./pages/Home";
 import { createMnTheme } from "./styles/theme";
 import { useState, useEffect } from "react";

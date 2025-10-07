@@ -5,8 +5,8 @@ import Home from "../pages/Home";
 import { createMnTheme } from "../styles/theme";
 
 // Use your actual theme creation function
-const lightTheme = createMnTheme('light');
-const darkTheme = createMnTheme('dark');
+const lightTheme = createMnTheme("light");
+const darkTheme = createMnTheme("dark");
 
 // Theme decorators
 const withLightTheme = (Story: any) => (

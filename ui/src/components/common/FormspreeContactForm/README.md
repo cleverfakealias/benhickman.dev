@@ -23,71 +23,82 @@ FormspreeContactForm/
 ## Usage
 
 ### Basic Usage
+
 ```tsx
-import FormspreeContactForm from './components/common/FormspreeContactForm';
+import FormspreeContactForm from "./components/common/FormspreeContactForm";
 
 // Use in your component
-<FormspreeContactForm />
+<FormspreeContactForm />;
 ```
 
 ### Advanced Usage with Individual Components
+
 ```tsx
-import { 
-  ContactForm, 
-  FormField, 
-  useFormspreeForm 
-} from './components/common/FormspreeContactForm/exports';
+import {
+  ContactForm,
+  FormField,
+  useFormspreeForm,
+} from "./components/common/FormspreeContactForm/exports";
 
 // Custom implementation using the hook and components
 const MyCustomForm = () => {
   const formState = useFormspreeForm(formspreeUrl, recaptchaSiteKey);
-  
-  return (
-    <ContactForm {...formState} />
-  );
+
+  return <ContactForm {...formState} />;
 };
 ```
 
 ## Components
 
 ### FormspreeContactForm (Main Component)
+
 The primary component that handles the complete contact form flow including success states.
 
 ### useFormspreeForm (Custom Hook)
+
 Manages all form state, validation, and submission logic. Returns:
+
 - Form data and validation state
 - Handlers for input changes and form submission
 - CAPTCHA management
 - Error handling
 
 ### ContactForm
+
 The main form UI component that renders all form fields and handles user interactions.
 
 ### FormField
+
 A reusable form field component with consistent styling and validation display.
 
 ### SuccessScreen
+
 Displays the success message after form submission.
 
 ### SubmitButton
+
 The form submission button with loading states and proper accessibility.
 
 ### FormHeader
+
 The form title and description section.
 
 ## Utilities
 
 ### validation.ts
+
 - `validateEmail()`: Email format validation
 - `validateForm()`: Complete form validation
 - `isFormValid()`: Check if form has any errors
 
 ### api.ts
+
 - `submitForm()`: Handles the Formspree API submission with proper error handling
 
 ## Types
 
 All TypeScript interfaces and types are defined in `types.ts`:
+
 - `FormData`: Form field data structure
 - `FormErrors`: Validation error structure
 - `FormspreeContactFormProps`: Main component props
@@ -96,6 +107,7 @@ All TypeScript interfaces and types are defined in `types.ts`:
 ## Configuration
 
 The component automatically gets configuration from `getDomainConfig()`:
+
 - `formspreeUrl`: Your Formspree form endpoint
 - `recaptchaSiteKey`: Your reCAPTCHA site key
 

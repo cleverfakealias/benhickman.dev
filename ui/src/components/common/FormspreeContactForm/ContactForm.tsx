@@ -1,9 +1,5 @@
 import React from "react";
-import {
-  Box,
-  Alert,
-  useTheme,
-} from "@mui/material";
+import { Box, Alert, useTheme } from "@mui/material";
 import { Person, Email, Phone, Message } from "@mui/icons-material";
 import Grid2 from "@mui/material/Grid2";
 import HCaptcha from "@hcaptcha/react-hcaptcha";
@@ -26,7 +22,9 @@ interface ContactFormProps {
   configError: string | null;
   hCaptchaSiteKey: string;
   captchaRef: React.RefObject<HCaptcha>;
-  onInputChange: (field: keyof FormData) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  onInputChange: (
+    field: keyof FormData,
+  ) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
   onSubmit: (e: React.FormEvent) => void;
   onCaptchaVerified: (token: string | null) => void;
   onCaptchaExpired: () => void;
