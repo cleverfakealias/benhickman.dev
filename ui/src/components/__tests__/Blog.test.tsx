@@ -3,31 +3,38 @@ import '@testing-library/jest-dom';
 jest.mock('../features/sanity/sanityClient', () => ({
   fetchPosts: jest.fn(() => Promise.resolve([])),
 }));
-import { render, waitFor } from '@testing-library/react';
+import { render, waitFor, screen, act } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
+import { ThemeProvider } from '@mui/material/styles';
+import { createMnTheme } from '../../styles/theme';
 import Blog from '../../pages/Blog';
 
-const renderWithRouter = (component: React.ReactElement) => {
-  return render(<BrowserRouter>{component}</BrowserRouter>);
+const renderWithProviders = (component: React.ReactElement) => {
+  return render(
+    <ThemeProvider theme={createMnTheme('light')}>
+      <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+        {component}
+      </BrowserRouter>
+    </ThemeProvider>
+  );
 };
 
 describe('Blog', () => {
   test('renders without crashing', async () => {
-    await waitFor(() => {
-      renderWithRouter(<Blog />);
+    await act(async () => {
+      renderWithProviders(<Blog />);
     });
     // Blog component should render some content
     expect(document.body).toBeInTheDocument();
   });
 
   test('renders blog heading or loading state', async () => {
-    renderWithRouter(<Blog />);
-    // Wait for any async state updates to flush
-    await waitFor(() => {
-      expect(document.body).toBeInTheDocument();
+    await act(async () => {
+      renderWithProviders(<Blog />);
     });
-    // Should either show blog content or loading state
-    // Since we're mocking Sanity to return empty array,
-    // the component should handle this gracefully
+    // Wait for the blog content to load (mock returns empty array)
+    await waitFor(() => {
+      expect(screen.getByText('No blog posts yet')).toBeInTheDocument();
+    });
   });
 });

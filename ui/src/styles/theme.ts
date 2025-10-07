@@ -375,29 +375,3 @@ export const createMnTheme = (mode: 'light' | 'dark') => {
     },
   });
 };
-
-// Type augmentation for custom theme properties
-declare module '@mui/material/styles' {
-  interface Theme {
-    custom: {
-      gradients: typeof commonStyles.gradients;
-      shadows: typeof commonStyles.shadows;
-      transitions: typeof commonStyles.transitions;
-      borders: typeof commonStyles.borders;
-      getCardStyles: () => object;
-      getSocialStyles: () => object;
-      getCallToActionStyles: () => object;
-    };
-  }
-  interface ThemeOptions {
-    custom?: {
-      gradients?: typeof commonStyles.gradients;
-      shadows?: typeof commonStyles.shadows;
-      transitions?: typeof commonStyles.transitions;
-      borders?: typeof commonStyles.borders;
-      getCardStyles?: () => object;
-      getSocialStyles?: () => object;
-      getCallToActionStyles?: () => object;
-    };
-  }
-}

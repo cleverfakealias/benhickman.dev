@@ -24,7 +24,7 @@ import { MemoryRouter } from 'react-router-dom';
 
 const renderWithTheme = (component: React.ReactElement) => {
   return render(
-    <MemoryRouter>
+    <MemoryRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <ThemeProvider theme={theme}>{component}</ThemeProvider>
     </MemoryRouter>
   );
