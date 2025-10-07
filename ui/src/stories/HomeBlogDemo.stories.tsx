@@ -33,14 +33,14 @@ const lightTheme = createMnTheme('light');
 const darkTheme = createMnTheme('dark');
 
 // Theme decorators
-const withLightTheme = (Story: any) => (
+const withLightTheme = (Story: React.ComponentType) => (
   <ThemeProvider theme={lightTheme}>
     <CssBaseline />
     <Story />
   </ThemeProvider>
 );
 
-const withDarkTheme = (Story: any) => (
+const withDarkTheme = (Story: React.ComponentType) => (
   <ThemeProvider theme={darkTheme}>
     <CssBaseline />
     <Story />

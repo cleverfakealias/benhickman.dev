@@ -20,6 +20,10 @@ interface FormData {
   message: string;
 }
 
+interface FormspreeError {
+  message: string;
+}
+
 interface FormspreeContactFormProps {
   formspreeUrl?: string;
   hCaptchaSiteKey?: string;
@@ -161,7 +165,7 @@ const FormspreeContactForm: React.FC<FormspreeContactFormProps> = () => {
         if (errorData?.message) errMsg = errorData.message;
         // Formspree sometimes returns field errors:
         if (Array.isArray(errorData?.errors) && errorData.errors.length) {
-          errMsg = errorData.errors.map((e: any) => e.message).join('; ');
+          errMsg = errorData.errors.map((e: FormspreeError) => e.message).join('; ');
         }
       } catch {
         try {
@@ -176,8 +180,8 @@ const FormspreeContactForm: React.FC<FormspreeContactFormProps> = () => {
       if (/captcha|hcaptcha|token/i.test(errMsg)) resetCaptcha();
 
       setSubmitError(errMsg);
-    } catch (err: any) {
-      if (err?.name === 'AbortError') {
+    } catch (err: unknown) {
+      if (err instanceof Error && err.name === 'AbortError') {
         setSubmitError('The request timed out. Please check your connection and try again.');
       } else {
         console.error('Form submission error:', err);

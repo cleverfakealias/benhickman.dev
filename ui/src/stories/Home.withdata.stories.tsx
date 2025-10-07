@@ -10,7 +10,7 @@ const lightTheme = createMnTheme('light');
 const darkTheme = createMnTheme('dark');
 
 // Decorator to provide theme context
-const withLightTheme = (Story: any) => {
+const withLightTheme = (Story: React.ComponentType) => {
   return (
     <ThemeProvider theme={lightTheme}>
       <CssBaseline />
@@ -20,7 +20,7 @@ const withLightTheme = (Story: any) => {
 };
 
 // Decorator for dark theme
-const withDarkTheme = (Story: any) => {
+const withDarkTheme = (Story: React.ComponentType) => {
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />

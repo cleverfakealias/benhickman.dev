@@ -10,7 +10,7 @@ export interface FormspreeContactFormProps {
   recaptchaSiteKey?: string;
 }
 
-export interface FormErrors extends Partial<FormData> {}
+export type FormErrors = Partial<FormData>;
 
 export interface FormState {
   formData: FormData;

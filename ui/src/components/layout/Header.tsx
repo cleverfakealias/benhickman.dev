@@ -37,12 +37,9 @@ const Header: React.FC<HeaderProps> = ({ themeMode, setThemeMode }) => {
   );
 
   // Memoize the debounced resize handler
-  const handleResize = useCallback(
-    debounce(() => {
-      setIsMobile(window.innerWidth <= 768);
-    }, 200),
-    []
-  );
+  const handleResize = debounce(() => {
+    setIsMobile(window.innerWidth <= 768);
+  }, 200);
 
   useEffect(() => {
     window.addEventListener('resize', handleResize);
@@ -52,7 +49,6 @@ const Header: React.FC<HeaderProps> = ({ themeMode, setThemeMode }) => {
     };
   }, [handleResize]);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const handleDrawerToggle = () => {
     setDrawerOpen((prev) => !prev);
   };

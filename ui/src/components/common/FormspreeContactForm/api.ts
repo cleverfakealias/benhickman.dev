@@ -1,5 +1,9 @@
 import { FormData } from './types';
 
+interface FormspreeError {
+  message: string;
+}
+
 export interface SubmitFormOptions {
   formData: FormData;
   captchaToken: string;
@@ -47,7 +51,7 @@ export const submitForm = async ({
       if (errorData?.message) errMsg = errorData.message;
       // Formspree sometimes returns field errors:
       if (Array.isArray(errorData?.errors) && errorData.errors.length) {
-        errMsg = errorData.errors.map((e: any) => e.message).join('; ');
+        errMsg = errorData.errors.map((e: FormspreeError) => e.message).join('; ');
       }
     } catch {
       try {
@@ -59,8 +63,8 @@ export const submitForm = async ({
     }
 
     return { success: false, error: errMsg };
-  } catch (err: any) {
-    if (err?.name === 'AbortError') {
+  } catch (err: unknown) {
+    if (err instanceof Error && err.name === 'AbortError') {
       return {
         success: false,
         error: 'The request timed out. Please check your connection and try again.',
