@@ -71,13 +71,15 @@ export const domainConfigs: Record<string, DomainConfig> = {
 };
 
 export const getDomainConfig = (hostname?: string) => {
-  const host = hostname || (typeof window !== 'undefined' ? window.location.hostname : 'zengineer.cloud');
+  const host =
+    hostname || (typeof window !== 'undefined' ? window.location.hostname : 'zengineer.cloud');
   return domainConfigs[host] || domainConfigs['zengineer.cloud'];
 };
 
 export const updateMetaTags = (hostname?: string) => {
   const config = getDomainConfig(hostname);
-  const host = hostname || (typeof window !== 'undefined' ? window.location.hostname : 'zengineer.cloud');
+  const host =
+    hostname || (typeof window !== 'undefined' ? window.location.hostname : 'zengineer.cloud');
 
   document.title = config.branding.title;
 
@@ -117,7 +119,7 @@ export const updateMetaTags = (hostname?: string) => {
 
   // Structured data - update the JSON-LD
   const scripts = document.querySelectorAll('script[type="application/ld+json"]');
-  scripts.forEach(script => {
+  scripts.forEach((script) => {
     const data = JSON.parse(script.textContent || '{}');
     if (data['@type'] === 'Organization') {
       data.name = config.branding.name;
