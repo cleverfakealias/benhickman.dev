@@ -20,13 +20,13 @@ export const domainConfigs: Record<string, DomainConfig> = {
     formspreeUrl: import.meta.env.VITE_FORMSPREE_URL || '',
     hCaptchaSiteKey: import.meta.env.VITE_HCAPTCHA_SITEKEY || '',
     branding: {
-      name: 'Zengineer',
+      name: 'Zengineer.cloud',
       logo: '/images/zengineer dark logo 2.png',
       alt: 'Zengineer monogram logo',
       subtitle: 'Cloud Architecture and Development',
-      title: 'Zengineer | Cloud Architecture and Development',
+      title: 'Zengineer.cloud | Architecture and Software Engineering',
       description:
-        'Zengineer provides expert cloud architecture and development services, specializing in scalable, modern software solutions.',
+        'Zengineer.cloud provides expert cloud architecture and development services, specializing in scalable, modern software solutions.',
     },
   },
   'zennlogic.com': {
@@ -71,7 +71,65 @@ export const domainConfigs: Record<string, DomainConfig> = {
 };
 
 export const getDomainConfig = (hostname?: string) => {
-  const host =
-    hostname || (typeof window !== 'undefined' ? window.location.hostname : 'zengineer.cloud');
+  const host = hostname || (typeof window !== 'undefined' ? window.location.hostname : 'zengineer.cloud');
   return domainConfigs[host] || domainConfigs['zengineer.cloud'];
+};
+
+export const updateMetaTags = (hostname?: string) => {
+  const config = getDomainConfig(hostname);
+  const host = hostname || (typeof window !== 'undefined' ? window.location.hostname : 'zengineer.cloud');
+
+  document.title = config.branding.title;
+
+  // Update meta description
+  const descMeta = document.querySelector('meta[name="description"]');
+  if (descMeta) descMeta.setAttribute('content', config.branding.description);
+
+  // Update OG
+  const ogTitle = document.querySelector('meta[property="og:title"]');
+  if (ogTitle) ogTitle.setAttribute('content', config.branding.title);
+
+  const ogDesc = document.querySelector('meta[property="og:description"]');
+  if (ogDesc) ogDesc.setAttribute('content', config.branding.description);
+
+  const ogUrl = document.querySelector('meta[property="og:url"]');
+  if (ogUrl) ogUrl.setAttribute('content', `https://${host}/`);
+
+  const ogImage = document.querySelector('meta[property="og:image"]');
+  if (ogImage) ogImage.setAttribute('content', `https://${host}${config.branding.logo}`);
+
+  // Twitter
+  const twTitle = document.querySelector('meta[property="twitter:title"]');
+  if (twTitle) twTitle.setAttribute('content', config.branding.title);
+
+  const twDesc = document.querySelector('meta[property="twitter:description"]');
+  if (twDesc) twDesc.setAttribute('content', config.branding.description);
+
+  const twUrl = document.querySelector('meta[property="twitter:url"]');
+  if (twUrl) twUrl.setAttribute('content', `https://${host}/`);
+
+  const twImage = document.querySelector('meta[property="twitter:image"]');
+  if (twImage) twImage.setAttribute('content', `https://${host}${config.branding.logo}`);
+
+  // Canonical
+  const canonical = document.querySelector('link[rel="canonical"]');
+  if (canonical) canonical.setAttribute('href', `https://${host}/`);
+
+  // Structured data - update the JSON-LD
+  const scripts = document.querySelectorAll('script[type="application/ld+json"]');
+  scripts.forEach(script => {
+    const data = JSON.parse(script.textContent || '{}');
+    if (data['@type'] === 'Organization') {
+      data.name = config.branding.name;
+      data.url = `https://${host}`;
+      data.logo = `https://${host}${config.branding.logo}`;
+      data.description = config.branding.description;
+      script.textContent = JSON.stringify(data);
+    } else if (data['@type'] === 'WebSite') {
+      data.name = config.branding.name;
+      data.url = `https://${host}`;
+      data.description = config.branding.subtitle || config.branding.description;
+      script.textContent = JSON.stringify(data);
+    }
+  });
 };
