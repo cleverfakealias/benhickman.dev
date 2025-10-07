@@ -1,8 +1,9 @@
 import React from 'react';
-import { Box, Typography, Grid, Paper } from '@mui/material';
+import { Box, Typography, Grid, Paper, useTheme } from '@mui/material';
 import AccentBar from '../common/AccentBar';
 
 const HomeSummary: React.FC = () => {
+  const theme = useTheme();
   return (
     <Paper
       elevation={3}
@@ -14,10 +15,7 @@ const HomeSummary: React.FC = () => {
         py: { xs: 3, md: 5 },
         position: 'relative',
         overflow: 'hidden',
-        boxShadow: (theme) =>
-          theme.palette.mode === 'dark'
-            ? '0 4px 32px 0 rgba(124,77,255,0.10)'
-            : '0 4px 32px 0 rgba(65,42,145,0.08)',
+        boxShadow: (theme) => theme.custom.shadows.card.light,
       }}
     >
       <AccentBar />
@@ -86,7 +84,7 @@ const HomeSummary: React.FC = () => {
                 minHeight: 320,
                 maxHeight: 600,
                 borderRadius: 0,
-                boxShadow: '0 8px 32px 0 rgba(31,38,135,0.18)',
+                boxShadow: theme.custom.shadows.card.dark,
                 display: 'block',
               }}
             />

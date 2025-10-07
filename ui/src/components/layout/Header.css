@@ -50,7 +50,7 @@
 }
 
 .header-links a {
-  color: #ffffff;
+  color: var(--header-text);
   text-decoration: none;
   font-size: 0.95rem;
   font-weight: 500;
@@ -63,15 +63,15 @@
 
 .header-links a:hover,
 .header-links a:focus {
-  color: #8cd2ef;
-  text-shadow: 0 0 8px rgba(140, 210, 239, 0.5);
+  color: var(--header-link-hover);
+  text-shadow: 0 0 8px var(--header-link-glow);
   outline: none;
 }
 
 .header-links a:focus {
   outline: none;
   box-shadow:
-    0 0 0 3px rgba(140, 210, 239, 0.5),
+    0 0 0 3px var(--header-link-glow),
     0 2px 8px 0 rgba(140, 210, 239, 0.15);
   border-radius: 6px;
   background: rgba(140, 210, 239, 0.08);
@@ -81,9 +81,9 @@
 }
 
 .header-links a.active {
-  color: #8cd2ef;
+  color: var(--header-active-link);
   font-weight: 600;
-  text-shadow: 0 0 8px rgba(140, 210, 239, 0.5);
+  text-shadow: 0 0 8px var(--header-link-glow);
 }
 
 .active-indicator {
@@ -93,11 +93,11 @@
 /* Glow animation for active link underline */
 @keyframes glow {
   0% {
-    box-shadow: 0 2px 8px #8cd2ef;
+    box-shadow: 0 2px 8px var(--header-link-glow);
   }
   100% {
     box-shadow:
-      0 2px 12px #8cd2ef,
+      0 2px 12px var(--header-link-glow),
       0 0 20px rgba(140, 210, 239, 0.5);
   }
 }
@@ -106,21 +106,21 @@
   font-size: 1.1rem;
   font-weight: bold;
   letter-spacing: 1px;
-  color: var(--header-text, #ffffff);
+  color: var(--header-text);
 }
 
 .menu-btn {
   display: none;
   background: none;
   border: none;
-  color: var(--header-text, #ffffff);
+  color: var(--header-text);
   font-size: 2rem;
   cursor: pointer;
   transition: color 0.3s ease;
 }
 
 .menu-btn:hover {
-  color: var(--header-link-hover, #8cd2ef);
+  color: var(--header-link-hover);
 }
 
 /* Mobile Styles */
@@ -142,7 +142,7 @@
 /* Focus styles for better accessibility */
 .header button:focus,
 .header a:focus {
-  outline: 2px solid var(--header-link-hover, #8cd2ef);
+  outline: 2px solid var(--header-link-hover);
   outline-offset: 2px;
   border-radius: 4px;
 }
@@ -150,7 +150,7 @@
 /* High contrast mode support */
 @media (prefers-contrast: high) {
   .header {
-    border-bottom: 2px solid var(--header-text, #ffffff);
+    border-bottom: 2px solid var(--header-text);
   }
 
   .header-links a {
@@ -159,7 +159,7 @@
 
   .header-links a.active {
     text-decoration: none;
-    border-bottom: 2px solid var(--header-link-hover, #8cd2ef);
+    border-bottom: 2px solid var(--header-link-hover);
   }
 }
 

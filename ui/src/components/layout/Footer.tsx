@@ -1,5 +1,14 @@
 import React, { useState } from 'react';
-import { Avatar, Box, Typography, Menu, MenuItem, IconButton, Tooltip } from '@mui/material';
+import {
+  Avatar,
+  Box,
+  Typography,
+  Menu,
+  MenuItem,
+  IconButton,
+  Tooltip,
+  useTheme,
+} from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import './Footer.css';
 import Socials from './Socials';
@@ -73,6 +82,7 @@ interface FooterProps {
 import { getDomainConfig } from '../../config/domainConfig';
 
 const Footer: React.FC<FooterProps> = ({ themeMode, setThemeMode }) => {
+  const theme = useTheme();
   const { branding: brand } = getDomainConfig();
   const isDark = themeMode === 'dark';
   return (
@@ -112,16 +122,16 @@ const Footer: React.FC<FooterProps> = ({ themeMode, setThemeMode }) => {
             sx={{
               width: { xs: 20, md: 20 },
               height: { xs: 20, md: 20 },
-              border: '1.5px solid #8CD2EF',
-              boxShadow: '0 2px 8px 0 rgba(140,210,239,0.10)',
-              bgcolor: '#fff',
+              border: `1.5px solid ${theme.palette.secondary.main}`,
+              boxShadow: theme.custom.shadows.social.light,
+              bgcolor: theme.palette.common.white,
             }}
           />
           <Typography
             sx={{
               fontWeight: 600,
               fontSize: { xs: '0.8rem', md: '0.85rem' },
-              color: '#8CD2EF',
+              color: theme.palette.secondary.main,
               letterSpacing: '0.04em',
             }}
             aria-label="Mission statement"
@@ -135,7 +145,7 @@ const Footer: React.FC<FooterProps> = ({ themeMode, setThemeMode }) => {
           sx={{
             textAlign: 'center',
             fontSize: '0.85rem',
-            color: '#fff',
+            color: theme.palette.common.white,
             opacity: 0.85,
             display: { xs: 'none', md: 'block' },
             order: { xs: 3, md: 2 },
@@ -159,9 +169,9 @@ const Footer: React.FC<FooterProps> = ({ themeMode, setThemeMode }) => {
             aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
             onClick={() => setThemeMode(isDark ? 'light' : 'dark')}
             sx={{
-              color: isDark ? '#FFD600' : '#1976d2',
+              color: isDark ? theme.palette.secondary.main : theme.palette.primary.main,
               background: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(140,210,239,0.10)',
-              border: '1.5px solid #8CD2EF',
+              border: `1.5px solid ${theme.palette.secondary.main}`,
               width: { xs: 28, md: 28 },
               height: { xs: 28, md: 28 },
               transition: 'background 0.3s, color 0.3s',
@@ -177,7 +187,7 @@ const Footer: React.FC<FooterProps> = ({ themeMode, setThemeMode }) => {
           sx={{
             textAlign: 'center',
             fontSize: '0.75rem',
-            color: '#fff',
+            color: theme.palette.common.white,
             opacity: 0.75,
             display: { xs: 'block', md: 'none' },
             order: { xs: 3, md: 4 },

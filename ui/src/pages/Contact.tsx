@@ -39,16 +39,28 @@ const Contact: React.FC = () => {
         <Card
           sx={{
             borderRadius: 4,
-            background: theme.custom.gradients.hero[theme.palette.mode],
-            border: theme.custom.borders.card[theme.palette.mode],
-            boxShadow: theme.custom.shadows.card[theme.palette.mode],
+            background:
+              theme.palette.mode === 'dark'
+                ? theme.custom.gradients.hero.dark
+                : theme.custom.gradients.hero.light,
+            border:
+              theme.palette.mode === 'dark'
+                ? theme.custom.borders.card.dark
+                : theme.custom.borders.card.light,
+            boxShadow:
+              theme.palette.mode === 'dark'
+                ? theme.custom.shadows.card.dark
+                : theme.custom.shadows.card.light,
             position: 'relative',
             overflow: 'hidden',
             mb: 4,
             width: '100%',
             transition: theme.custom.transitions.smooth,
             '&:hover': {
-              boxShadow: theme.custom.shadows.card.hover[theme.palette.mode],
+              boxShadow:
+                theme.palette.mode === 'dark'
+                  ? theme.custom.shadows.card.hover.dark
+                  : theme.custom.shadows.card.hover.light,
             },
             '&::before': {
               content: '""',

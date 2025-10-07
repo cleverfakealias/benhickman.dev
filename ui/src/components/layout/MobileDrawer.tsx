@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { Avatar } from '@mui/material';
+import { Avatar, useTheme } from '@mui/material';
 import FocusTrap from 'focus-trap-react';
 import Socials from './Socials';
 
@@ -13,6 +13,7 @@ interface Props {
 }
 
 const MobileDrawer: React.FC<Props> = ({ open, onClose, navLinks, brand, isActiveLink }) => {
+  const theme = useTheme();
   const drawerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -76,15 +77,15 @@ const MobileDrawer: React.FC<Props> = ({ open, onClose, navLinks, brand, isActiv
             top: 0,
             left: 0,
             right: 0,
-            background: '#412A91',
-            color: '#ffffff',
+            background: theme.palette.primary.main,
+            color: theme.palette.primary.contrastText,
             padding: '1rem',
             zIndex: 2000,
             transform: open ? 'translateY(0)' : 'translateY(-32px)',
             opacity: open ? 1 : 0,
             transition:
               'transform 300ms cubic-bezier(0.4,0,0.2,1), opacity 300ms cubic-bezier(0.4,0,0.2,1)',
-            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+            boxShadow: theme.custom.shadows.card.dark,
             maxHeight: '100vh',
             overflowY: 'auto',
           }}
@@ -100,7 +101,7 @@ const MobileDrawer: React.FC<Props> = ({ open, onClose, navLinks, brand, isActiv
               justifyContent: 'space-between',
               alignItems: 'center',
               paddingBottom: '1rem',
-              borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+              borderBottom: `1px solid ${theme.palette.primary.contrastText}1A`,
               marginBottom: '1.5rem',
             }}
           >
@@ -112,7 +113,7 @@ const MobileDrawer: React.FC<Props> = ({ open, onClose, navLinks, brand, isActiv
                 alignItems: 'center',
                 gap: '0.75rem',
                 textDecoration: 'none',
-                color: '#ffffff',
+                color: theme.palette.primary.contrastText,
                 fontSize: '1.1rem',
                 fontWeight: '600',
               }}
@@ -124,8 +125,8 @@ const MobileDrawer: React.FC<Props> = ({ open, onClose, navLinks, brand, isActiv
                 sx={{
                   width: 32,
                   height: 32,
-                  border: '2px solid #8CD2EF',
-                  boxShadow: '0 2px 12px 0 rgba(140, 210, 239, 0.15)',
+                  border: `2px solid ${theme.palette.secondary.main}`,
+                  boxShadow: theme.custom.shadows.social.light,
                   bgcolor: 'background.paper',
                 }}
               />
@@ -138,7 +139,7 @@ const MobileDrawer: React.FC<Props> = ({ open, onClose, navLinks, brand, isActiv
               style={{
                 background: 'none',
                 border: 'none',
-                color: '#ffffff',
+                color: theme.palette.primary.contrastText,
                 fontSize: '1.5rem',
                 cursor: 'pointer',
                 padding: '0.5rem',
@@ -151,7 +152,7 @@ const MobileDrawer: React.FC<Props> = ({ open, onClose, navLinks, brand, isActiv
                 justifyContent: 'center',
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+                e.currentTarget.style.backgroundColor = `${theme.palette.primary.contrastText}1A`;
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = 'transparent';
@@ -183,7 +184,9 @@ const MobileDrawer: React.FC<Props> = ({ open, onClose, navLinks, brand, isActiv
                       display: 'flex',
                       alignItems: 'center',
                       padding: '1rem',
-                      color: isActiveLink(link.href) ? '#8CD2EF' : '#ffffff',
+                      color: isActiveLink(link.href)
+                        ? theme.palette.secondary.main
+                        : theme.palette.primary.contrastText,
                       fontWeight: isActiveLink(link.href) ? '700' : '400',
                       textDecoration: 'none',
                       borderRadius: '8px',
@@ -199,8 +202,8 @@ const MobileDrawer: React.FC<Props> = ({ open, onClose, navLinks, brand, isActiv
                           width: '8px',
                           height: '8px',
                           borderRadius: '50%',
-                          backgroundColor: '#8CD2EF',
-                          boxShadow: '0 0 8px rgba(140, 210, 239, 0.5)',
+                          backgroundColor: theme.palette.secondary.main,
+                          boxShadow: `0 0 8px ${theme.palette.mode === 'dark' ? 'rgba(140, 210, 239, 0.3)' : 'rgba(65, 42, 145, 0.3)'}`,
                           marginRight: '0.75rem',
                           display: 'inline-block',
                         }}
@@ -218,7 +221,7 @@ const MobileDrawer: React.FC<Props> = ({ open, onClose, navLinks, brand, isActiv
             style={{
               marginTop: '2rem',
               paddingTop: '1.5rem',
-              borderTop: '1px solid rgba(255, 255, 255, 0.1)',
+              borderTop: `1px solid ${theme.palette.primary.contrastText}1A`,
               textAlign: 'center',
             }}
           >

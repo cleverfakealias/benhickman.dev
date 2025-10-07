@@ -155,8 +155,8 @@ export default function Playground() {
       </Box>
       <Box
         sx={{
-          background: '#222',
-          color: '#fff',
+          background: theme.palette.background.paper,
+          color: theme.palette.text.primary,
           minHeight: 80,
           padding: 2,
           fontFamily: 'monospace',
@@ -165,7 +165,10 @@ export default function Playground() {
           borderRadius: 1,
         }}
       >
-        <Typography variant="subtitle1" sx={{ color: '#8CD2EF', fontWeight: 600 }}>
+        <Typography
+          variant="subtitle1"
+          sx={{ color: theme.palette.secondary.main, fontWeight: 600 }}
+        >
           Output:
         </Typography>
         <pre style={{ margin: 0 }}>{output}</pre>

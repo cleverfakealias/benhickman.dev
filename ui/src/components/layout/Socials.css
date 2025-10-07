@@ -12,19 +12,19 @@
 
 /* Fallback for browsers that don't support CSS custom properties */
 body[data-theme='dark'] .socials a svg {
-  color: #eeeeee; /* United Light Grey */
+  color: #aaaaaa; /* lightGray from theme */
 }
 
 body[data-theme='dark'] .socials a:hover svg {
-  color: #8cd2ef; /* Loon Gray */
-  filter: drop-shadow(0 0 4px #412a91); /* Updated ABE Purple */
+  color: #8cd2ef; /* loonGray from theme */
+  filter: drop-shadow(0 0 4px #412a91); /* vikingsPurple from theme */
 }
 
 body[data-theme='light'] .socials a svg {
-  color: #eeeeee; /* United Light Grey */
+  color: #eeeeee; /* unitedLightGray from theme */
 }
 
 body[data-theme='light'] .socials a:hover svg {
-  color: #412a91; /* Updated ABE Purple */
-  filter: drop-shadow(0 0 4px #8cd2ef); /* Loon Gray */
+  color: #412a91; /* vikingsPurple from theme */
+  filter: drop-shadow(0 0 4px #8cd2ef); /* loonGray from theme */
 }

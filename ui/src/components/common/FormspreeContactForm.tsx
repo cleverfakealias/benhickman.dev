@@ -221,7 +221,7 @@ const FormspreeContactForm: React.FC<FormspreeContactFormProps> = () => {
             fontSize: theme.typography.body1?.fontSize,
             background: `linear-gradient(90deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
             color: theme.palette.getContrastText(theme.palette.primary.main),
-            boxShadow: '0 2px 8px 0 rgba(31, 38, 135, 0.18)',
+            boxShadow: theme.custom.shadows.button.dark,
             '&:hover': {
               background: `linear-gradient(90deg, ${theme.palette.primary.dark} 0%, ${theme.palette.secondary.dark || theme.palette.secondary.main} 100%)`,
             },
@@ -290,7 +290,7 @@ const FormspreeContactForm: React.FC<FormspreeContactFormProps> = () => {
                 '& .MuiOutlinedInput-root': {
                   borderRadius: '4px',
                   background: theme.palette.background.paper,
-                  boxShadow: '0 1px 4px 0 rgba(31,38,135,0.07)',
+                  boxShadow: theme.custom.shadows.card.light,
                   '&.Mui-focused fieldset': {
                     borderColor: theme.palette.primary.main,
                     boxShadow: `0 0 8px ${theme.palette.primary.main}40`,
@@ -318,7 +318,7 @@ const FormspreeContactForm: React.FC<FormspreeContactFormProps> = () => {
                 '& .MuiOutlinedInput-root': {
                   borderRadius: `${theme.shape.borderRadius}px`,
                   background: theme.palette.background.paper,
-                  boxShadow: '0 1px 4px 0 rgba(31,38,135,0.07)',
+                  boxShadow: theme.custom.shadows.card.light,
                   '&.Mui-focused fieldset': {
                     borderColor: theme.palette.primary.main,
                     boxShadow: `0 0 8px ${theme.palette.primary.main}40`,
@@ -344,7 +344,7 @@ const FormspreeContactForm: React.FC<FormspreeContactFormProps> = () => {
                 '& .MuiOutlinedInput-root': {
                   borderRadius: `${theme.shape.borderRadius}px`,
                   background: theme.palette.background.paper,
-                  boxShadow: '0 1px 4px 0 rgba(31,38,135,0.07)',
+                  boxShadow: theme.custom.shadows.card.light,
                   '&.Mui-focused fieldset': {
                     borderColor: theme.palette.primary.main,
                     boxShadow: `0 0 8px ${theme.palette.primary.main}40`,
@@ -382,7 +382,7 @@ const FormspreeContactForm: React.FC<FormspreeContactFormProps> = () => {
                 '& .MuiOutlinedInput-root': {
                   borderRadius: `${theme.shape.borderRadius}px`,
                   background: theme.palette.background.paper,
-                  boxShadow: '0 1px 4px 0 rgba(31,38,135,0.07)',
+                  boxShadow: theme.custom.shadows.card.light,
                   '&.Mui-focused fieldset': {
                     borderColor: theme.palette.primary.main,
                     boxShadow: `0 0 8px ${theme.palette.primary.main}40`,
@@ -421,7 +421,7 @@ const FormspreeContactForm: React.FC<FormspreeContactFormProps> = () => {
                   fontSize: theme.typography.body1?.fontSize,
                   background: `linear-gradient(90deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
                   color: theme.palette.getContrastText(theme.palette.primary.main),
-                  boxShadow: '0 2px 8px 0 rgba(31, 38, 135, 0.18)',
+                  boxShadow: theme.custom.shadows.button.dark,
                   '&:hover': {
                     background: `linear-gradient(90deg, ${theme.palette.primary.dark} 0%, ${theme.palette.secondary.dark} 100%)`,
                   },

@@ -1,8 +1,9 @@
 import React from 'react';
 import { Container, Typography, Box, Card, CardContent, useTheme } from '@mui/material';
-import { Code, Web, Storage, Build, CloudQueue, Support, Business } from '@mui/icons-material';
+import { Code, Web, Storage, Build, CloudQueue } from '@mui/icons-material';
 import Grid2 from '@mui/material/Grid2';
-import CareerTimeline, { TimelineItemData } from '../components/features/CareerTimeline';
+import CareerTimeline from '../components/features/CareerTimeline';
+import { timelineData } from '../components/features/timelineData';
 import GradientDivider from '../components/common/GradientDivider';
 
 const DevelopmentExperience: React.FC = () => {
@@ -53,39 +54,6 @@ const DevelopmentExperience: React.FC = () => {
     },
   ];
 
-  const timelineData: TimelineItemData[] = [
-    {
-      title: 'Software Engineer',
-      subtitle: 'SPS Commerce',
-      description:
-        'Seasoned Software Developer working on enterprise SaaS applications, focusing on scalable cloud solutions and modern web technologies.',
-      timestamp: '2017 - Present',
-      startDate: '2017',
-      color: 'primary',
-      icon: <Code />,
-    },
-    {
-      title: 'Support Supervisor',
-      subtitle: 'WhereToLive.com',
-      description:
-        'Managed technical support team for web development and email hosting services in the Real Estate industry, leading a team of support representatives.',
-      timestamp: '2012 - 2017',
-      startDate: '2012',
-      color: 'secondary',
-      icon: <Business />,
-    },
-    {
-      title: 'Technical Support Representative',
-      subtitle: 'Microboards Technology',
-      description:
-        'Provided comprehensive technical support for CD and DVD replication and printing devices, troubleshooting hardware and software issues.',
-      timestamp: '2007 - 2012',
-      startDate: '2007',
-      color: 'success',
-      icon: <Support />,
-    },
-  ];
-
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
       {/* Header Section */}
@@ -127,14 +95,26 @@ const DevelopmentExperience: React.FC = () => {
             <Card
               sx={{
                 borderRadius: 4,
-                background: theme.custom.gradients.hero[theme.palette.mode],
-                border: theme.custom.borders.card[theme.palette.mode],
-                boxShadow: theme.custom.shadows.card[theme.palette.mode],
+                background:
+                  theme.palette.mode === 'dark'
+                    ? theme.custom.gradients.hero.dark
+                    : theme.custom.gradients.hero.light,
+                border:
+                  theme.palette.mode === 'dark'
+                    ? theme.custom.borders.card.dark
+                    : theme.custom.borders.card.light,
+                boxShadow:
+                  theme.palette.mode === 'dark'
+                    ? theme.custom.shadows.card.dark
+                    : theme.custom.shadows.card.light,
                 position: 'relative',
                 overflow: 'hidden',
                 transition: theme.custom.transitions.smooth,
                 '&:hover': {
-                  boxShadow: theme.custom.shadows.card.hover[theme.palette.mode],
+                  boxShadow:
+                    theme.palette.mode === 'dark'
+                      ? theme.custom.shadows.card.hover.dark
+                      : theme.custom.shadows.card.hover.light,
                 },
                 '&::before': {
                   content: '""',
@@ -185,7 +165,7 @@ const DevelopmentExperience: React.FC = () => {
                       justifyContent: 'center',
                       color: 'white',
                       mr: 3,
-                      boxShadow: `0 8px 16px rgba(65, 42, 145, 0.2)`,
+                      boxShadow: theme.custom.shadows.card.light,
                       transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                       '& .MuiSvgIcon-root': {
                         fontSize: '1.5rem',

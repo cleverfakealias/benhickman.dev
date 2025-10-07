@@ -74,8 +74,8 @@ const Header: React.FC<HeaderProps> = ({ themeMode, setThemeMode }) => {
             sx={{
               width: 64,
               height: 64,
-              border: '3px solid #8CD2EF', // Consistent loonGray
-              boxShadow: '0 4px 24px 0 rgba(140, 210, 239, 0.15)',
+              border: `3px solid ${theme.palette.secondary.main}`,
+              boxShadow: theme.custom.shadows.social.light,
               bgcolor: theme.palette.background.paper,
               marginRight: '0.5rem',
             }}
@@ -87,7 +87,7 @@ const Header: React.FC<HeaderProps> = ({ themeMode, setThemeMode }) => {
               className="site-title"
               sx={{
                 fontWeight: 900,
-                color: '#ffffff',
+                color: 'var(--header-text)',
                 fontFamily: "'Manrope', Arial, sans-serif",
                 fontSize: { xs: '1.7rem', md: '2.5rem' },
               }}
@@ -97,7 +97,7 @@ const Header: React.FC<HeaderProps> = ({ themeMode, setThemeMode }) => {
             <Typography
               variant="subtitle1"
               sx={{
-                color: '#8CD2EF', // Consistent loonGray
+                color: 'var(--header-link-hover)',
                 fontWeight: 700,
                 fontSize: { xs: '1.08rem', md: '1.22rem' },
                 maxWidth: { xs: '120px', md: '180px' },
@@ -138,7 +138,9 @@ const Header: React.FC<HeaderProps> = ({ themeMode, setThemeMode }) => {
                     className={isActiveLink(link.href) ? 'active' : ''}
                     aria-current={isActiveLink(link.href) ? 'page' : undefined}
                     style={{
-                      color: isActiveLink(link.href) ? '#8CD2EF' : '#fff',
+                      color: isActiveLink(link.href)
+                        ? 'var(--header-active-link)'
+                        : 'var(--header-text)',
                       fontWeight: isActiveLink(link.href) ? 700 : 500,
                       position: 'relative',
                       transition: 'color 0.2s cubic-bezier(0.4,0,0.2,1)',
@@ -154,10 +156,10 @@ const Header: React.FC<HeaderProps> = ({ themeMode, setThemeMode }) => {
                           bottom: -6,
                           width: '100%',
                           height: '3px',
-                          background: 'linear-gradient(90deg, #8CD2EF, #5DADE2)',
+                          background: `linear-gradient(90deg, var(--header-active-link), ${theme.palette.secondary.main})`,
                           borderRadius: '2px',
                           transition: 'all 0.3s cubic-bezier(0.4,0,0.2,1)',
-                          boxShadow: '0 2px 8px 0 rgba(140, 210, 239, 0.15)',
+                          boxShadow: theme.custom.shadows.social.light,
                         }}
                       />
                     )}
@@ -182,9 +184,9 @@ const Header: React.FC<HeaderProps> = ({ themeMode, setThemeMode }) => {
               onClick={handleThemeToggle}
               aria-label={`Switch to ${themeMode === 'light' ? 'dark' : 'light'} mode`}
               sx={{
-                color: '#ffffff',
+                color: 'var(--header-text)',
                 '&:hover': {
-                  color: '#8CD2EF', // Consistent loonGray
+                  color: 'var(--header-link-hover)',
                 },
               }}
             >
@@ -198,9 +200,9 @@ const Header: React.FC<HeaderProps> = ({ themeMode, setThemeMode }) => {
               aria-controls="mobile-drawer"
               onClick={handleDrawerToggle}
               sx={{
-                color: '#8CD2EF', // Consistent loonGray
+                color: 'var(--header-link-hover)',
                 '&:hover': {
-                  color: '#5DADE2', // Lighter loonGray
+                  color: 'var(--header-active-link)',
                 },
               }}
             >

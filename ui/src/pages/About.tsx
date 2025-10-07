@@ -123,17 +123,6 @@ const About: React.FC = () => {
       <Grid2 container spacing={4} sx={{ mb: 6 }} alignItems="center">
         <Grid2 size={{ xs: 12, md: 8 }}>
           <Typography
-            variant="h5"
-            sx={{
-              fontWeight: 700,
-              color: theme.palette.primary.dark,
-              mb: 2,
-              fontFamily: 'Inter, Montserrat, Roboto, Arial, sans-serif',
-            }}
-          >
-            Hello, I’m Ben — the developer behind Zengineer Cloud Development.
-          </Typography>
-          <Typography
             variant="body1"
             paragraph
             sx={{

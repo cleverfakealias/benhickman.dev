@@ -65,9 +65,9 @@ export default function BlogCard({ post }: BlogCardProps): React.ReactElement {
     },
     '&:hover': {
       transform: 'translateY(-8px) scale(1.02)',
-      boxShadow: '0 20px 40px rgba(65, 42, 145, 0.15)',
+      boxShadow: theme.custom.shadows.card.hover.dark,
       ...(theme.palette.mode === 'dark' && {
-        background: 'linear-gradient(145deg, rgba(50,50,50,0.95) 0%, rgba(60,60,60,0.95) 100%)',
+        background: theme.custom.gradients.card.hover.dark,
       }),
     },
     '&::before': {

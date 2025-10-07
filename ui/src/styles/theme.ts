@@ -1,152 +1,38 @@
 import { createTheme } from '@mui/material/styles';
-
-// Minnesota Sports Team Color Palette
-export const mnColors = {
-  // MN United Colors
-  loonGray: '#8CD2EF',
-  unitedDarkBlue: '#263E68',
-  unitedLightGray: '#EEEEEE',
-
-  // Vikings Colors (Updated with ABE purple)
-  vikingsPurple: '#412A91', // Updated to match ABE image
-  vikingsGold: '#FFC62F',
-  vikingsWhite: '#FFFFFF',
-
-  // Twins Colors
-  twinsNavy: '#002B5C',
-  twinsRed: '#C6011F',
-  twinsGold: '#CFAB7A',
-
-  // Additional shades for better theming
-  lightBackground: '#FAFAFA',
-  darkBackground: '#121212',
-  mediumGray: '#666666',
-  lightGray: '#AAAAAA',
-  darkGray: '#333333',
-};
+import {
+  colorTokens,
+  themeConfigs,
+  fontConfigs,
+  shadowTokens,
+  gradientTokens,
+  borderTokens,
+  transitionTokens,
+} from './colorTokens';
+import { themeUtils } from './themeUtils';
+import './theme.d';
 
 // Theme configuration for light and dark modes
 export const mnThemeConfig = {
-  light: {
-    primary: mnColors.vikingsPurple,
-    secondary: mnColors.loonGray,
-    accent: mnColors.loonGray,
-    background: {
-      default: mnColors.lightBackground,
-      paper: mnColors.unitedLightGray,
-    },
-    text: {
-      primary: mnColors.twinsNavy,
-      secondary: mnColors.mediumGray,
-    },
-    socialIcons: {
-      default: mnColors.unitedLightGray,
-      hover: mnColors.vikingsPurple,
-      shadow: mnColors.loonGray,
-    },
-    footer: {
-      background: mnColors.vikingsPurple,
-      text: mnColors.vikingsWhite,
-    },
-  },
-  dark: {
-    primary: mnColors.loonGray,
-    secondary: mnColors.vikingsPurple,
-    accent: mnColors.twinsGold,
-    background: {
-      default: mnColors.darkBackground,
-      paper: mnColors.darkGray,
-    },
-    text: {
-      primary: mnColors.vikingsWhite,
-      secondary: mnColors.lightGray,
-    },
-    socialIcons: {
-      default: mnColors.unitedLightGray,
-      hover: mnColors.loonGray,
-      shadow: mnColors.vikingsPurple,
-    },
-    footer: {
-      background: mnColors.vikingsPurple,
-      text: mnColors.vikingsWhite,
-    },
-  },
+  light: themeConfigs.light,
+  dark: themeConfigs.dark,
 };
 
 // Add or update fontFamily in theme config
-export const fontFamilies = {
-  heading: "'Manrope', Arial, sans-serif",
-  body: "'Space Grotesk', Arial, sans-serif",
-  mono: "'JetBrains Mono', 'Fira Mono', 'Menlo', monospace",
-};
+export const fontFamilies = fontConfigs;
 
 // Common styling patterns used throughout the site
 const commonStyles = {
   // Gradient patterns
-  gradients: {
-    primary: 'linear-gradient(90deg, #412A91, #002B5C)',
-    primaryDark: 'linear-gradient(90deg, #7C4DFF, #448AFF)',
-    accent: 'linear-gradient(135deg, #8CD2EF, #5DADE2)',
-    card: {
-      light: 'linear-gradient(145deg, rgba(255,255,255,0.96) 0%, rgba(248,250,252,0.96) 100%)',
-      dark: 'linear-gradient(145deg, rgba(30,30,30,0.95) 0%, rgba(40,40,40,0.95) 100%)',
-      hover: {
-        light: 'linear-gradient(145deg, rgba(255,255,255,0.98) 0%, rgba(248,250,252,0.98) 100%)',
-        dark: 'linear-gradient(145deg, rgba(50,50,50,0.95) 0%, rgba(60,60,60,0.95) 100%)',
-      },
-    },
-    hero: {
-      light: 'linear-gradient(135deg, #f5f7fa 0%, #e8eaf6 100%)',
-      dark: 'linear-gradient(135deg, #23243a 0%, #2c2e4d 100%)',
-    },
-    callToAction: {
-      light: 'linear-gradient(135deg, rgba(65,42,145,0.03) 0%, rgba(0,43,92,0.03) 100%)',
-      dark: 'linear-gradient(135deg, rgba(124,77,255,0.05) 0%, rgba(68,138,255,0.05) 100%)',
-    },
-  },
+  gradients: gradientTokens,
 
   // Shadow patterns
-  shadows: {
-    card: {
-      light: '0 4px 32px 0 rgba(65,42,145,0.08)',
-      dark: '0 4px 32px 0 rgba(124,77,255,0.10)',
-      hover: {
-        light: '0 8px 48px 0 rgba(65,42,145,0.12)',
-        dark: '0 8px 48px 0 rgba(124,77,255,0.15)',
-      },
-    },
-    button: {
-      light: '0 2px 8px 0 rgba(65,42,145,0.12)',
-      dark: '0 2px 8px 0 rgba(124,77,255,0.18)',
-      hover: {
-        light: '0 4px 16px 0 rgba(65,42,145,0.18)',
-        dark: '0 4px 16px 0 rgba(124,77,255,0.25)',
-      },
-    },
-    social: {
-      light: '0 4px 16px 0 rgba(65,42,145,0.15)',
-      dark: '0 4px 16px 0 rgba(124,77,255,0.20)',
-    },
-  },
+  shadows: shadowTokens,
 
   // Transition patterns
-  transitions: {
-    standard: 'all 0.3s ease',
-    smooth: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-    fast: 'all 0.2s ease-in-out',
-  },
+  transitions: transitionTokens,
 
   // Border patterns
-  borders: {
-    card: {
-      light: '1px solid rgba(65,42,145,0.08)',
-      dark: '1px solid rgba(124,77,255,0.1)',
-    },
-    social: {
-      light: '1px solid rgba(65,42,145,0.08)',
-      dark: '1px solid rgba(255,255,255,0.08)',
-    },
-  },
+  borders: borderTokens,
 };
 
 // Function to create theme based on mode
@@ -154,11 +40,21 @@ export const createMnTheme = (mode: 'light' | 'dark') => {
   const config = mnThemeConfig[mode];
   const isDark = mode === 'dark';
 
-  return createTheme({
+  const theme = createTheme({
     palette: {
       mode,
-      primary: { main: config.primary },
-      secondary: { main: config.secondary },
+      primary: {
+        main: config.primary,
+        light: colorTokens.alpha.primary[30], // Lighter version
+        dark: colorTokens.mn.twinsNavy, // Darker version
+        contrastText: colorTokens.semantic.white,
+      },
+      secondary: {
+        main: config.secondary,
+        light: colorTokens.alpha.secondary[30], // Lighter version
+        dark: colorTokens.mn.unitedDarkBlue, // Darker version
+        contrastText: colorTokens.mn.twinsNavy,
+      },
       background: config.background,
       text: config.text,
     },
@@ -225,10 +121,11 @@ export const createMnTheme = (mode: 'light' | 'dark') => {
             '--social-icon-shadow': config.socialIcons.shadow,
             '--footer-bg': config.footer.background,
             '--footer-text': config.footer.text,
-            '--header-bg': config.footer.background, // Same as footer for consistency
-            '--header-text': config.footer.text,
-            '--header-link-hover': config.socialIcons.hover,
+            '--header-bg': config.header.background,
+            '--header-text': config.header.text,
+            '--header-link-hover': config.header.linkHover,
             '--header-link-glow': config.socialIcons.shadow,
+            '--header-active-link': config.header.activeLink,
             '--color-primary': config.primary,
             '--color-secondary': config.secondary,
             '--color-background-paper': config.background.paper,
@@ -308,7 +205,7 @@ export const createMnTheme = (mode: 'light' | 'dark') => {
             background: `linear-gradient(90deg, ${config.primary} 0%, ${config.secondary} 100%)`,
             color: '#ffffff',
             '&:hover': {
-              background: `linear-gradient(90deg, ${config.primary}dd 0%, ${config.secondary}dd 100%)`,
+              background: `linear-gradient(90deg, ${colorTokens.alpha.primary[80]} 0%, ${colorTokens.alpha.secondary[80]} 100%)`,
               color: '#ffffff',
             },
           },
@@ -326,52 +223,20 @@ export const createMnTheme = (mode: 'light' | 'dark') => {
         },
       },
     },
-    // Custom theme extensions
+  });
+
+  // Add custom properties to the theme
+  return {
+    ...theme,
     custom: {
       gradients: commonStyles.gradients,
       shadows: commonStyles.shadows,
       transitions: commonStyles.transitions,
       borders: commonStyles.borders,
       // Helper functions for common patterns
-      getCardStyles: () => ({
-        transition: commonStyles.transitions.smooth,
-        background: isDark ? commonStyles.gradients.card.dark : commonStyles.gradients.card.light,
-        backdropFilter: 'blur(10px)',
-        border: isDark ? commonStyles.borders.card.dark : commonStyles.borders.card.light,
-        borderRadius: 16,
-        boxShadow: isDark ? commonStyles.shadows.card.dark : commonStyles.shadows.card.light,
-        overflow: 'hidden',
-        position: 'relative' as const,
-        '&:hover': {
-          transform: 'translateY(-8px) scale(1.02)',
-          boxShadow: isDark
-            ? commonStyles.shadows.card.hover.dark
-            : commonStyles.shadows.card.hover.light,
-          background: isDark
-            ? commonStyles.gradients.card.hover.dark
-            : commonStyles.gradients.card.hover.light,
-        },
-      }),
-      getSocialStyles: () => ({
-        transition: commonStyles.transitions.standard,
-        background: isDark ? 'rgba(255,255,255,0.04)' : 'rgba(65,42,145,0.02)',
-        border: isDark ? commonStyles.borders.social.dark : commonStyles.borders.social.light,
-        '&:hover': {
-          transform: 'translateY(-2px)',
-          background: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(65,42,145,0.04)',
-          boxShadow: isDark ? commonStyles.shadows.social.dark : commonStyles.shadows.social.light,
-        },
-      }),
-      getCallToActionStyles: () => ({
-        background: isDark
-          ? commonStyles.gradients.callToAction.dark
-          : commonStyles.gradients.callToAction.light,
-        border: isDark ? commonStyles.borders.card.dark : commonStyles.borders.card.light,
-        borderRadius: 4,
-        '& .MuiTypography-root': {
-          color: isDark ? '#ffffff' : 'inherit',
-        },
-      }),
+      getCardStyles: () => themeUtils.getCardStyles(theme),
+      getSocialStyles: () => themeUtils.getSocialStyles(theme),
+      getCallToActionStyles: () => themeUtils.getCallToActionStyles(theme),
     },
-  });
+  };
 };
