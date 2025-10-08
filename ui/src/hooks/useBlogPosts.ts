@@ -19,7 +19,7 @@ export function useBlogPosts() {
         setLoading(false);
       })
       .catch((error) => {
-        console.error('Error fetching posts:', error);
+        console.error('Error fetching posts: ', error);
         setLoading(false);
       });
   }, []);
