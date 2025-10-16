@@ -6,7 +6,6 @@ import DevelopmentExperience from '../../pages/DevelopmentExperience';
 
 // Mock CareerTimeline to avoid heavy rendering and potential open handles
 jest.mock('../../components/features/CareerTimeline', () => {
-  const React = require('react');
   const MockTimeline = ({ title }: { title?: string }) => (
     <div data-testid="career-timeline">{title ?? 'Timeline'}</div>
   );
