@@ -4,80 +4,50 @@ import { ThemeProvider } from '@mui/material/styles';
 import { createMnTheme } from '../../styles/theme';
 import About from '../../pages/About';
 
-const renderWithTheme = (component: React.ReactElement) => {
+const renderAbout = () => {
   const theme = createMnTheme('light');
-  return render(<ThemeProvider theme={theme}>{component}</ThemeProvider>);
+  return render(
+    <ThemeProvider theme={theme}>
+      <About />
+    </ThemeProvider>
+  );
 };
 
 describe('About', () => {
-  test('renders About Me heading', () => {
-    renderWithTheme(<About />);
-    expect(screen.getByText('About Me')).toBeInTheDocument();
-  });
+  test('renders core content and structure (single render)', () => {
+    renderAbout();
 
-  test('renders introduction text', () => {
-    renderWithTheme(<About />);
+    // Main heading
+    expect(screen.getByRole('heading', { level: 1, name: /about me/i })).toBeInTheDocument();
+
+    // Section headings
     expect(
-      screen.getByText(/I’m a seasoned software engineer with over 15 years in tech/)
+      screen.getByRole('heading', { level: 2, name: /technical skills/i })
     ).toBeInTheDocument();
-  });
+    expect(screen.getByRole('heading', { level: 2, name: /what i bring/i })).toBeInTheDocument();
 
-  test('renders What I Bring section', () => {
-    renderWithTheme(<About />);
-    expect(screen.getByText('What I Bring')).toBeInTheDocument();
-  });
+    // Ensure only the two expected level-2 headings exist
+    expect(screen.getAllByRole('heading', { level: 2 })).toHaveLength(2);
 
-  test('renders Technical Skills section', () => {
-    renderWithTheme(<About />);
-    expect(screen.getByText('Technical Skills')).toBeInTheDocument();
-  });
+    // Key intro text snippet
+    expect(
+      screen.getByText(/I’m a seasoned software engineer with over 15 years in tech/i)
+    ).toBeInTheDocument();
 
-  test('renders Enterprise SaaS Experience', () => {
-    renderWithTheme(<About />);
-    expect(screen.getByText('Enterprise SaaS Experience')).toBeInTheDocument();
-  });
+    // Highlights (card titles are level 3 headings)
+    const highlights = [
+      'Enterprise SaaS Experience',
+      'System Architecture',
+      'Cloud-Native Development',
+      'Full-Stack Development',
+    ];
+    highlights.forEach((title) => {
+      expect(screen.getByRole('heading', { level: 3, name: title })).toBeInTheDocument();
+    });
 
-  test('renders System Architecture', () => {
-    renderWithTheme(<About />);
-    expect(screen.getByText('System Architecture')).toBeInTheDocument();
-  });
-
-  test('renders Cloud-Native Development', () => {
-    renderWithTheme(<About />);
-    expect(screen.getByText('Cloud-Native Development')).toBeInTheDocument();
-  });
-
-  test('renders Full-Stack Development', () => {
-    renderWithTheme(<About />);
-    expect(screen.getByText('Full-Stack Development')).toBeInTheDocument();
-  });
-
-  test('renders React skill', () => {
-    renderWithTheme(<About />);
-    expect(screen.getByText('React')).toBeInTheDocument();
-  });
-
-  test('renders TypeScript skill', () => {
-    renderWithTheme(<About />);
-    expect(screen.getByText('TypeScript')).toBeInTheDocument();
-  });
-
-  test('renders AWS skill', () => {
-    renderWithTheme(<About />);
-    expect(screen.getByText('AWS')).toBeInTheDocument();
-  });
-
-  test('renders Docker skill', () => {
-    renderWithTheme(<About />);
-    expect(screen.getByText('Docker')).toBeInTheDocument();
-  });
-
-  test('renders main heading with correct text', () => {
-    renderWithTheme(<About />);
-    const mainHeading = screen.getByRole('heading', { level: 1 });
-    expect(mainHeading).toHaveTextContent('About Me');
-
-    const subHeadings = screen.getAllByRole('heading', { level: 2 });
-    expect(subHeadings).toHaveLength(2); // Technical Skills and What I Bring
+    // Representative skills chips
+    ['React', 'TypeScript', 'AWS', 'Docker'].forEach((skill) => {
+      expect(screen.getByText(skill)).toBeInTheDocument();
+    });
   });
 });

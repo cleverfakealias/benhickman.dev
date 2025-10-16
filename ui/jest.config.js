@@ -12,10 +12,7 @@ export default {
       'ts-jest',
       {
         useESM: true,
-        tsconfig: {
-          jsx: 'react-jsx',
-          esModuleInterop: true,
-        },
+        tsconfig: '<rootDir>/tsconfig.app.json',
       },
     ],
   },
