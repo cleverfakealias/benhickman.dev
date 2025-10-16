@@ -27,7 +27,9 @@ describe('DevelopmentExperience', () => {
     renderPage();
 
     // Title and subtitle
-    expect(screen.getByRole('heading', { level: 1, name: /development experience/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { level: 1, name: /development experience/i })
+    ).toBeInTheDocument();
     expect(
       screen.getByText(
         /Technical expertise spanning full-stack development, modern frameworks, and enterprise solutions/i
