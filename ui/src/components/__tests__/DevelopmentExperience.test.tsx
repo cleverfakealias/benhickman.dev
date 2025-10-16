@@ -4,67 +4,38 @@ import { ThemeProvider } from '@mui/material/styles';
 import { createMnTheme } from '../../styles/theme';
 import DevelopmentExperience from '../../pages/DevelopmentExperience';
 
+// Mock CareerTimeline to avoid heavy rendering and potential open handles
+jest.mock('../../components/features/CareerTimeline', () => {
+  const React = require('react');
+  const MockTimeline = ({ title }: { title?: string }) => (
+    <div data-testid="career-timeline">{title ?? 'Timeline'}</div>
+  );
+  return { __esModule: true, default: MockTimeline };
+});
+
 const theme = createMnTheme('light');
 
-const renderWithTheme = (component: React.ReactElement) => {
-  return render(<ThemeProvider theme={theme}>{component}</ThemeProvider>);
-};
+const renderPage = () =>
+  render(
+    <ThemeProvider theme={theme}>
+      <DevelopmentExperience />
+    </ThemeProvider>
+  );
 
 describe('DevelopmentExperience', () => {
-  test('renders development experience page title', () => {
-    renderWithTheme(<DevelopmentExperience />);
-    expect(screen.getByText('Development Experience')).toBeInTheDocument();
-  });
+  test('renders core content and structure (single render)', () => {
+    renderPage();
 
-  test('renders development experience subtitle', () => {
-    renderWithTheme(<DevelopmentExperience />);
+    // Title and subtitle
+    expect(screen.getByRole('heading', { level: 1, name: /development experience/i })).toBeInTheDocument();
     expect(
       screen.getByText(
-        'Technical expertise spanning full-stack development, modern frameworks, and enterprise solutions'
+        /Technical expertise spanning full-stack development, modern frameworks, and enterprise solutions/i
       )
     ).toBeInTheDocument();
-  });
 
-  test('renders all experience sections', () => {
-    renderWithTheme(<DevelopmentExperience />);
-
-    expect(screen.getByText('Full Stack Development')).toBeInTheDocument();
-    expect(screen.getByText('Front-End Technologies')).toBeInTheDocument();
-    expect(screen.getByText('Back-End Technologies')).toBeInTheDocument();
-    expect(screen.getByText('Databases')).toBeInTheDocument();
-    expect(screen.getByText('CI/CD')).toBeInTheDocument();
-    expect(screen.getByText('Infrastructure & Methodologies')).toBeInTheDocument();
-  });
-
-  test('renders experience descriptions', () => {
-    renderWithTheme(<DevelopmentExperience />);
-
-    expect(screen.getByText(/With over 7 years of professional experience/)).toBeInTheDocument();
-    expect(
-      screen.getByText(/Skilled in building modern, responsive user interfaces/)
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText(/Proficient in back-end development with Java and Python/)
-    ).toBeInTheDocument();
-    expect(screen.getByText(/Experienced with a variety of database systems/)).toBeInTheDocument();
-    expect(
-      screen.getByText(/Hands-on experience with modern DevOps pipelines/)
-    ).toBeInTheDocument();
-    expect(screen.getByText(/I work confidently with Docker and Kubernetes/)).toBeInTheDocument();
-  });
-
-  test('has proper heading structure', () => {
-    renderWithTheme(<DevelopmentExperience />);
-
-    // Main heading - use getAllByRole to handle multiple h1s
-    const mainHeadings = screen.getAllByRole('heading', { level: 1 });
-    const developmentExperienceHeading = mainHeadings.find(
-      (heading) => heading.textContent === 'Development Experience'
-    );
-    expect(developmentExperienceHeading).toBeInTheDocument();
-
-    // Section headings: check each is present and is an h2
-    const sectionTitles = [
+    // Section headings (h2)
+    const sections = [
       'Full Stack Development',
       'Front-End Technologies',
       'Back-End Technologies',
@@ -72,19 +43,19 @@ describe('DevelopmentExperience', () => {
       'CI/CD',
       'Infrastructure & Methodologies',
     ];
-    sectionTitles.forEach((title) => {
-      const heading = screen.getByRole('heading', { level: 2, name: title });
-      expect(heading).toBeInTheDocument();
+    sections.forEach((name) => {
+      expect(screen.getByRole('heading', { level: 2, name })).toBeInTheDocument();
     });
-  });
 
-  test('renders experience cards with hover effects', () => {
-    renderWithTheme(<DevelopmentExperience />);
-    expect(screen.getByText('Full Stack Development')).toBeInTheDocument();
-    expect(screen.getByText('Front-End Technologies')).toBeInTheDocument();
-    expect(screen.getByText('Back-End Technologies')).toBeInTheDocument();
-    expect(screen.getByText('Databases')).toBeInTheDocument();
-    expect(screen.getByText('CI/CD')).toBeInTheDocument();
-    expect(screen.getByText('Infrastructure & Methodologies')).toBeInTheDocument();
+    // Representative description snippets
+    expect(screen.getByText(/over 7 years of professional experience/i)).toBeInTheDocument();
+    expect(screen.getByText(/responsive user interfaces/i)).toBeInTheDocument();
+    expect(screen.getByText(/back-end development with Java and Python/i)).toBeInTheDocument();
+    expect(screen.getByText(/variety of database systems/i)).toBeInTheDocument();
+    expect(screen.getByText(/modern DevOps pipelines/i)).toBeInTheDocument();
+    expect(screen.getByText(/Docker and Kubernetes/i)).toBeInTheDocument();
+
+    // Timeline mocked presence
+    expect(screen.getByTestId('career-timeline')).toBeInTheDocument();
   });
 });

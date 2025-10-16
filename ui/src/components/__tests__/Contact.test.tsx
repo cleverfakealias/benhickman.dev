@@ -1,35 +1,42 @@
 import '@testing-library/jest-dom';
-import '@testing-library/jest-dom';
 
 // Mock the FormspreeContactForm to avoid ReCAPTCHA and env issues in tests
 jest.mock('../common/FormspreeContactForm', () => {
-  return function MockFormspreeContactForm() {
-    return (
-      <div data-testid="formspree-contact-form">
-        <h1>Please feel free to reach out to me and I'll get back to you as soon as possible!</h1>
-        <form>
-          <input name="name" placeholder="Name" />
-          <input name="email" placeholder="Email" />
-          <input name="phone" placeholder="Phone (optional)" />
-          <textarea name="message" placeholder="Message" />
-          <button type="submit">Submit</button>
-        </form>
-      </div>
-    );
+  const React = require('react');
+  const MockFormspreeContactForm = () => (
+    <div data-testid="formspree-contact-form">
+      <h1>Please feel free to reach out to me and I'll get back to you as soon as possible!</h1>
+      <form>
+        <input name="name" placeholder="Name" />
+        <input name="email" placeholder="Email" />
+        <input name="phone" placeholder="Phone (optional)" />
+        <textarea name="message" placeholder="Message" />
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+  );
+  return {
+    __esModule: true,
+    default: MockFormspreeContactForm,
+    FormspreeContactForm: MockFormspreeContactForm,
   };
 });
 
 // Mock the ContactInformation component
 jest.mock('../common/ContactInformation', () => {
-  return function MockContactInformation() {
-    return (
-      <div data-testid="contact-information">
-        <h3>Contact Information</h3>
-        <div>Email: me@benhickman.dev</div>
-        <div>Phone: (651) 300-4252</div>
-        <div>Location: Minnesota, USA</div>
-      </div>
-    );
+  const React = require('react');
+  const MockContactInformation = () => (
+    <div data-testid="contact-information">
+      <h3>Contact Information</h3>
+      <div>Email: me@benhickman.dev</div>
+      <div>Phone: (651) 300-4252</div>
+      <div>Location: Minnesota, USA</div>
+    </div>
+  );
+  return {
+    __esModule: true,
+    default: MockContactInformation,
+    ContactInformation: MockContactInformation,
   };
 });
 

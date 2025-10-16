@@ -12,7 +12,7 @@ export default {
       'ts-jest',
       {
         useESM: true,
-        tsconfig: '<rootDir>/tsconfig.app.json',
+        tsconfig: '<rootDir>/tsconfig.jest.json',
       },
     ],
   },
