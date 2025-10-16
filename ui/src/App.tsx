@@ -3,17 +3,21 @@ import Footer from './components/layout/Footer';
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { useTheme } from './hooks/useTheme';
-import Blog from './pages/Blog';
-import BlogPostDetail from './components/features/blog/BlogPostDetail';
-import Contact from './pages/Contact';
-import About from './pages/About';
-import DevelopmentExperience from './pages/DevelopmentExperience';
-import Playground from './pages/Playground';
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
-import Home from './pages/Home';
-import { createMnTheme } from './styles/theme';
+import { lazy, Suspense } from 'react';
+import ErrorBoundary from './components/common/ErrorBoundary';
+import RouteSkeleton from './components/common/RouteSkeleton';
+const Home = lazy(() => import('./pages/Home'));
+const Blog = lazy(() => import('./pages/Blog'));
+const BlogPostDetail = lazy(() => import('./components/features/blog/BlogPostDetail'));
+const Contact = lazy(() => import('./pages/Contact'));
+const About = lazy(() => import('./pages/About'));
+const DevelopmentExperience = lazy(() => import('./pages/DevelopmentExperience'));
+const Playground = lazy(() => import('./pages/Playground'));
+import { buildTheme } from './theme/theme';
 import { useState, useEffect } from 'react';
 import { getDomainConfig } from './config/domainConfig';
+import './theme/tokens.css';
 
 function AnimatedPageContainer() {
   const location = useLocation();
@@ -41,15 +45,19 @@ function AnimatedPageContainer() {
           'opacity 400ms cubic-bezier(0.4,0,0.2,1), transform 400ms cubic-bezier(0.4,0,0.2,1)',
       }}
     >
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="blog" element={<Blog />} />
-        <Route path="blog/post/:slug" element={<BlogPostDetail />} />
-        <Route path="experience" element={<DevelopmentExperience />} />
-        <Route path="about" element={<About />} />
-        <Route path="contact" element={<Contact />} />
-        <Route path="playground" element={<Playground />} />
-      </Routes>
+      <ErrorBoundary fallback={<div role="alert" style={{ padding: '2rem' }}>Unable to load route.</div>}>
+        <Suspense fallback={<RouteSkeleton /> }>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="blog" element={<Blog />} />
+            <Route path="blog/post/:slug" element={<BlogPostDetail />} />
+            <Route path="experience" element={<DevelopmentExperience />} />
+            <Route path="about" element={<About />} />
+            <Route path="contact" element={<Contact />} />
+            <Route path="playground" element={<Playground />} />
+          </Routes>
+        </Suspense>
+      </ErrorBoundary>
     </div>
   );
 }
@@ -71,14 +79,20 @@ function App() {
     metaDesc.setAttribute('content', branding.description);
   }, [branding]);
 
-  const theme = createMnTheme(themeMode as 'light' | 'dark');
+  // Apply html data-theme for CSS variables
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', themeMode);
+  }, [themeMode]);
+
+  // New MUI theme based on CSS vars; keep old theme available if needed
+  const theme = buildTheme(themeMode as 'light' | 'dark');
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <Header themeMode={themeMode} setThemeMode={setThemeMode} />
-        <main
+        <main id="main-content"
           style={{
             flex: 1,
             display: 'flex',

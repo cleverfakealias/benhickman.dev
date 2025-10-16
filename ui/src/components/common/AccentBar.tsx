@@ -18,10 +18,7 @@ const AccentBar: React.FC<AccentBarProps> = ({ height = 8, sx = {} }) => {
         left: 0,
         width: '100%',
         height,
-        background:
-          theme.palette.mode === 'dark'
-            ? 'linear-gradient(90deg, #7C4DFF, #448AFF)'
-            : 'linear-gradient(90deg, #412A91, #002B5C)',
+        background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
         opacity: 0.9,
         borderTopLeftRadius: 0,
         borderTopRightRadius: 0,

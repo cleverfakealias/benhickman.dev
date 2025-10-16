@@ -64,7 +64,7 @@ export default function Blog(): React.ReactElement {
             mt: 3,
             width: { xs: '100px', md: '150px' },
             height: '4px',
-            background: theme.custom.gradients.primary,
+            background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
             borderRadius: theme.shape.borderRadius,
             mx: 'auto',
           }}

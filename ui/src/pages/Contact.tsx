@@ -2,6 +2,7 @@ import React from 'react';
 import FormspreeContactForm from '../components/common/FormspreeContactForm';
 import ContactInformation from '../components/common/ContactInformation';
 import { Card, CardContent, useTheme, Container, Box, Typography } from '@mui/material';
+import { alpha } from '@mui/material/styles';
 import { Theme } from '@mui/material/styles';
 
 const Contact: React.FC = () => {
@@ -41,26 +42,20 @@ const Contact: React.FC = () => {
             borderRadius: 4,
             background:
               theme.palette.mode === 'dark'
-                ? theme.custom.gradients.hero.dark
-                : theme.custom.gradients.hero.light,
-            border:
-              theme.palette.mode === 'dark'
-                ? theme.custom.borders.card.dark
-                : theme.custom.borders.card.light,
-            boxShadow:
-              theme.palette.mode === 'dark'
-                ? theme.custom.shadows.card.dark
-                : theme.custom.shadows.card.light,
+                ? `linear-gradient(145deg, ${theme.palette.background.paper} 0%, ${alpha('#fff', 0.06)} 100%)`
+                : `linear-gradient(145deg, ${theme.palette.background.paper} 0%, ${alpha('#000', 0.02)} 100%)`,
+            border: `1px solid ${theme.palette.divider}`,
+            boxShadow: theme.shadows[2],
             position: 'relative',
             overflow: 'hidden',
             mb: 4,
             width: '100%',
-            transition: theme.custom.transitions.smooth,
+            transition: theme.transitions.create('box-shadow', {
+              duration: theme.transitions.duration.standard,
+              easing: theme.transitions.easing.easeInOut,
+            }),
             '&:hover': {
-              boxShadow:
-                theme.palette.mode === 'dark'
-                  ? theme.custom.shadows.card.hover.dark
-                  : theme.custom.shadows.card.hover.light,
+              boxShadow: theme.shadows[3],
             },
             '&::before': {
               content: '""',
@@ -69,7 +64,7 @@ const Contact: React.FC = () => {
               left: 0,
               right: 0,
               height: '4px',
-              background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
+              background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
               borderRadius: 4,
             },
           }}

@@ -15,7 +15,7 @@ const HomeSummary: React.FC = () => {
         py: { xs: 3, md: 5 },
         position: 'relative',
         overflow: 'hidden',
-        boxShadow: (theme) => theme.custom.shadows.card.light,
+        boxShadow: (theme) => (theme.palette.mode === 'dark' ? theme.shadows[4] : theme.shadows[2]),
       }}
     >
       <AccentBar />
@@ -84,7 +84,7 @@ const HomeSummary: React.FC = () => {
                 minHeight: 320,
                 maxHeight: 600,
                 borderRadius: 0,
-                boxShadow: theme.custom.shadows.card.dark,
+                boxShadow: theme.palette.mode === 'dark' ? theme.shadows[6] : theme.shadows[3],
                 display: 'block',
               }}
             />

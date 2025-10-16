@@ -14,14 +14,19 @@ const ContactInformation: React.FC = () => {
           p: 4,
           textAlign: 'center',
           borderRadius: 4,
-          background: theme.custom.gradients.hero[theme.palette.mode],
-          border: theme.custom.borders.card[theme.palette.mode],
-          boxShadow: theme.custom.shadows.card[theme.palette.mode],
-          transition: theme.custom.transitions.smooth,
+          background:
+            theme.palette.mode === 'dark'
+              ? `linear-gradient(180deg, ${theme.palette.background.paper} 0%, ${theme.palette.background.default} 100%)`
+              : `linear-gradient(180deg, ${theme.palette.background.paper} 0%, ${theme.palette.background.default} 100%)`,
+          border: `1px solid ${theme.palette.divider}`,
+          boxShadow: theme.palette.mode === 'dark' ? theme.shadows[6] : theme.shadows[3],
+          transition: theme.transitions.create(['box-shadow', 'transform'], {
+            duration: theme.transitions.duration.standard,
+          }),
           position: 'relative',
           overflow: 'hidden',
           '&:hover': {
-            boxShadow: theme.custom.shadows.card.hover[theme.palette.mode],
+            boxShadow: theme.palette.mode === 'dark' ? theme.shadows[8] : theme.shadows[4],
           },
         }}
       >

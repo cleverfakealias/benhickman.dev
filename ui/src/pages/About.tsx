@@ -197,9 +197,7 @@ const About: React.FC = () => {
                 width: 240,
                 height: 240,
                 border: `4px solid ${theme.palette.primary.main}`,
-                boxShadow: isDark
-                  ? theme.custom.shadows.card.dark
-                  : theme.custom.shadows.card.light,
+                boxShadow: isDark ? theme.shadows[6] : theme.shadows[3],
               }}
               src="/images/ABE.png"
               alt="Ben Hickman"

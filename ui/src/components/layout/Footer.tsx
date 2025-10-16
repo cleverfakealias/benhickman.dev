@@ -123,7 +123,7 @@ const Footer: React.FC<FooterProps> = ({ themeMode, setThemeMode }) => {
               width: { xs: 20, md: 20 },
               height: { xs: 20, md: 20 },
               border: `1.5px solid ${theme.palette.secondary.main}`,
-              boxShadow: theme.custom.shadows.social.light,
+              boxShadow: theme.shadows[1],
               bgcolor: theme.palette.common.white,
             }}
           />

@@ -75,7 +75,7 @@ const Header: React.FC<HeaderProps> = ({ themeMode, setThemeMode }) => {
               width: 64,
               height: 64,
               border: `3px solid ${theme.palette.secondary.main}`,
-              boxShadow: theme.custom.shadows.social.light,
+              boxShadow: theme.shadows[1],
               bgcolor: theme.palette.background.paper,
               marginRight: '0.5rem',
             }}
@@ -159,7 +159,7 @@ const Header: React.FC<HeaderProps> = ({ themeMode, setThemeMode }) => {
                           background: `linear-gradient(90deg, var(--header-active-link), ${theme.palette.secondary.main})`,
                           borderRadius: '2px',
                           transition: 'all 0.3s cubic-bezier(0.4,0,0.2,1)',
-                          boxShadow: theme.custom.shadows.social.light,
+                          boxShadow: theme.shadows[1],
                         }}
                       />
                     )}

@@ -67,7 +67,7 @@ const FormField: React.FC<FormFieldProps> = ({
           '& .MuiOutlinedInput-root': {
             borderRadius: `${theme.shape.borderRadius}px`,
             background: theme.palette.background.paper,
-            boxShadow: theme.custom.shadows.card.light,
+            boxShadow: theme.palette.mode === 'dark' ? theme.shadows[6] : theme.shadows[2],
             '&.Mui-focused fieldset': {
               borderColor: theme.palette.primary.main,
               boxShadow: `0 0 8px ${theme.palette.primary.main}40`,

@@ -2,6 +2,7 @@ import React from 'react';
 import { Container, Typography, Box, Card, CardContent, useTheme } from '@mui/material';
 import { Code, Web, Storage, Build, CloudQueue } from '@mui/icons-material';
 import Grid2 from '@mui/material/Grid2';
+import { alpha } from '@mui/material/styles';
 import CareerTimeline from '../components/features/CareerTimeline';
 import { timelineData } from '../components/features/timelineData';
 import GradientDivider from '../components/common/GradientDivider';
@@ -97,24 +98,18 @@ const DevelopmentExperience: React.FC = () => {
                 borderRadius: 4,
                 background:
                   theme.palette.mode === 'dark'
-                    ? theme.custom.gradients.hero.dark
-                    : theme.custom.gradients.hero.light,
-                border:
-                  theme.palette.mode === 'dark'
-                    ? theme.custom.borders.card.dark
-                    : theme.custom.borders.card.light,
-                boxShadow:
-                  theme.palette.mode === 'dark'
-                    ? theme.custom.shadows.card.dark
-                    : theme.custom.shadows.card.light,
+                    ? `linear-gradient(145deg, ${theme.palette.background.paper} 0%, ${alpha('#fff', 0.06)} 100%)`
+                    : `linear-gradient(145deg, ${theme.palette.background.paper} 0%, ${alpha('#000', 0.02)} 100%)`,
+                border: `1px solid ${theme.palette.divider}`,
+                boxShadow: theme.shadows[2],
                 position: 'relative',
                 overflow: 'hidden',
-                transition: theme.custom.transitions.smooth,
+                transition: theme.transitions.create('box-shadow', {
+                  duration: theme.transitions.duration.standard,
+                  easing: theme.transitions.easing.easeInOut,
+                }),
                 '&:hover': {
-                  boxShadow:
-                    theme.palette.mode === 'dark'
-                      ? theme.custom.shadows.card.hover.dark
-                      : theme.custom.shadows.card.hover.light,
+                  boxShadow: theme.shadows[3],
                 },
                 '&::before': {
                   content: '""',
@@ -125,16 +120,16 @@ const DevelopmentExperience: React.FC = () => {
                   height: '4px',
                   background:
                     experience.color === 'primary'
-                      ? `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.primary.light})`
+                      ? `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`
                       : experience.color === 'secondary'
-                        ? `linear-gradient(90deg, ${theme.palette.secondary.main}, ${theme.palette.secondary.light})`
+                        ? `linear-gradient(90deg, ${theme.palette.secondary.main}, ${theme.palette.primary.main})`
                         : experience.color === 'success'
-                          ? `linear-gradient(90deg, ${theme.palette.success.main}, ${theme.palette.success.light})`
+                          ? `linear-gradient(90deg, ${theme.palette.success.main}, ${theme.palette.secondary.main})`
                           : experience.color === 'warning'
-                            ? `linear-gradient(90deg, ${theme.palette.warning.main}, ${theme.palette.warning.light})`
+                            ? `linear-gradient(90deg, ${theme.palette.warning.main}, ${theme.palette.secondary.main})`
                             : experience.color === 'error'
-                              ? `linear-gradient(90deg, ${theme.palette.error.main}, ${theme.palette.error.light})`
-                              : `linear-gradient(90deg, ${theme.palette.info.main}, ${theme.palette.info.light})`,
+                              ? `linear-gradient(90deg, ${theme.palette.error.main}, ${theme.palette.secondary.main})`
+                              : `linear-gradient(90deg, ${theme.palette.info.main}, ${theme.palette.secondary.main})`,
                   borderRadius: 4,
                 },
               }}
@@ -165,7 +160,7 @@ const DevelopmentExperience: React.FC = () => {
                       justifyContent: 'center',
                       color: 'white',
                       mr: 3,
-                      boxShadow: theme.custom.shadows.card.light,
+                      boxShadow: theme.shadows[1],
                       transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                       '& .MuiSvgIcon-root': {
                         fontSize: '1.5rem',

@@ -1,6 +1,6 @@
 .header {
   width: 100vw;
-  background: var(--header-bg, #412a91);
+  background: var(--header-bg, var(--color-surface));
   color: var(--header-text, #ffffff);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   position: fixed;
@@ -34,7 +34,7 @@
 }
 
 .header-logo:focus {
-  outline: 2px solid var(--header-link-hover, #8cd2ef);
+  outline: 2px solid var(--header-link-hover, var(--color-focus));
   outline-offset: 2px;
   border-radius: 4px;
 }
@@ -63,7 +63,7 @@
 
 .header-links a:hover,
 .header-links a:focus {
-  color: var(--header-link-hover);
+  color: var(--header-link-hover, var(--color-accent));
   text-shadow: 0 0 8px var(--header-link-glow);
   outline: none;
 }
@@ -71,10 +71,10 @@
 .header-links a:focus {
   outline: none;
   box-shadow:
-    0 0 0 3px var(--header-link-glow),
-    0 2px 8px 0 rgba(140, 210, 239, 0.15);
+    0 0 0 3px var(--header-link-glow, var(--color-focus)),
+    0 2px 8px 0 color-mix(in oklch, var(--color-accent) 15%, transparent);
   border-radius: 6px;
-  background: rgba(140, 210, 239, 0.08);
+  background: color-mix(in oklch, var(--color-accent) 8%, transparent);
   transition:
     box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1),
     background 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -93,12 +93,12 @@
 /* Glow animation for active link underline */
 @keyframes glow {
   0% {
-    box-shadow: 0 2px 8px var(--header-link-glow);
+    box-shadow: 0 2px 8px var(--header-link-glow, var(--color-focus));
   }
   100% {
     box-shadow:
-      0 2px 12px var(--header-link-glow),
-      0 0 20px rgba(140, 210, 239, 0.5);
+      0 2px 12px var(--header-link-glow, var(--color-focus)),
+      0 0 20px color-mix(in oklch, var(--color-accent) 40%, transparent);
   }
 }
 
@@ -165,9 +165,7 @@
 
 /* Light mode specific adjustments */
 @media (prefers-color-scheme: light) {
-  .header {
-    box-shadow: 0 2px 8px rgba(65, 42, 145, 0.15);
-  }
+  .header { box-shadow: var(--shadow-1); }
 }
 
 /* Dark mode specific adjustments */

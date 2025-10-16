@@ -1,0 +1,170 @@
+/* Design tokens in OKLCH with hex fallbacks; light and dark themes via [data-theme] */
+
+:root {
+  /* Color scheme helps form controls pick correct native theme */
+  color-scheme: light;
+
+  /* Semantic colors (OKLCH first, then hex fallback) */
+  /* Direction A — Ink & Lime (default) */
+  --color-accent: oklch(0.78 0.16 127); /* vivid lime */
+  --color-accent-hex: #59d11f;
+  --color-accent-contrast: oklch(0.25 0.02 255);
+  --color-accent-contrast-hex: #0b0f14;
+  --color-secondary: oklch(0.79 0.11 210); /* fresh cyan */
+  --color-secondary-hex: #33c2dd;
+
+  --color-bg: oklch(0.98 0.01 255);
+  --color-bg-hex: #f8fafc;
+  --color-surface: oklch(0.96 0.01 255);
+  --color-surface-hex: #f3f5f7;
+  --color-overlay: oklch(0.95 0.01 250 / 0.8);
+
+  --color-text: oklch(0.18 0.02 255);
+  --color-text-hex: #0e1116;
+  --color-text-secondary: oklch(0.55 0.02 255);
+  --color-text-secondary-hex: #4b5563;
+  --color-text-muted: oklch(0.68 0.02 255);
+  --color-text-muted-hex: #8a95a3;
+
+  --color-border: oklch(0.92 0.01 255);
+  --color-border-hex: #e4e8ee;
+  --color-focus: oklch(0.78 0.16 127 / 0.45);
+  --color-focus-hex: #59d11f73;
+
+  --color-success: oklch(0.76 0.12 145);
+  --color-success-hex: #34d399;
+  --color-warning: oklch(0.85 0.12 80);
+  --color-warning-hex: #fbbf24;
+  --color-danger: oklch(0.65 0.18 28);
+  --color-danger-hex: #ef4444;
+
+  /* Typography */
+  --font-sans: 'InterVariable', Inter, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --type-scale: 1.2; /* modular scale base */
+
+  /* Shape (radii) */
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-2xl: 20px;
+
+  /* Elevation (shadows) - subtle, layered */
+  --shadow-1: 0 1px 2px rgba(17, 20, 24, 0.06), 0 1px 1px rgba(17, 20, 24, 0.04);
+  --shadow-2: 0 2px 6px rgba(17, 20, 24, 0.08), 0 1px 2px rgba(17, 20, 24, 0.06);
+  --shadow-3: 0 6px 12px rgba(17, 20, 24, 0.10), 0 2px 4px rgba(17, 20, 24, 0.08);
+  --shadow-4: 0 10px 20px rgba(17, 20, 24, 0.12), 0 4px 6px rgba(17, 20, 24, 0.10);
+  --shadow-5: 0 18px 36px rgba(17, 20, 24, 0.16), 0 8px 12px rgba(17, 20, 24, 0.12);
+
+  /* Motion */
+  --motion-100: 100ms;
+  --motion-150: 150ms;
+  --motion-200: 200ms;
+  --motion-300: 300ms;
+  --motion-500: 500ms;
+  --easing-standard: cubic-bezier(0.2, 0, 0, 1);
+  --easing-emphasized: cubic-bezier(0.2, 0, 0, 1.2);
+  --easing-exit: cubic-bezier(0.4, 0, 1, 1);
+}
+
+/* Dark theme */
+html[data-theme='dark'] {
+  color-scheme: dark;
+  /* Direction A — Ink & Lime (dark) */
+  --color-accent: oklch(0.76 0.16 127);
+  --color-accent-hex: #72dd2b;
+  --color-accent-contrast: oklch(0.98 0.01 255);
+  --color-accent-contrast-hex: #f8fafc;
+  --color-secondary: oklch(0.76 0.11 210);
+  --color-secondary-hex: #4dd0e8;
+
+  --color-bg: oklch(0.15 0.01 255);
+  --color-bg-hex: #0b1015;
+  --color-surface: oklch(0.19 0.01 255);
+  --color-surface-hex: #10161d;
+  --color-overlay: oklch(0.18 0.01 255 / 0.8);
+
+  --color-text: oklch(0.95 0.01 255);
+  --color-text-hex: #edf2f7;
+  --color-text-secondary: oklch(0.78 0.02 255);
+  --color-text-secondary-hex: #c8d0da;
+  --color-text-muted: oklch(0.68 0.02 255);
+  --color-text-muted-hex: #9aa7b6;
+
+  --color-border: oklch(0.34 0.01 255);
+  --color-border-hex: #2a3441;
+  --color-focus: oklch(0.76 0.16 127 / 0.45);
+  --color-focus-hex: #72dd2b73;
+
+  --color-success: oklch(0.76 0.12 145);
+  --color-success-hex: #34d399;
+  --color-warning: oklch(0.82 0.12 80);
+  --color-warning-hex: #f59e0b;
+  --color-danger: oklch(0.65 0.18 28);
+  --color-danger-hex: #ef4444;
+
+  /* Elevation tuned darker */
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.30), 0 1px 1px rgba(0, 0, 0, 0.25);
+  --shadow-2: 0 2px 6px rgba(0, 0, 0, 0.35), 0 1px 2px rgba(0, 0, 0, 0.28);
+  --shadow-3: 0 6px 12px rgba(0, 0, 0, 0.40), 0 2px 4px rgba(0, 0, 0, 0.32);
+  --shadow-4: 0 10px 20px rgba(0, 0, 0, 0.45), 0 4px 6px rgba(0, 0, 0, 0.36);
+  --shadow-5: 0 18px 36px rgba(0, 0, 0, 0.50), 0 8px 12px rgba(0, 0, 0, 0.40);
+}
+
+/* Optional Direction B — Mineral Warmth */
+html[data-brand='mineral'] {
+  /* warm stone neutrals with rust + muted teal */
+  --color-accent: oklch(0.66 0.17 35);
+  --color-accent-hex: #cf6a3a; /* desaturated rust */
+  --color-accent-contrast: oklch(0.21 0.01 70);
+  --color-accent-contrast-hex: #0f0d0b;
+  --color-secondary: oklch(0.72 0.10 200);
+  --color-secondary-hex: #57a6a3; /* muted teal */
+
+  --color-bg: oklch(0.98 0.01 95);
+  --color-bg-hex: #fafaf8;
+  --color-surface: oklch(0.96 0.01 95);
+  --color-surface-hex: #f4f3f1;
+  --color-text: oklch(0.18 0.01 70);
+  --color-text-hex: #14110f;
+  --color-text-secondary: oklch(0.58 0.02 70);
+  --color-text-secondary-hex: #6b625c;
+  --color-border: oklch(0.92 0.01 95);
+  --color-border-hex: #e8e4de;
+  --color-focus: oklch(0.66 0.17 35 / 0.45);
+  --color-focus-hex: #cf6a3a73;
+}
+
+html[data-theme='dark'][data-brand='mineral'] {
+  --color-accent: oklch(0.72 0.14 35);
+  --color-accent-hex: #e17a50;
+  --color-accent-contrast: oklch(0.97 0.01 95);
+  --color-accent-contrast-hex: #f7f6f4;
+  --color-secondary: oklch(0.75 0.09 200);
+  --color-secondary-hex: #69b8b5;
+
+  --color-bg: oklch(0.16 0.01 95);
+  --color-bg-hex: #12100e;
+  --color-surface: oklch(0.2 0.01 95);
+  --color-surface-hex: #171412;
+  --color-text: oklch(0.95 0.01 95);
+  --color-text-hex: #f2f0ee;
+  --color-text-secondary: oklch(0.78 0.01 95);
+  --color-text-secondary-hex: #cdc7c1;
+  --color-border: oklch(0.33 0.01 95);
+  --color-border-hex: #2b2622;
+  --color-focus: oklch(0.72 0.14 35 / 0.45);
+  --color-focus-hex: #e17a5073;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --motion-100: 0ms;
+    --motion-150: 0ms;
+    --motion-200: 0ms;
+    --motion-300: 0ms;
+    --motion-500: 0ms;
+  }
+}

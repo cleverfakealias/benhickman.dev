@@ -35,7 +35,7 @@ const SuccessScreen: React.FC<SuccessScreenProps> = ({ onSendAnother }) => {
           fontSize: theme.typography.body1?.fontSize,
           background: `linear-gradient(90deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
           color: theme.palette.getContrastText(theme.palette.primary.main),
-          boxShadow: theme.custom.shadows.button.dark,
+          boxShadow: theme.palette.mode === 'dark' ? theme.shadows[6] : theme.shadows[3],
           '&:hover': {
             background: `linear-gradient(90deg, ${theme.palette.primary.dark} 0%, ${theme.palette.secondary.dark || theme.palette.secondary.main} 100%)`,
           },

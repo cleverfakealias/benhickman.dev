@@ -146,7 +146,7 @@ const BlogPostDetail = () => {
           sx={{
             width: '100%',
             height: '2px',
-            background: theme.custom.gradients.primary,
+            background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
             borderRadius: theme.shape.borderRadius,
             mb: 4,
           }}

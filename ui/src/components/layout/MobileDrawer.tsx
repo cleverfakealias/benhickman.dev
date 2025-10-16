@@ -85,7 +85,7 @@ const MobileDrawer: React.FC<Props> = ({ open, onClose, navLinks, brand, isActiv
             opacity: open ? 1 : 0,
             transition:
               'transform 300ms cubic-bezier(0.4,0,0.2,1), opacity 300ms cubic-bezier(0.4,0,0.2,1)',
-            boxShadow: theme.custom.shadows.card.dark,
+            boxShadow: theme.shadows[2],
             maxHeight: '100vh',
             overflowY: 'auto',
           }}
@@ -126,7 +126,7 @@ const MobileDrawer: React.FC<Props> = ({ open, onClose, navLinks, brand, isActiv
                   width: 32,
                   height: 32,
                   border: `2px solid ${theme.palette.secondary.main}`,
-                  boxShadow: theme.custom.shadows.social.light,
+                  boxShadow: theme.shadows[1],
                   bgcolor: 'background.paper',
                 }}
               />

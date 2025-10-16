@@ -29,7 +29,7 @@ export default function HomeWrapper({
           new Date(b.publishedAt || b._createdAt || '').getTime() -
           new Date(a.publishedAt || a._createdAt || '').getTime()
       );
-      setFirstPost(sorted[0]);
+      if (sorted[0]) setFirstPost(sorted[0]);
     } else if (!showMockData) {
       // Use real API call for production (will likely fail in Storybook)
       import('../components/features/sanity/sanityClient').then(({ fetchPosts }) => {
@@ -40,7 +40,7 @@ export default function HomeWrapper({
                 new Date(b.publishedAt || b._createdAt || '').getTime() -
                 new Date(a.publishedAt || a._createdAt || '').getTime()
             );
-            setFirstPost(sorted[0]);
+            if (sorted[0]) setFirstPost(sorted[0]);
           }
         });
       });

@@ -56,8 +56,13 @@ const SocialLinks: React.FC<SocialLinksProps> = ({ centered = true, compact = fa
                 '&:hover': {
                   borderColor: social.color,
                   boxShadow: `0 4px 16px 0 ${social.color}30`,
+                  transform: 'translateY(-2px)',
                 },
-                ...theme.custom.getSocialStyles(),
+                border: `1px solid ${theme.palette.divider}`,
+                backgroundColor: theme.palette.background.paper,
+                transition: theme.transitions.create(['box-shadow', 'transform', 'border-color'], {
+                  duration: theme.transitions.duration.shorter,
+                }),
               }}
             >
               <Box

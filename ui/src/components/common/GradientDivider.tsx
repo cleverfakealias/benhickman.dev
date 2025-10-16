@@ -21,7 +21,8 @@ const GradientDivider: React.FC<GradientDividerProps> = ({
       sx={{
         width,
         height,
-        background: gradient || theme.custom.gradients.primary,
+        background:
+          gradient || `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
         borderRadius: '4px',
         mx: margin,
       }}

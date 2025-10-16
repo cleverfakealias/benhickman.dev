@@ -43,20 +43,16 @@ export default function BlogCard({ post }: BlogCardProps): React.ReactElement {
     height: '100%',
     display: 'flex',
     flexDirection: 'column',
-    transition: theme.custom.transitions.smooth,
+    transition: theme.transitions.create(['transform', 'box-shadow', 'background'], {
+      duration: theme.transitions.duration.standard,
+    }),
     background:
       theme.palette.mode === 'dark'
-        ? theme.custom.gradients.hero.dark
-        : theme.custom.gradients.hero.light,
-    border:
-      theme.palette.mode === 'dark'
-        ? theme.custom.borders.card.dark
-        : theme.custom.borders.card.light,
+        ? `linear-gradient(180deg, ${theme.palette.background.paper} 0%, ${theme.palette.background.default} 100%)`
+        : theme.palette.background.paper,
+    border: `1px solid ${theme.palette.divider}`,
     borderRadius: 4,
-    boxShadow:
-      theme.palette.mode === 'dark'
-        ? theme.custom.shadows.card.dark
-        : theme.custom.shadows.card.light,
+    boxShadow: theme.palette.mode === 'dark' ? theme.shadows[6] : theme.shadows[2],
     overflow: 'hidden',
     position: 'relative',
     '& .MuiCardMedia-root': {
@@ -65,10 +61,7 @@ export default function BlogCard({ post }: BlogCardProps): React.ReactElement {
     },
     '&:hover': {
       transform: 'translateY(-8px) scale(1.02)',
-      boxShadow: theme.custom.shadows.card.hover.dark,
-      ...(theme.palette.mode === 'dark' && {
-        background: theme.custom.gradients.card.hover.dark,
-      }),
+      boxShadow: theme.palette.mode === 'dark' ? theme.shadows[8] : theme.shadows[4],
     },
     '&::before': {
       content: '""',

@@ -11,8 +11,8 @@ const HeroBanner: React.FC = () => {
       elevation={3}
       sx={{
         p: { xs: 2, md: 4 },
-        background: theme.custom.gradients.hero[theme.palette.mode],
-        boxShadow: theme.custom.shadows.card[theme.palette.mode],
+        background: theme.palette.background.paper,
+        boxShadow: theme.shadows[2],
         display: 'flex',
         flexDirection: { xs: 'column', md: 'row' },
         alignItems: 'center',
@@ -20,10 +20,8 @@ const HeroBanner: React.FC = () => {
         gap: 4,
         position: 'relative',
         overflow: 'hidden',
-        transition: theme.custom.transitions.smooth,
-        '&:hover': {
-          boxShadow: theme.custom.shadows.card.hover[theme.palette.mode],
-        },
+        transition: theme.transitions.create('box-shadow', { duration: theme.transitions.duration.standard }),
+        '&:hover': { boxShadow: theme.shadows[3] },
       }}
     >
       {/* Top accent bar */}
@@ -47,8 +45,8 @@ const HeroBanner: React.FC = () => {
             width: '100%',
             height: 'auto',
             filter: theme.palette.mode === 'dark' ? 'brightness(1.1)' : 'brightness(0.9)',
-            transition: theme.custom.transitions.standard,
-            boxShadow: theme.custom.shadows.social[theme.palette.mode],
+            transition: theme.transitions.create('box-shadow', { duration: theme.transitions.duration.short }),
+            boxShadow: theme.shadows[1],
             borderRadius: '4px',
           }}
         />
@@ -102,7 +100,9 @@ const HeroBanner: React.FC = () => {
             mt: 4,
             px: 4,
             fontSize: { xs: '1rem', md: '1.1rem' },
-            transition: theme.custom.transitions.standard,
+            transition: theme.transitions.create(['background-color', 'box-shadow', 'transform'], {
+              duration: theme.transitions.duration.standard,
+            }),
           }}
           href="/contact"
         >

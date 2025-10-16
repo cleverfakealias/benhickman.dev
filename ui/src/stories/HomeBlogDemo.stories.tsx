@@ -65,7 +65,8 @@ const HomeWithBlogDemo = () => (
       elevation={3}
       sx={{
         p: 4,
-        background: (theme) => theme.custom.gradients.hero[theme.palette.mode],
+        background: (theme) =>
+          `linear-gradient(180deg, ${theme.palette.background.paper} 0%, ${theme.palette.background.default} 100%)`,
         mb: 4,
       }}
     >
@@ -111,7 +112,7 @@ const HomeWithBlogDemo = () => (
         <Paper
           sx={{
             p: 3,
-            background: (theme) => theme.custom.gradients.card[theme.palette.mode],
+            background: (theme) => theme.palette.background.paper,
             minHeight: 200,
             display: 'flex',
             alignItems: 'center',

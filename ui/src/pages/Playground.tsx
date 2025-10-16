@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect } from 'react';
 import Editor from '@monaco-editor/react';
 import { Paper, Button, Typography, useTheme, Box } from '@mui/material';
+import { alpha } from '@mui/material/styles';
 import AccentBar from '../components/common/AccentBar';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { getDomainConfig } from '../config/domainConfig';
@@ -107,8 +108,10 @@ export default function Playground() {
       sx={{
         p: { xs: 2, md: 4 },
         background:
-          theme.custom?.gradients?.hero?.[theme.palette.mode] || theme.palette.background.paper,
-        boxShadow: theme.custom?.shadows?.card?.[theme.palette.mode] || 3,
+          theme.palette.mode === 'dark'
+            ? `linear-gradient(145deg, ${theme.palette.background.paper} 0%, ${alpha('#fff', 0.06)} 100%)`
+            : `linear-gradient(145deg, ${theme.palette.background.paper} 0%, ${alpha('#000', 0.02)} 100%)`,
+        boxShadow: theme.shadows[2],
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'stretch',

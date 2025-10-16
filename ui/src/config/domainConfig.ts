@@ -70,10 +70,12 @@ export const domainConfigs: Record<string, DomainConfig> = {
   },
 };
 
-export const getDomainConfig = (hostname?: string) => {
+export const getDomainConfig = (hostname?: string): DomainConfig => {
   const host =
     hostname || (typeof window !== 'undefined' ? window.location.hostname : 'benhickman.dev');
-  return domainConfigs[host] || domainConfigs['benhickman.dev'];
+  const fallback = domainConfigs['benhickman.dev'];
+  const cfg = domainConfigs[host as keyof typeof domainConfigs];
+  return (cfg || fallback) as DomainConfig;
 };
 
 export const updateMetaTags = (hostname?: string) => {
