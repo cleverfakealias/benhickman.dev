@@ -3,6 +3,15 @@ export default {
   preset: 'ts-jest',
   testEnvironment: 'jsdom',
   setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
+  globals: {
+    'import.meta': {
+      env: {
+        VITE_SANITY_PROJECT_ID: 'test-project-id',
+        VITE_SANITY_DATASET: 'test',
+        MODE: 'test',
+      },
+    },
+  },
   moduleNameMapper: {
     '^@/(.*)$': '<rootDir>/src/$1',
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
