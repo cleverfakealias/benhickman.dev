@@ -1,18 +1,8 @@
 import React from 'react';
 import { Box, Typography, Button, Container } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { heroSkills } from './heroSkills';
 import './HeroBanner.css';
-
-export const heroSkills = [
-  'Frontend Engineering (React / TypeScript)',
-  'Backend Engineering (Python / Java / Node)',
-  'Cloud Architecture',
-  'Event-driven systems',
-  'Microservices',
-  'Kubernetes',
-  'CI/CD Pipelines',
-  'Observability',
-];
 
 const HeroBanner: React.FC = () => {
   return (

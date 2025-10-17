@@ -167,7 +167,7 @@ describe('Home Page', () => {
     });
 
     it('should handle null blog posts response', async () => {
-      jest.spyOn(sanityClient, 'fetchPosts').mockResolvedValue(null as any);
+      jest.spyOn(sanityClient, 'fetchPosts').mockResolvedValue(null as unknown as BlogPost[]);
 
       renderWithRouter(<Home />);
 
