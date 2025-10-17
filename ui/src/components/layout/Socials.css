@@ -1,30 +1,36 @@
-.socials a svg {
-  color: var(--social-icon-color);
+/* Social icons - 70% opacity by default, 100% on hover */
+.socials a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  border: 1px solid transparent;
   transition:
-    color 0.3s ease,
-    filter 0.3s ease;
+    color var(--motion-150) var(--easing-standard),
+    opacity var(--motion-150) var(--easing-standard),
+    border-color var(--motion-150) var(--easing-standard),
+    background var(--motion-150) var(--easing-standard);
+}
+
+.socials a svg {
+  color: var(--color-text-secondary-hex);
+  opacity: 0.7;
+  transition: inherit;
 }
 
 .socials a:hover svg {
-  color: var(--social-icon-hover);
-  filter: drop-shadow(0 0 4px var(--social-icon-shadow));
+  color: var(--color-accent-hex);
+  opacity: 1;
 }
 
-/* Fallback for browsers that don't support CSS custom properties */
-body[data-theme='dark'] .socials a svg {
-  color: #aaaaaa; /* lightGray from theme */
+.socials a:hover {
+  border-color: var(--color-border);
+  background: color-mix(in oklch, var(--color-accent) 8%, transparent);
 }
 
-body[data-theme='dark'] .socials a:hover svg {
-  color: #8cd2ef; /* loonGray from theme */
-  filter: drop-shadow(0 0 4px #412a91); /* vikingsPurple from theme */
-}
-
-body[data-theme='light'] .socials a svg {
-  color: #eeeeee; /* unitedLightGray from theme */
-}
-
-body[data-theme='light'] .socials a:hover svg {
-  color: #412a91; /* vikingsPurple from theme */
-  filter: drop-shadow(0 0 4px #8cd2ef); /* loonGray from theme */
+.socials a:focus {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
 }

@@ -2,12 +2,12 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import HomeWrapper from './HomeWrapper';
-import { createMnTheme } from '../styles/theme';
+import { buildTheme } from '../theme/theme';
 import { mockBlogPosts } from './mocks/sanityMocks';
 
 // Use your actual theme creation function
-const lightTheme = createMnTheme('light');
-const darkTheme = createMnTheme('dark');
+const lightTheme = buildTheme('light');
+const darkTheme = buildTheme('dark');
 
 // Decorator to provide theme context
 const withLightTheme = (Story: React.ComponentType) => {

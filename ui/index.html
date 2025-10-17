@@ -60,8 +60,22 @@
       href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Pacifico&display=swap"
       rel="stylesheet"
     />
+    <!-- Preconnects for Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Geist Sans (Google Early Access via variable family) -->
     <link
-      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Manrope:wght@400;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Clash Display from Fontshare -->
+    <link
+      href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- JetBrains Mono Variable (fallback to static if variable not available) -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400..800;1,400..800&display=swap"
       rel="stylesheet"
     />
     <style>
@@ -69,27 +83,50 @@
         font-family: 'Pacifico', cursive;
         font-size: 2.2rem;
         letter-spacing: 0.04em;
-        color: #412a91;
+        color: inherit;
         margin-bottom: 0.2em;
       }
       .subtitle {
         font-family: 'Orbitron', sans-serif;
         font-size: 1.1rem;
-        color: #448aff;
+        color: inherit;
         letter-spacing: 0.08em;
       }
-      @media (prefers-color-scheme: dark) {
-        .fancy-title {
-          color: #7c4dff;
-        }
-        .subtitle {
-          color: #7c4dff;
-        }
-      }
     </style>
+    <script>
+      (function () {
+        try {
+          var SOURCE_KEY = 'zennlogic-theme-source';
+          var MODE_KEY = 'zennlogic-theme-mode';
+          var source = localStorage.getItem(SOURCE_KEY) || 'system';
+          var mode = (source === 'manual' && localStorage.getItem(MODE_KEY)) || null;
+          if (!mode) {
+            mode =
+              window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+                ? 'dark'
+                : 'light';
+          }
+          document.documentElement.setAttribute('data-theme', mode);
+        } catch (e) {
+          // no-op
+        }
+      })();
+    </script>
   </head>
   <body>
-    <a href="#main-content" class="skip-to-content" style="position:absolute;left:-10000px;top:auto;width:1px;height:1px;overflow:hidden;">Skip to content</a>
+    <a
+      href="#main-content"
+      class="skip-to-content"
+      style="
+        position: absolute;
+        left: -10000px;
+        top: auto;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+      "
+      >Skip to content</a
+    >
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

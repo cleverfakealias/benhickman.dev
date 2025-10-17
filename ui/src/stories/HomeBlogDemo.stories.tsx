@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { Container, Typography, Box, Paper, Alert } from '@mui/material';
-import { createMnTheme } from '../styles/theme';
+import { buildTheme } from '../theme/theme';
 import BlogCard from '../components/features/blog/BlogCard';
 import { BlogPost } from '../components/features/sanity/types';
 
@@ -29,8 +29,8 @@ const mockBlogPost: BlogPost = {
 };
 
 // Use your actual theme creation function
-const lightTheme = createMnTheme('light');
-const darkTheme = createMnTheme('dark');
+const lightTheme = buildTheme('light');
+const darkTheme = buildTheme('dark');
 
 // Theme decorators
 const withLightTheme = (Story: React.ComponentType) => (

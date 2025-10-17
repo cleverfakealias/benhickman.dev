@@ -43,7 +43,7 @@ const NavigationDrawer: React.FC = () => {
           </IconButton>
           <Divider />
           <List>
-            {['Home', 'About', 'Contact'].map((text) => (
+            {['Home', 'Contact'].map((text) => (
               <ListItem key={text} component={'li'}>
                 <ListItemText primary={text} />
               </ListItem>

@@ -5,7 +5,7 @@ export default function BlogHeader(): React.ReactElement {
   const theme = useTheme();
 
   return (
-    <Box sx={{ textAlign: 'center', mb: 4 }}>
+    <Box sx={{ textAlign: 'center', mb: 5 }}>
       <Typography
         variant="h2"
         component="h1"
@@ -13,7 +13,7 @@ export default function BlogHeader(): React.ReactElement {
         sx={{
           fontWeight: theme.typography.fontWeightBold,
           color: theme.palette.primary.main,
-          mb: 2,
+          mb: 3,
         }}
       >
         Blog

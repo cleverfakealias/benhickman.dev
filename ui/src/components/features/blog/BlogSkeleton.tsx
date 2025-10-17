@@ -7,8 +7,8 @@ export default function BlogSkeleton(): React.ReactElement {
       <Card sx={{ height: '100%' }}>
         <Skeleton variant="rectangular" width="100%" height={200} />
         <CardContent>
-          <Skeleton variant="text" sx={{ fontSize: '1.5rem', mb: 1 }} />
-          <Skeleton variant="text" sx={{ mb: 2 }} />
+          <Skeleton variant="text" sx={{ fontSize: '1.5rem', mb: 2 }} />
+          <Skeleton variant="text" sx={{ mb: 3 }} />
           <Skeleton variant="text" width="60%" />
         </CardContent>
       </Card>

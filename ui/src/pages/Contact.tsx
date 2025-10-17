@@ -1,83 +1,105 @@
 import React from 'react';
 import FormspreeContactForm from '../components/common/FormspreeContactForm';
 import ContactInformation from '../components/common/ContactInformation';
-import { Card, CardContent, useTheme, Container, Box, Typography } from '@mui/material';
-import { alpha } from '@mui/material/styles';
-import { Theme } from '@mui/material/styles';
+import { Container, Box, Typography } from '@mui/material';
 
 const Contact: React.FC = () => {
-  const theme = useTheme() as Theme;
   return (
-    <Container maxWidth="md" sx={{ py: 8 }}>
+    <Container maxWidth="lg" sx={{ py: { xs: 3, md: 4 } }}>
       {/* Header Section */}
-      <Box sx={{ textAlign: 'center', mb: 6 }}>
+      <Box sx={{ textAlign: 'center', mb: { xs: 4, md: 5 } }}>
         <Typography
-          variant="h2"
           component="h1"
-          gutterBottom
           sx={{
-            fontWeight: 'bold',
-            color: theme.palette.primary.main,
+            fontWeight: 800,
+            letterSpacing: '-0.01em',
+            fontSize: { xs: '1.8rem', md: '2.2rem' },
+            color: 'var(--color-text)',
             mb: 2,
           }}
         >
-          Contact
+          Get in Touch
         </Typography>
         <Typography
-          variant="h5"
           sx={{
-            maxWidth: '600px',
+            color: 'var(--color-text-secondary-hex)',
+            maxWidth: 640,
             mx: 'auto',
-            color: theme.palette.text.secondary,
-            opacity: theme.palette.mode === 'dark' ? 0.9 : 0.7,
+            lineHeight: 1.6,
           }}
         >
-          Get in touch for project inquiries, collaboration, or just to say hello!
+          Let's discuss your project, collaboration opportunities, or just connect.
         </Typography>
-      </Box>
-      {/* Contact Card */}
-      <Box>
-        <Card
+        <Box
           sx={{
-            borderRadius: 4,
-            background:
-              theme.palette.mode === 'dark'
-                ? `linear-gradient(145deg, ${theme.palette.background.paper} 0%, ${alpha('#fff', 0.06)} 100%)`
-                : `linear-gradient(145deg, ${theme.palette.background.paper} 0%, ${alpha('#000', 0.02)} 100%)`,
-            border: `1px solid ${theme.palette.divider}`,
-            boxShadow: theme.shadows[2],
-            position: 'relative',
-            overflow: 'hidden',
-            mb: 4,
-            width: '100%',
-            transition: theme.transitions.create('box-shadow', {
-              duration: theme.transitions.duration.standard,
-              easing: theme.transitions.easing.easeInOut,
-            }),
+            width: { xs: 64, md: 92 },
+            height: 3,
+            borderRadius: 2,
+            background: 'var(--color-secondary-hex)',
+            mx: 'auto',
+            mt: 2,
+          }}
+        />
+      </Box>
+
+      {/* Contact Card */}
+      <Box component="section">
+        <Box
+          sx={{
+            background: 'var(--color-surface)',
+            border: '1px solid var(--color-border)',
+            boxShadow: 'var(--shadow-1)',
+            borderRadius: 'var(--radius-lg)',
+            p: { xs: 3, md: 5 },
+            transition: 'box-shadow 150ms var(--easing-standard)',
             '&:hover': {
-              boxShadow: theme.shadows[3],
-            },
-            '&::before': {
-              content: '""',
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              height: '4px',
-              background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
-              borderRadius: 4,
+              boxShadow: 'var(--shadow-2)',
             },
           }}
         >
-          <CardContent sx={{ p: { xs: 2, sm: 4 } }}>
-            <Box sx={{ borderRadius: 0, p: 0 }}>
-              <ContactInformation />
-            </Box>
-            <Box sx={{ mt: 4, borderRadius: 0, p: 0 }}>
-              <FormspreeContactForm />
-            </Box>
-          </CardContent>
-        </Card>
+          {/* Contact Information Section */}
+          <Box sx={{ mb: { xs: 4, md: 5 } }}>
+            <Typography
+              component="h2"
+              sx={{
+                fontWeight: 700,
+                letterSpacing: '-0.01em',
+                fontSize: { xs: '1.25rem', md: '1.5rem' },
+                color: 'var(--color-text)',
+                mb: 3,
+              }}
+            >
+              Contact Information
+            </Typography>
+            <ContactInformation />
+          </Box>
+
+          {/* Divider */}
+          <Box
+            sx={{
+              height: 1,
+              background: 'var(--color-border)',
+              my: { xs: 4, md: 5 },
+            }}
+          />
+
+          {/* Contact Form Section */}
+          <Box>
+            <Typography
+              component="h2"
+              sx={{
+                fontWeight: 700,
+                letterSpacing: '-0.01em',
+                fontSize: { xs: '1.25rem', md: '1.5rem' },
+                color: 'var(--color-text)',
+                mb: 3,
+              }}
+            >
+              Send a Message
+            </Typography>
+            <FormspreeContactForm />
+          </Box>
+        </Box>
       </Box>
     </Container>
   );

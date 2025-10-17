@@ -1,97 +1,106 @@
 import React from 'react';
-import { Box, Typography, Grid, Paper, useTheme } from '@mui/material';
-import AccentBar from '../common/AccentBar';
+import { Box, Typography } from '@mui/material';
 
 const HomeSummary: React.FC = () => {
-  const theme = useTheme();
   return (
-    <Paper
-      elevation={3}
-      sx={{
-        maxWidth: 900,
-        mx: 'auto',
-        my: 6,
-        px: 2,
-        py: { xs: 3, md: 5 },
-        position: 'relative',
-        overflow: 'hidden',
-        boxShadow: (theme) => (theme.palette.mode === 'dark' ? theme.shadows[4] : theme.shadows[2]),
-      }}
-    >
-      <AccentBar />
-      <Grid container spacing={4} alignItems="center" justifyContent="center">
-        <Grid item xs={12} md={7}>
-          <Box sx={{ textAlign: { xs: 'center', md: 'left' } }}>
-            <Typography
-              variant="body1"
-              sx={{
-                mb: 2,
-                color: (theme) => theme.palette.text.primary,
-                lineHeight: 1.7,
-              }}
-            >
-              Growing up, technology was always part of my life. From playing Nintendo as a young
-              child to taking apart and reassembling my family's Gateway computer, my curiosity for
-              how things worked was insatiable.
-            </Typography>
-            <Typography
-              variant="body1"
-              sx={{
-                mb: 2,
-                color: (theme) => theme.palette.text.secondary,
-                lineHeight: 1.7,
-              }}
-            >
-              I started my career in technical support and eventually became a supervisor at a
-              dot-com startup. In this role I was immersed in web development and email hosting in
-              the Real Estate industry. Now, I'm working on an enterprise software engineering team
-              at a global Saas company. I work on numerous microservices and user interfaces in
-              multiple languages.
-            </Typography>
-            <Typography
-              variant="body1"
-              sx={{
-                color: (theme) => theme.palette.text.primary,
-                lineHeight: 1.7,
-              }}
-            >
-              Over the years, I've become proficient in Python, Typescript/Javascript, and Java. I
-              thrive on solving complex problems. I'm constantly learning and adapting to new
-              technologies, and I'm excited about the possibility of transitioning to an Architect
-              role in the future where I am able to leverage my skills in cloud systems and
-              development.
-            </Typography>
-          </Box>
-        </Grid>
-        <Grid
-          item
-          xs={12}
-          md={5}
+    <Box component="section">
+      {/* Card shell */}
+      <Box
+        sx={{
+          background: 'var(--color-surface)',
+          border: '1px solid var(--color-border)',
+          boxShadow: 'var(--shadow-1)',
+          borderRadius: 'var(--radius-lg)',
+          p: { xs: 3, md: 5 },
+        }}
+      >
+        {/* Section heading with copper underline */}
+        <Box sx={{ mb: { xs: 3, md: 4 } }}>
+          <Typography
+            component="h2"
+            sx={{
+              fontWeight: 700,
+              letterSpacing: '-0.01em',
+              fontSize: { xs: '1.35rem', md: '1.6rem' },
+              color: 'var(--color-text)',
+            }}
+          >
+            About my work
+          </Typography>
+          <Box
+            sx={{
+              mt: 1,
+              width: { xs: '64px', md: '92px' },
+              height: '3px',
+              borderRadius: '2px',
+              backgroundColor: 'var(--color-secondary-hex)', // copper
+            }}
+          />
+        </Box>
+
+        {/* Content grid */}
+        <Box
           sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'stretch',
+            display: 'grid',
+            gap: { xs: 3, md: 5 },
+            alignItems: 'center',
+            gridTemplateColumns: { xs: '1fr', md: '1.05fr 0.95fr' },
           }}
         >
-          <Box sx={{ width: '100%', height: '100%' }}>
-            <img
-              src={'/images/windingroad.jpeg'}
-              alt="Winding Road"
-              style={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-                minHeight: 320,
-                maxHeight: 600,
-                borderRadius: 0,
-                boxShadow: theme.palette.mode === 'dark' ? theme.shadows[6] : theme.shadows[3],
+          <Box sx={{ order: { xs: 1, md: 1 }, maxWidth: { md: '70ch' } }}>
+            <Typography
+              variant="body1"
+              sx={{ mb: 2, lineHeight: 1.75, color: 'var(--color-text)' }}
+            >
+              Technology has been the through-line of my life—what began as curiosity became a
+              career in building systems that help organizations move faster and make better
+              decisions. I’ve spent years bridging business goals with technical strategy,
+              translating complexity into clarity.
+            </Typography>
+
+            <Typography
+              variant="body1"
+              sx={{ mb: 2, lineHeight: 1.75, color: 'var(--color-text-secondary-hex)' }}
+            >
+              My experience spans from early dot-com operations to leading enterprise software
+              initiatives in the SaaS space. I’ve designed cloud architectures, modernized legacy
+              platforms, and helped teams scale securely through automation, observability, and
+              thoughtful design.
+            </Typography>
+
+            <Typography variant="body1" sx={{ lineHeight: 1.75, color: 'var(--color-text)' }}>
+              I work across the stack—Python, TypeScript, and Java—to deliver measurable outcomes:
+              systems that are stable, cost-efficient, and built to evolve. My focus is on aligning
+              engineering excellence with real business value.
+            </Typography>
+          </Box>
+
+          {/* Media second; fixed aspect ratio so the card doesn’t grow vertically */}
+          <Box
+            sx={{
+              order: { xs: 2, md: 2 },
+              justifySelf: { md: 'end' },
+              width: '100%',
+              maxWidth: { md: 520 },
+            }}
+          >
+            <Box
+              component="img"
+              src="/images/windingroad.jpeg"
+              alt="Winding road through Minnesota hills"
+              sx={{
                 display: 'block',
+                width: '100%',
+                aspectRatio: '16 / 9',
+                objectFit: 'cover',
+                borderRadius: 'var(--radius-md)',
+                boxShadow: 'var(--shadow-2)',
               }}
             />
           </Box>
-        </Grid>
-      </Grid>
-    </Paper>
+        </Box>
+      </Box>
+    </Box>
   );
 };
 

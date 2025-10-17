@@ -79,7 +79,7 @@ const MobileDrawer: React.FC<Props> = ({ open, onClose, navLinks, brand, isActiv
             right: 0,
             background: theme.palette.primary.main,
             color: theme.palette.primary.contrastText,
-            padding: '1rem',
+            padding: 'var(--space-3)',
             zIndex: 2000,
             transform: open ? 'translateY(0)' : 'translateY(-32px)',
             opacity: open ? 1 : 0,
@@ -100,9 +100,9 @@ const MobileDrawer: React.FC<Props> = ({ open, onClose, navLinks, brand, isActiv
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
-              paddingBottom: '1rem',
+              paddingBottom: 'var(--space-3)',
               borderBottom: `1px solid ${theme.palette.primary.contrastText}1A`,
-              marginBottom: '1.5rem',
+              marginBottom: 'var(--space-4)',
             }}
           >
             <Link
@@ -143,7 +143,7 @@ const MobileDrawer: React.FC<Props> = ({ open, onClose, navLinks, brand, isActiv
                 fontSize: '1.5rem',
                 cursor: 'pointer',
                 padding: '0.5rem',
-                borderRadius: '4px',
+                borderRadius: 'var(--radius-sm)',
                 transition: 'background-color 0.2s ease',
                 minWidth: '44px',
                 minHeight: '44px',
@@ -183,13 +183,13 @@ const MobileDrawer: React.FC<Props> = ({ open, onClose, navLinks, brand, isActiv
                     style={{
                       display: 'flex',
                       alignItems: 'center',
-                      padding: '1rem',
+                      padding: 'var(--space-3)',
                       color: isActiveLink(link.href)
                         ? theme.palette.secondary.main
                         : theme.palette.primary.contrastText,
                       fontWeight: isActiveLink(link.href) ? '700' : '400',
                       textDecoration: 'none',
-                      borderRadius: '8px',
+                      borderRadius: 'var(--radius-md)',
                       transition: 'all 0.2s ease',
                       fontSize: '1.1rem',
                       minHeight: '44px',

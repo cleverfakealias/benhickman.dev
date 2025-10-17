@@ -4,18 +4,16 @@ import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { useTheme } from './hooks/useTheme';
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useState, useEffect, useMemo } from 'react';
 import ErrorBoundary from './components/common/ErrorBoundary';
 import RouteSkeleton from './components/common/RouteSkeleton';
 const Home = lazy(() => import('./pages/Home'));
 const Blog = lazy(() => import('./pages/Blog'));
 const BlogPostDetail = lazy(() => import('./components/features/blog/BlogPostDetail'));
 const Contact = lazy(() => import('./pages/Contact'));
-const About = lazy(() => import('./pages/About'));
 const DevelopmentExperience = lazy(() => import('./pages/DevelopmentExperience'));
 const Playground = lazy(() => import('./pages/Playground'));
 import { buildTheme } from './theme/theme';
-import { useState, useEffect } from 'react';
 import { getDomainConfig } from './config/domainConfig';
 import './theme/tokens.css';
 
@@ -35,24 +33,28 @@ function AnimatedPageContainer() {
         flexDirection: 'column',
         justifyContent: 'flex-start',
         alignItems: 'flex-start',
-        paddingTop: '2rem',
-        paddingBottom: '6rem',
+        paddingBottom: 'var(--space-7)',
         marginBottom: 0,
-        gap: '2rem',
+        gap: 'var(--space-3)',
         opacity: animate ? 1 : 0,
         transform: animate ? 'translateY(0)' : 'translateY(24px)',
         transition:
           'opacity 400ms cubic-bezier(0.4,0,0.2,1), transform 400ms cubic-bezier(0.4,0,0.2,1)',
       }}
     >
-      <ErrorBoundary fallback={<div role="alert" style={{ padding: '2rem' }}>Unable to load route.</div>}>
-        <Suspense fallback={<RouteSkeleton /> }>
+      <ErrorBoundary
+        fallback={
+          <div role="alert" style={{ padding: 'var(--space-3)' }}>
+            Unable to load route.
+          </div>
+        }
+      >
+        <Suspense fallback={<RouteSkeleton />}>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="blog" element={<Blog />} />
             <Route path="blog/post/:slug" element={<BlogPostDetail />} />
             <Route path="experience" element={<DevelopmentExperience />} />
-            <Route path="about" element={<About />} />
             <Route path="contact" element={<Contact />} />
             <Route path="playground" element={<Playground />} />
           </Routes>
@@ -79,27 +81,25 @@ function App() {
     metaDesc.setAttribute('content', branding.description);
   }, [branding]);
 
-  // Apply html data-theme for CSS variables
-  useEffect(() => {
-    document.documentElement.setAttribute('data-theme', themeMode);
-  }, [themeMode]);
+  // Note: useTheme hook already sets html[data-theme], no need to duplicate here
 
   // New MUI theme based on CSS vars; keep old theme available if needed
-  const theme = buildTheme(themeMode as 'light' | 'dark');
+  // Memoize theme to ensure it's recreated when themeMode changes
+  const theme = useMemo(() => buildTheme(themeMode as 'light' | 'dark'), [themeMode]);
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         <Header themeMode={themeMode} setThemeMode={setThemeMode} />
-        <main id="main-content"
+        <main
+          id="main-content"
           style={{
             flex: 1,
             display: 'flex',
             flexDirection: 'column',
-            marginTop: '4.5rem', // Space for fixed header
-            marginBottom: '4rem', // Space for fixed footer
-            minHeight: 'calc(100vh - 8.5rem)', // Full height minus header and footer
+            marginBottom: 'var(--space-5)', // Space for fixed footer
+            minHeight: 'calc(100vh - 64px - 52px)', // Full height minus header and footer
           }}
         >
           <AnimatedPageContainer />

@@ -2,11 +2,11 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import Home from '../pages/Home';
-import { createMnTheme } from '../styles/theme';
+import { buildTheme } from '../theme/theme';
 
 // Use your actual theme creation function
-const lightTheme = createMnTheme('light');
-const darkTheme = createMnTheme('dark');
+const lightTheme = buildTheme('light');
+const darkTheme = buildTheme('dark');
 
 // Theme decorators
 const withLightTheme = (Story: React.ComponentType) => (

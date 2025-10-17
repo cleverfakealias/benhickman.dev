@@ -46,12 +46,9 @@ export default function BlogCard({ post }: BlogCardProps): React.ReactElement {
     transition: theme.transitions.create(['transform', 'box-shadow', 'background'], {
       duration: theme.transitions.duration.standard,
     }),
-    background:
-      theme.palette.mode === 'dark'
-        ? `linear-gradient(180deg, ${theme.palette.background.paper} 0%, ${theme.palette.background.default} 100%)`
-        : theme.palette.background.paper,
+    background: theme.palette.background.paper,
     border: `1px solid ${theme.palette.divider}`,
-    borderRadius: 4,
+    borderRadius: 'var(--radius-sm)',
     boxShadow: theme.palette.mode === 'dark' ? theme.shadows[6] : theme.shadows[2],
     overflow: 'hidden',
     position: 'relative',
@@ -62,15 +59,6 @@ export default function BlogCard({ post }: BlogCardProps): React.ReactElement {
     '&:hover': {
       transform: 'translateY(-8px) scale(1.02)',
       boxShadow: theme.palette.mode === 'dark' ? theme.shadows[8] : theme.shadows[4],
-    },
-    '&::before': {
-      content: '""',
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      right: 0,
-      height: '4px',
-      background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
     },
   };
 
@@ -100,7 +88,7 @@ export default function BlogCard({ post }: BlogCardProps): React.ReactElement {
           />
         )}
 
-        <CardContent sx={{ flexGrow: 1, p: 4 }}>
+        <CardContent sx={{ flexGrow: 1, p: 5 }}>
           <Typography
             variant="h5"
             component="h2"
@@ -108,7 +96,7 @@ export default function BlogCard({ post }: BlogCardProps): React.ReactElement {
             sx={{
               fontWeight: 600,
               color: theme.palette.text.primary,
-              mb: 2,
+              mb: 3,
               lineHeight: 1.3,
             }}
           >
@@ -119,7 +107,7 @@ export default function BlogCard({ post }: BlogCardProps): React.ReactElement {
             <Typography
               variant="body2"
               sx={{
-                mb: 3,
+                mb: 4,
                 display: '-webkit-box',
                 WebkitLineClamp: 3,
                 WebkitBoxOrient: 'vertical',
@@ -133,7 +121,7 @@ export default function BlogCard({ post }: BlogCardProps): React.ReactElement {
             </Typography>
           )}
 
-          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, mt: 'auto' }}>
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mt: 'auto' }}>
             <Chip
               icon={<AccessTime />}
               label={formatDate(post.publishedAt)}

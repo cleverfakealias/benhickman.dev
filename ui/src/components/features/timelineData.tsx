@@ -59,28 +59,18 @@ export const timelineData: TimelineItemData[] = [
     icon: <LanguageIcon />,
     startDate: '2024',
   },
-  //   {
-  //     title: 'LangGraph Agentic AI Lab',
-  //     subtitle: 'LangGraph + LangSmith',
-  //     description:
-  //       'Prototyped modular, agentic AI flows with tracing/observability to explore orchestration patterns for real-world tasks.',
-  //     timestamp: '2025',
-  //     color: 'primary',
-  //     icon: <AutoAwesomeIcon />,
-  //     startDate: '2025',
-  //   },
-  //   {
-  //     title: 'RAG Application',
-  //     subtitle: 'LangChain + ChromaDB + Streamlit',
-  //     description:
-  //       'Built semantic search and document Q&A pipeline; experimented with retrieval quality and developer ergonomics.',
-  //     timestamp: '2025',
-  //     color: 'primary',
-  //     icon: <AutoAwesomeIcon />,
-  //     startDate: '2025',
-  //   },
 
   // Certifications / Education
+  {
+    title: 'Associate of Applied Science, Artificial Intelligence',
+    subtitle: 'Expected Spring 2028',
+    description:
+      'Pursuing my AAS in AI through Hennepin Technical College, focusing on machine learning, neural networks, natural language processing, and ethics of Artificial Intelligence.',
+    timestamp: 'In Progress',
+    color: 'warning',
+    icon: <SchoolIcon />,
+    startDate: '2026',
+  },
   {
     title: 'AWS Certified Solutions Architect – Professional',
     subtitle: 'Targeting Winter 2025',

@@ -1,8 +1,6 @@
 import { useRef, useState, useEffect } from 'react';
 import Editor from '@monaco-editor/react';
 import { Paper, Button, Typography, useTheme, Box } from '@mui/material';
-import { alpha } from '@mui/material/styles';
-import AccentBar from '../components/common/AccentBar';
 import HCaptcha from '@hcaptcha/react-hcaptcha';
 import { getDomainConfig } from '../config/domainConfig';
 
@@ -106,27 +104,23 @@ export default function Playground() {
     <Paper
       elevation={3}
       sx={{
-        p: { xs: 2, md: 4 },
-        background:
-          theme.palette.mode === 'dark'
-            ? `linear-gradient(145deg, ${theme.palette.background.paper} 0%, ${alpha('#fff', 0.06)} 100%)`
-            : `linear-gradient(145deg, ${theme.palette.background.paper} 0%, ${alpha('#000', 0.02)} 100%)`,
+        p: 5,
+        background: theme.palette.background.paper,
         boxShadow: theme.shadows[2],
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'stretch',
         justifyContent: 'center',
-        gap: 3,
+        gap: 4,
         position: 'relative',
         overflow: 'hidden',
         minHeight: 480,
         maxWidth: 900,
-        margin: '32px auto',
+        margin: 'var(--space-6) auto',
         width: '100%',
       }}
     >
-      <AccentBar />
-      <Typography variant="h4" sx={{ fontWeight: 700, mb: 2, color: theme.palette.text.primary }}>
+      <Typography variant="h4" sx={{ fontWeight: 700, mb: 3, color: theme.palette.text.primary }}>
         Just a place to play with JavaScript
       </Typography>
       <Box sx={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column' }}>
@@ -143,11 +137,11 @@ export default function Playground() {
         onClick={runCode}
         variant="contained"
         color="primary"
-        sx={{ alignSelf: 'flex-start', mt: 1, mb: 1 }}
+        sx={{ alignSelf: 'flex-start', mt: 2, mb: 2 }}
       >
         Run
       </Button>
-      <Box sx={{ alignSelf: 'flex-start', mb: 2 }}>
+      <Box sx={{ alignSelf: 'flex-start', mb: 3 }}>
         <HCaptcha
           ref={captchaRef}
           sitekey={hCaptchaSiteKey}
@@ -161,7 +155,7 @@ export default function Playground() {
           background: theme.palette.background.paper,
           color: theme.palette.text.primary,
           minHeight: 80,
-          padding: 2,
+          padding: 3,
           fontFamily: 'monospace',
           width: '100%',
           overflowX: 'auto',

@@ -1,115 +1,154 @@
 import React from 'react';
-import { Typography, Box, useTheme, Paper, Button } from '@mui/material';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import AccentBar from './AccentBar';
+import { Box, Typography, Button, Container } from '@mui/material';
+import { Link } from 'react-router-dom';
+import './HeroBanner.css';
+
+export const heroSkills = [
+  'Frontend Engineering (React / TypeScript)',
+  'Backend Engineering (Python / Java / Node)',
+  'Cloud Architecture',
+  'Event-driven systems',
+  'Microservices',
+  'Kubernetes',
+  'CI/CD Pipelines',
+  'Observability',
+];
 
 const HeroBanner: React.FC = () => {
-  const theme = useTheme();
-
   return (
-    <Paper
-      elevation={3}
-      sx={{
-        p: { xs: 2, md: 4 },
-        background: theme.palette.background.paper,
-        boxShadow: theme.shadows[2],
-        display: 'flex',
-        flexDirection: { xs: 'column', md: 'row' },
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: 4,
-        position: 'relative',
-        overflow: 'hidden',
-        transition: theme.transitions.create('box-shadow', { duration: theme.transitions.duration.standard }),
-        '&:hover': { boxShadow: theme.shadows[3] },
-      }}
-    >
-      {/* Top accent bar */}
-      <AccentBar />
-
-      {/* Logo Section */}
-      <Box
-        sx={{
-          flex: '0 0 auto',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          zIndex: 1,
-        }}
-      >
-        <img
-          src="/images/ABE.png"
-          alt="ABE - Architect, Build, Elevate"
-          style={{
-            maxWidth: '300px',
-            width: '100%',
-            height: 'auto',
-            filter: theme.palette.mode === 'dark' ? 'brightness(1.1)' : 'brightness(0.9)',
-            transition: theme.transitions.create('box-shadow', { duration: theme.transitions.duration.short }),
-            boxShadow: theme.shadows[1],
-            borderRadius: '4px',
-          }}
-        />
-      </Box>
-
-      {/* Content Section */}
-      <Box
-        sx={{
-          flex: 1,
-          textAlign: { xs: 'center', md: 'left' },
-          maxWidth: { xs: '100%', md: '600px' },
-          zIndex: 1,
-        }}
-      >
-        <Typography
-          variant="h5"
-          component="p"
+    <Box component="section" className="hero" sx={{ position: 'relative', py: { xs: 6, md: 10 } }}>
+      <Container maxWidth="lg" sx={{ px: { xs: 2, md: 4 } }}>
+        {/* CSS Grid instead of Grid2 */}
+        <Box
+          className="hero-grid"
           sx={{
-            mb: 3,
-            lineHeight: 1.6,
-            color: theme.palette.text.primary,
-            fontWeight: 400,
-            fontSize: { xs: '1.1rem', md: '1.3rem' },
+            display: 'grid',
+            alignItems: 'center',
+            gap: { xs: 3, md: 6 },
+            // two columns at md+, single column on mobile
+            gridTemplateColumns: { xs: '1fr', md: 'minmax(420px, 0.95fr) 1.05fr' },
           }}
         >
-          I architect cloud-native systems, build reliable software, and elevate ideas into
-          scalable, secure applications.
-        </Typography>
+          {/* Copy first on mobile, second on desktop */}
+          <Box
+            className="hero-copy"
+            sx={{
+              order: { xs: 1, md: 2 },
+              maxWidth: { md: '64ch' },
+            }}
+          >
+            <Typography
+              variant="h1"
+              className="hero-title"
+              sx={{
+                fontWeight: 800,
+                lineHeight: 1.05,
+                letterSpacing: '-0.01em',
+                fontSize: { xs: 'clamp(2rem, 8vw, 2.6rem)', md: 'clamp(2.4rem, 3.6vw, 3.2rem)' },
+                mb: 1.5,
+              }}
+            >
+              Systems that scale. Software that lasts.
+            </Typography>
 
-        <Typography
-          variant="h6"
-          component="p"
-          sx={{
-            color: theme.palette.text.secondary,
-            fontStyle: 'italic',
-            lineHeight: 1.5,
-            fontSize: { xs: '1rem', md: '1.1rem' },
-          }}
-        >
-          My mission is to turn complexity into clarity—delivering solutions that are efficient,
-          maintainable, and built to grow.
-        </Typography>
+            <Typography
+              variant="h5"
+              className="hero-sub"
+              sx={{ fontWeight: 500, color: 'var(--color-secondary-hex)', mb: 2 }}
+            >
+              Cloud architecture, platform engineering, and calm reliability.
+            </Typography>
 
-        {/* Call-to-action button */}
-        <Button
-          variant="contained"
-          color="primary"
-          size="large"
-          endIcon={<ArrowForwardIcon />}
-          sx={{
-            mt: 4,
-            px: 4,
-            fontSize: { xs: '1rem', md: '1.1rem' },
-            transition: theme.transitions.create(['background-color', 'box-shadow', 'transform'], {
-              duration: theme.transitions.duration.standard,
-            }),
-          }}
-          href="/contact"
-        >
-          Let's Connect
-        </Button>
-      </Box>
-    </Paper>
+            <Typography
+              variant="body1"
+              className="hero-blurb"
+              sx={{ color: 'var(--color-text-secondary-hex)', lineHeight: 1.75, mb: 3 }}
+            >
+              I help teams go from prototype to production with infrastructure that’s cost-aware,
+              resilient, and easy to evolve.
+            </Typography>
+
+            <Box className="hero-actions" sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', mb: 2 }}>
+              <Button
+                component={Link}
+                to="/contact"
+                className="button-primary"
+                variant="contained"
+                size="large"
+                sx={{ borderRadius: 'var(--radius-md)' }}
+              >
+                Let’s design it
+              </Button>
+              <Button
+                component={Link}
+                to="/experience"
+                className="button-ghost"
+                variant="outlined"
+                size="large"
+                sx={{ borderRadius: 'var(--radius-md)' }}
+              >
+                See experience
+              </Button>
+            </Box>
+
+            {/* Make proof chips a single row with graceful wrap; small to reduce height */}
+            <Box
+              component="ul"
+              className="hero-proof"
+              sx={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                gap: 1,
+                p: 0,
+                m: 0,
+                listStyle: 'none',
+                color: 'var(--color-text-muted-hex)',
+              }}
+            >
+              {heroSkills.map((t) => (
+                <Typography
+                  key={t}
+                  component="li"
+                  sx={{
+                    fontSize: '0.9rem',
+                    border: '1px solid var(--color-border)',
+                    borderRadius: 'var(--radius-sm)',
+                    px: 1.1,
+                    py: 0.35,
+                    background: 'color-mix(in oklch, var(--color-accent) 6%, var(--color-surface))',
+                  }}
+                >
+                  {t}
+                </Typography>
+              ))}
+            </Box>
+          </Box>
+
+          {/* Media second on mobile, first on desktop */}
+          <Box
+            className="hero-media"
+            sx={{ order: { xs: 2, md: 1 }, justifySelf: { md: 'start' } }}
+          >
+            <Box
+              component="img"
+              src="/images/working.jpg"
+              alt="Architect. Build. Elevate."
+              className="hero-image"
+              sx={{
+                display: 'block',
+                width: '100%',
+                height: 'auto',
+                borderRadius: 'var(--radius-lg)',
+                boxShadow: 'var(--shadow-2)',
+                // keep image from getting too tall → reduces vertical feel
+                maxHeight: { md: 420 },
+                objectFit: 'cover',
+              }}
+            />
+          </Box>
+        </Box>
+      </Container>
+    </Box>
   );
 };
 

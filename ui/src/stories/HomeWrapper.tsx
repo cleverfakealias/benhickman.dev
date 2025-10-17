@@ -3,7 +3,6 @@ import { Container } from '@mui/material';
 import HeroBanner from '../components/common/HeroBanner';
 import HomeSummary from '../components/features/HomeSummary';
 import BlogCard from '../components/features/blog/BlogCard';
-import TypewriterCode from '../components/features/TypewriterCode';
 import { BlogPost } from '../components/features/sanity/types';
 
 interface HomeWrapperProps {
@@ -19,7 +18,6 @@ export default function HomeWrapper({
   showMockData = false,
 }: HomeWrapperProps): React.ReactElement {
   const [firstPost, setFirstPost] = useState<BlogPost | null>(null);
-  const codeText = `// Welcome, curious coder!\nfunction greet(name) {\n  console.log(\`👋 Hi \${name},\nglad you're here!\`);\n}\n// Let's see who's visiting...\nconst visitor = 'awesome guest';\n// Say hello!\ngreet(visitor);\n// Output:\n// 👋 Hi awesome guest, glad you're here!\n// Want to learn, build, and explore?\n// Click the blog card on the left! <-`;
 
   useEffect(() => {
     if (showMockData && mockPosts.length > 0) {
@@ -80,7 +78,6 @@ export default function HomeWrapper({
             justifyContent: 'center',
           }}
         >
-          <TypewriterCode code={codeText} />
         </div>
       </div>
       <HomeSummary />

@@ -15,7 +15,7 @@ export default function BlogGrid({ posts, loading }: BlogGridProps): React.React
     return (
       <Grid2
         container
-        spacing={4}
+        spacing={5}
         direction="row"
         sx={{
           display: 'flex',
@@ -34,7 +34,7 @@ export default function BlogGrid({ posts, loading }: BlogGridProps): React.React
     return (
       <Grid2
         container
-        spacing={4}
+        spacing={5}
         direction="row"
         sx={{
           display: 'flex',
@@ -48,7 +48,7 @@ export default function BlogGrid({ posts, loading }: BlogGridProps): React.React
   }
 
   return (
-    <Grid2 container spacing={4}>
+    <Grid2 container spacing={5}>
       {posts.map((post) => (
         <Grid2 key={post.slug.current} size={{ xs: 12, sm: 6, md: 4 }}>
           <BlogCard post={post} />

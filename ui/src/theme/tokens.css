@@ -1,61 +1,91 @@
-/* Design tokens in OKLCH with hex fallbacks; light and dark themes via [data-theme] */
+/* =======================================================================
+   Brand: Northwoods Modern (Minnesota-inspired)
+   Professional neutral base + Evergreen (primary) + Copper (highlight)
+   ======================================================================= */
 
-:root {
-  /* Color scheme helps form controls pick correct native theme */
-  color-scheme: light;
+/* Base (Neutral Dark) — site default */
+:root,
+html[data-brand='northwoods'] {
+  color-scheme: dark;
 
-  /* Semantic colors (OKLCH first, then hex fallback) */
-  /* Direction A — Ink & Lime (default) */
-  --color-accent: oklch(0.78 0.16 127); /* vivid lime */
-  --color-accent-hex: #59d11f;
-  --color-accent-contrast: oklch(0.25 0.02 255);
-  --color-accent-contrast-hex: #0b0f14;
-  --color-secondary: oklch(0.79 0.11 210); /* fresh cyan */
-  --color-secondary-hex: #33c2dd;
+  /* Base unit for rem */
+  font-size: 16px;
 
-  --color-bg: oklch(0.98 0.01 255);
-  --color-bg-hex: #f8fafc;
-  --color-surface: oklch(0.96 0.01 255);
-  --color-surface-hex: #f3f5f7;
-  --color-overlay: oklch(0.95 0.01 250 / 0.8);
+  /* Fluid spacing scale using clamp(min, preferred, max) */
+  --space-0: 0;
+  --space-1: clamp(6px, 0.6vw, 10px);
+  --space-2: clamp(10px, 0.9vw, 14px);
+  --space-3: clamp(14px, 1.2vw, 18px);
+  --space-4: clamp(18px, 1.6vw, 24px);
+  --space-5: clamp(24px, 2.2vw, 32px);
+  --space-6: clamp(32px, 3vw, 48px);
+  --space-7: clamp(40px, 4vw, 64px);
 
-  --color-text: oklch(0.18 0.02 255);
-  --color-text-hex: #0e1116;
-  --color-text-secondary: oklch(0.55 0.02 255);
-  --color-text-secondary-hex: #4b5563;
-  --color-text-muted: oklch(0.68 0.02 255);
-  --color-text-muted-hex: #8a95a3;
-
-  --color-border: oklch(0.92 0.01 255);
-  --color-border-hex: #e4e8ee;
-  --color-focus: oklch(0.78 0.16 127 / 0.45);
-  --color-focus-hex: #59d11f73;
-
-  --color-success: oklch(0.76 0.12 145);
-  --color-success-hex: #34d399;
-  --color-warning: oklch(0.85 0.12 80);
-  --color-warning-hex: #fbbf24;
-  --color-danger: oklch(0.65 0.18 28);
-  --color-danger-hex: #ef4444;
-
-  /* Typography */
-  --font-sans: 'InterVariable', Inter, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, system-ui, sans-serif;
-  --font-mono: 'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  --type-scale: 1.2; /* modular scale base */
-
-  /* Shape (radii) */
+  /* Radii */
   --radius-xs: 2px;
   --radius-sm: 4px;
   --radius-md: 8px;
   --radius-lg: 12px;
-  --radius-2xl: 20px;
+  --radius-xl: clamp(14px, 1.4vw, 20px); /* grows on big screens */
 
-  /* Elevation (shadows) - subtle, layered */
-  --shadow-1: 0 1px 2px rgba(17, 20, 24, 0.06), 0 1px 1px rgba(17, 20, 24, 0.04);
-  --shadow-2: 0 2px 6px rgba(17, 20, 24, 0.08), 0 1px 2px rgba(17, 20, 24, 0.06);
-  --shadow-3: 0 6px 12px rgba(17, 20, 24, 0.10), 0 2px 4px rgba(17, 20, 24, 0.08);
-  --shadow-4: 0 10px 20px rgba(17, 20, 24, 0.12), 0 4px 6px rgba(17, 20, 24, 0.10);
-  --shadow-5: 0 18px 36px rgba(17, 20, 24, 0.16), 0 8px 12px rgba(17, 20, 24, 0.12);
+  /* Semantic spacers */
+  --gap-card: var(--space-4);
+  --gap-stack: var(--space-5); /* gaps between related items */
+  --gap-section: var(--space-7); /* gaps between sections */
+  --pad-card: var(--space-4);
+  --pad-section: var(--space-7);
+
+  /* Accents (desaturated evergreen; copper for highlight only) */
+  --color-accent: oklch(0.55 0.07 170);
+  --color-accent-hex: #2e5e49; /* Evergreen (primary, toned down) */
+  --color-accent-contrast: oklch(0.98 0.01 95);
+  --color-accent-contrast-hex: #ffffff;
+
+  --color-secondary: oklch(0.68 0.12 55);
+  --color-secondary-hex: #c1663e; /* Copper (highlight) */
+
+  /* Surfaces (neutral charcoal; no green tint) */
+  --color-bg: oklch(0.15 0.01 180);
+  --color-bg-hex: #0c0f0d; /* Background */
+  --color-surface: oklch(0.19 0.01 180);
+  --color-surface-hex: #131715; /* Elevated surface */
+  --color-overlay: oklch(0.18 0.01 180 / 0.8);
+
+  /* Text (neutral grays) */
+  --color-text: oklch(0.94 0.01 95);
+  --color-text-hex: #e6e8e6; /* Primary text */
+  --color-text-secondary: oklch(0.82 0.01 160);
+  --color-text-secondary-hex: #b8bdb8; /* Secondary */
+  --color-text-muted: oklch(0.72 0.01 160);
+  --color-text-muted-hex: #96a098; /* Muted */
+
+  /* Lines & focus */
+  --color-border: oklch(0.33 0.01 180);
+  --color-border-hex: #1f2420; /* Divider */
+  --color-focus: oklch(0.55 0.07 170 / 0.45);
+  --color-focus-hex: #2e5e4973;
+
+  /* Status (harmonized to neutral base) */
+  --color-success: oklch(0.69 0.1 160);
+  --color-success-hex: #57a773;
+  --color-warning: oklch(0.82 0.13 75);
+  --color-warning-hex: #e9b44c;
+  --color-danger: oklch(0.63 0.15 28);
+  --color-danger-hex: #d1603d;
+  --color-info: oklch(0.69 0.06 210);
+  --color-info-hex: #6ba3be; /* Lake teal (links/hover) */
+
+  /* Typography */
+  --font-sans:
+    'InterVariable', Inter, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, system-ui, sans-serif;
+  --font-mono:
+    'JetBrains Mono Variable', 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas,
+    monospace;
+
+  /* Shadows (neutral, no glow) */
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.26), 0 1px 1px rgba(0, 0, 0, 0.18);
+  --shadow-2: 0 2px 6px rgba(0, 0, 0, 0.32), 0 1px 2px rgba(0, 0, 0, 0.24);
+  --shadow-3: 0 6px 12px rgba(0, 0, 0, 0.4), 0 2px 4px rgba(0, 0, 0, 0.3);
 
   /* Motion */
   --motion-100: 100ms;
@@ -68,94 +98,76 @@
   --easing-exit: cubic-bezier(0.4, 0, 1, 1);
 }
 
-/* Dark theme */
-html[data-theme='dark'] {
-  color-scheme: dark;
-  /* Direction A — Ink & Lime (dark) */
-  --color-accent: oklch(0.76 0.16 127);
-  --color-accent-hex: #72dd2b;
-  --color-accent-contrast: oklch(0.98 0.01 255);
-  --color-accent-contrast-hex: #f8fafc;
-  --color-secondary: oklch(0.76 0.11 210);
-  --color-secondary-hex: #4dd0e8;
+/* Light — crisp, not washed */
+html[data-theme='light'],
+html[data-theme='light'][data-brand='northwoods'] {
+  color-scheme: light;
 
-  --color-bg: oklch(0.15 0.01 255);
-  --color-bg-hex: #0b1015;
-  --color-surface: oklch(0.19 0.01 255);
-  --color-surface-hex: #10161d;
-  --color-overlay: oklch(0.18 0.01 255 / 0.8);
-
-  --color-text: oklch(0.95 0.01 255);
-  --color-text-hex: #edf2f7;
-  --color-text-secondary: oklch(0.78 0.02 255);
-  --color-text-secondary-hex: #c8d0da;
-  --color-text-muted: oklch(0.68 0.02 255);
-  --color-text-muted-hex: #9aa7b6;
-
-  --color-border: oklch(0.34 0.01 255);
-  --color-border-hex: #2a3441;
-  --color-focus: oklch(0.76 0.16 127 / 0.45);
-  --color-focus-hex: #72dd2b73;
-
-  --color-success: oklch(0.76 0.12 145);
-  --color-success-hex: #34d399;
-  --color-warning: oklch(0.82 0.12 80);
-  --color-warning-hex: #f59e0b;
-  --color-danger: oklch(0.65 0.18 28);
-  --color-danger-hex: #ef4444;
-
-  /* Elevation tuned darker */
-  --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.30), 0 1px 1px rgba(0, 0, 0, 0.25);
-  --shadow-2: 0 2px 6px rgba(0, 0, 0, 0.35), 0 1px 2px rgba(0, 0, 0, 0.28);
-  --shadow-3: 0 6px 12px rgba(0, 0, 0, 0.40), 0 2px 4px rgba(0, 0, 0, 0.32);
-  --shadow-4: 0 10px 20px rgba(0, 0, 0, 0.45), 0 4px 6px rgba(0, 0, 0, 0.36);
-  --shadow-5: 0 18px 36px rgba(0, 0, 0, 0.50), 0 8px 12px rgba(0, 0, 0, 0.40);
-}
-
-/* Optional Direction B — Mineral Warmth */
-html[data-brand='mineral'] {
-  /* warm stone neutrals with rust + muted teal */
-  --color-accent: oklch(0.66 0.17 35);
-  --color-accent-hex: #cf6a3a; /* desaturated rust */
-  --color-accent-contrast: oklch(0.21 0.01 70);
-  --color-accent-contrast-hex: #0f0d0b;
-  --color-secondary: oklch(0.72 0.10 200);
-  --color-secondary-hex: #57a6a3; /* muted teal */
-
+  /* Neutrals */
   --color-bg: oklch(0.98 0.01 95);
-  --color-bg-hex: #fafaf8;
-  --color-surface: oklch(0.96 0.01 95);
-  --color-surface-hex: #f4f3f1;
-  --color-text: oklch(0.18 0.01 70);
-  --color-text-hex: #14110f;
-  --color-text-secondary: oklch(0.58 0.02 70);
-  --color-text-secondary-hex: #6b625c;
-  --color-border: oklch(0.92 0.01 95);
-  --color-border-hex: #e8e4de;
-  --color-focus: oklch(0.66 0.17 35 / 0.45);
-  --color-focus-hex: #cf6a3a73;
+  --color-bg-hex: #f5f7f6; /* slightly cooler, cleaner */
+  --color-surface: oklch(0.995 0.005 95);
+  --color-surface-hex: #fafbfb; /* softer white for cards - blends better */
+  --color-overlay: oklch(0.97 0.01 95 / 0.85);
+
+  /* Text (ink-like, not gray — boosted contrast) */
+  --color-text: oklch(0.21 0.03 250);
+  --color-text-hex: #141b20; /* primary body (ink black) */
+  --color-text-secondary: oklch(0.55 0.02 240);
+  --color-text-secondary-hex: #53616a; /* secondary */
+  --color-text-muted: oklch(0.67 0.02 240);
+  --color-text-muted-hex: #7a8891;
+
+  /* Accents (same brand, slightly stronger in light) */
+  --color-accent: oklch(0.58 0.08 170);
+  --color-accent-hex: #2f5a47; /* evergreen */
+  --color-accent-contrast: oklch(0.98 0.01 95);
+  --color-accent-contrast-hex: #ffffff;
+
+  --color-secondary: oklch(0.69 0.13 55);
+  --color-secondary-hex: #b65c39; /* copper */
+
+  /* Hairlines/borders (1px should be visible) */
+  --color-border: oklch(0.9 0.01 95);
+  --color-border-hex: #d8dedb; /* darker than before */
+  --color-focus: oklch(0.58 0.08 170 / 0.35);
+  --color-focus-hex: #2f5a474f;
+
+  /* Status (tuned for light) */
+  --color-success: oklch(0.57 0.1 160);
+  --color-success-hex: #2f8a5f;
+  --color-warning: oklch(0.7 0.13 75);
+  --color-warning-hex: #c9831e;
+  --color-danger: oklch(0.58 0.15 28);
+  --color-danger-hex: #b54539;
+  --color-info: oklch(0.55 0.06 210);
+  --color-info-hex: #2a7a90; /* lake-teal links */
+
+  /* Shadows (distinct but gentle — crisper edges) */
+  --shadow-1: 0 1px 3px rgba(16, 24, 28, 0.08), 0 1px 1px rgba(16, 24, 28, 0.05);
+  --shadow-2: 0 4px 12px rgba(16, 24, 28, 0.1), 0 2px 4px rgba(16, 24, 28, 0.06);
+  --shadow-3: 0 10px 24px rgba(16, 24, 28, 0.12), 0 4px 8px rgba(16, 24, 28, 0.08);
 }
 
-html[data-theme='dark'][data-brand='mineral'] {
-  --color-accent: oklch(0.72 0.14 35);
-  --color-accent-hex: #e17a50;
-  --color-accent-contrast: oklch(0.97 0.01 95);
-  --color-accent-contrast-hex: #f7f6f4;
-  --color-secondary: oklch(0.75 0.09 200);
-  --color-secondary-hex: #69b8b5;
+/* Dark override — keeps same base, allows future per-mode tweaks */
+html[data-theme='dark'],
+html[data-theme='dark'][data-brand='northwoods'] {
+  color-scheme: dark;
 
-  --color-bg: oklch(0.16 0.01 95);
-  --color-bg-hex: #12100e;
-  --color-surface: oklch(0.2 0.01 95);
-  --color-surface-hex: #171412;
-  --color-text: oklch(0.95 0.01 95);
-  --color-text-hex: #f2f0ee;
-  --color-text-secondary: oklch(0.78 0.01 95);
-  --color-text-secondary-hex: #cdc7c1;
-  --color-border: oklch(0.33 0.01 95);
-  --color-border-hex: #2b2622;
-  --color-focus: oklch(0.72 0.14 35 / 0.45);
-  --color-focus-hex: #e17a5073;
+  /* If you want slightly stronger contrast in explicit dark mode, nudge here: */
+  --color-surface: oklch(0.18 0.01 180);
+  --color-surface-hex: #111412;
+
+  /* Primary stays neutral + desaturated evergreen */
+  --color-accent: oklch(0.55 0.07 170);
+  --color-accent-hex: #2e5e49;
+
+  --color-secondary: oklch(0.69 0.12 55);
+  --color-secondary-hex: #d07a4e; /* a hair brighter for contrast on dark */
+
+  /* Shadows slightly denser on explicit dark */
+  --shadow-2: 0 2px 6px rgba(0, 0, 0, 0.35), 0 1px 2px rgba(0, 0, 0, 0.26);
+  --shadow-3: 0 6px 12px rgba(0, 0, 0, 0.42), 0 2px 4px rgba(0, 0, 0, 0.32);
 }
 
 /* Reduced motion */
@@ -167,4 +179,84 @@ html[data-theme='dark'][data-brand='mineral'] {
     --motion-300: 0ms;
     --motion-500: 0ms;
   }
+}
+
+/* =======================================================================
+   Component patterns — cards feel separate without heavy chrome
+   ======================================================================= */
+
+/* Cards feel separate without heavy chrome */
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-1);
+  border-radius: var(--radius-md);
+  transition: box-shadow var(--motion-200) var(--easing-standard);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-2);
+}
+
+/* Links and CTAs carry the color */
+a {
+  color: var(--color-info-hex);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--motion-150) var(--easing-standard);
+}
+
+a:hover {
+  border-bottom-color: currentColor;
+}
+
+a:focus {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+  border-radius: var(--radius-xs);
+}
+
+/* Button primary */
+.button-primary {
+  background: var(--color-accent-hex);
+  color: var(--color-accent-contrast-hex);
+  border: none;
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-5);
+  font-weight: 600;
+  cursor: pointer;
+  transition: filter var(--motion-150) var(--easing-standard);
+}
+
+.button-primary:hover {
+  filter: brightness(1.06);
+}
+
+.button-primary:focus {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+}
+
+/* Button secondary */
+.button-secondary {
+  background: transparent;
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-5);
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    border-color var(--motion-150) var(--easing-standard),
+    background var(--motion-150) var(--easing-standard);
+}
+
+.button-secondary:hover {
+  border-color: var(--color-accent-hex);
+  background: color-mix(in oklch, var(--color-accent) 8%, transparent);
+}
+
+.button-secondary:focus {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
 }

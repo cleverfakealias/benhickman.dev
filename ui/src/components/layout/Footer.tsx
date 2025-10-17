@@ -1,17 +1,9 @@
 import React, { useState } from 'react';
-import {
-  Avatar,
-  Box,
-  Typography,
-  Menu,
-  MenuItem,
-  IconButton,
-  Tooltip,
-  useTheme,
-} from '@mui/material';
+import { Box, Typography, Menu, MenuItem, IconButton, Tooltip, useTheme } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import './Footer.css';
 import Socials from './Socials';
+import { FaSun, FaMoon } from 'react-icons/fa';
 
 // Quick Links Dropdown Component and navLinks must be outside Footer
 const navLinks = [
@@ -42,7 +34,24 @@ const FooterQuickLinks: React.FC = () => {
           aria-expanded={open ? 'true' : undefined}
           onClick={handleClick}
           size="small"
-          sx={{ color: 'text.secondary' }}
+          sx={{
+            width: 32,
+            height: 32,
+            color: 'var(--color-text-secondary-hex)',
+            opacity: 0.7,
+            border: '1px solid transparent',
+            transition:
+              'color 0.15s var(--easing-standard), ' +
+              'opacity 0.15s var(--easing-standard), ' +
+              'border-color 0.15s var(--easing-standard), ' +
+              'background 0.15s var(--easing-standard)',
+            '&:hover': {
+              color: 'var(--color-accent-hex)',
+              opacity: 1,
+              borderColor: 'var(--color-border)',
+              background: 'color-mix(in oklch, var(--color-accent) 8%, transparent)',
+            },
+          }}
         >
           <MoreVertIcon />
         </IconButton>
@@ -72,67 +81,36 @@ const FooterQuickLinks: React.FC = () => {
   );
 };
 
-import { FaSun, FaMoon } from 'react-icons/fa';
-
 interface FooterProps {
   themeMode: string;
   setThemeMode: (mode: string) => void;
 }
 
-import { getDomainConfig } from '../../config/domainConfig';
-
 const Footer: React.FC<FooterProps> = ({ themeMode, setThemeMode }) => {
   const theme = useTheme();
-  const { branding: brand } = getDomainConfig();
   const isDark = themeMode === 'dark';
+
   return (
-    <footer
-      className="footer"
-      role="contentinfo"
-      aria-label="Site footer"
-      style={{ padding: '0 16px' }}
-    >
-      <Box
-        className="footer-content"
-        sx={{
-          display: 'flex',
-          flexDirection: { xs: 'column', md: 'row' },
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          width: '100%',
-          maxWidth: 1200,
-          margin: '0 auto',
-          boxSizing: 'border-box',
-          padding: { xs: '8px 0', md: '8px 0' },
-          gap: { xs: 0.5, md: 0 },
-        }}
-      >
-        {/* Left side - Logo and mission */}
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '0.5rem',
-            order: { xs: 1, md: 1 },
-          }}
-        >
-          <Avatar
-            src={brand.logo}
-            alt={brand.alt}
+    <footer className="footer" role="contentinfo" aria-label="Site footer">
+      <Box className="footer-content">
+        {/* Left: Tagline with copper accent dot */}
+        <Box className="footer-cell-left" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <Box
             sx={{
-              width: { xs: 20, md: 20 },
-              height: { xs: 20, md: 20 },
-              border: `1.5px solid ${theme.palette.secondary.main}`,
-              boxShadow: theme.shadows[1],
-              bgcolor: theme.palette.common.white,
+              width: 6,
+              height: 6,
+              borderRadius: '50%',
+              bgcolor: 'var(--color-secondary-hex)',
+              flexShrink: 0,
             }}
           />
           <Typography
             sx={{
+              fontSize: { xs: '0.75rem', md: '0.8125rem' },
               fontWeight: 600,
-              fontSize: { xs: '0.8rem', md: '0.85rem' },
-              color: theme.palette.secondary.main,
-              letterSpacing: '0.04em',
+              color: theme.palette.text.secondary,
+              letterSpacing: '0.02em',
+              whiteSpace: 'nowrap',
             }}
             aria-label="Mission statement"
           >
@@ -140,27 +118,26 @@ const Footer: React.FC<FooterProps> = ({ themeMode, setThemeMode }) => {
           </Typography>
         </Box>
 
-        {/* Center - Copyright (desktop only) */}
-        <Typography
-          sx={{
-            textAlign: 'center',
-            fontSize: '0.85rem',
-            color: theme.palette.common.white,
-            opacity: 0.85,
-            display: { xs: 'none', md: 'block' },
-            order: { xs: 3, md: 2 },
-          }}
-        >
-          &copy; {new Date().getFullYear()} Ben Hickman. All rights reserved.
-        </Typography>
+        {/* Center: Copyright */}
+        <Box className="footer-cell-center">
+          <Typography
+            sx={{
+              fontSize: { xs: '0.7rem', md: '0.8125rem' },
+              color: theme.palette.text.secondary,
+              opacity: 0.7,
+            }}
+          >
+            © {new Date().getFullYear()} Ben Hickman
+          </Typography>
+        </Box>
 
-        {/* Right side - Actions */}
+        {/* Right: Icons */}
         <Box
+          className="footer-cell-right"
           sx={{
             display: 'flex',
             alignItems: 'center',
-            gap: { xs: '0.25rem', md: '0.5rem' },
-            order: { xs: 2, md: 3 },
+            gap: { xs: 0.5, md: 1 },
           }}
         >
           <FooterQuickLinks />
@@ -169,33 +146,27 @@ const Footer: React.FC<FooterProps> = ({ themeMode, setThemeMode }) => {
             aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
             onClick={() => setThemeMode(isDark ? 'light' : 'dark')}
             sx={{
-              color: isDark ? theme.palette.secondary.main : theme.palette.primary.main,
-              background: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(140,210,239,0.10)',
-              border: `1.5px solid ${theme.palette.secondary.main}`,
-              width: { xs: 28, md: 28 },
-              height: { xs: 28, md: 28 },
-              transition: 'background 0.3s, color 0.3s',
+              width: 32,
+              height: 32,
+              color: theme.palette.text.secondary,
+              opacity: 0.7,
+              border: '1px solid transparent',
+              transition:
+                'color 0.15s var(--easing-standard), ' +
+                'opacity 0.15s var(--easing-standard), ' +
+                'border-color 0.15s var(--easing-standard), ' +
+                'background 0.15s var(--easing-standard)',
+              '&:hover': {
+                color: 'var(--color-accent-hex)',
+                opacity: 1,
+                borderColor: 'var(--color-border)',
+                background: 'color-mix(in oklch, var(--color-accent) 8%, transparent)',
+              },
             }}
-            size="small"
           >
-            {isDark ? <FaSun size={16} /> : <FaMoon size={14} />}
+            {isDark ? <FaSun size={14} /> : <FaMoon size={12} />}
           </IconButton>
         </Box>
-
-        {/* Mobile copyright (bottom) */}
-        <Typography
-          sx={{
-            textAlign: 'center',
-            fontSize: '0.75rem',
-            color: theme.palette.common.white,
-            opacity: 0.75,
-            display: { xs: 'block', md: 'none' },
-            order: { xs: 3, md: 4 },
-            marginTop: '2px',
-          }}
-        >
-          &copy; {new Date().getFullYear()} Ben Hickman
-        </Typography>
       </Box>
     </footer>
   );

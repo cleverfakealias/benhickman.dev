@@ -19,13 +19,7 @@ const Socials: React.FC = () => {
   return (
     <div
       className="socials"
-      style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        gap: '1rem',
-        width: '100%',
-      }}
+      style={{ display: 'flex', gap: 'var(--space-1)', alignItems: 'center' }}
     >
       {socials.map((social) => (
         <a
@@ -34,14 +28,6 @@ const Socials: React.FC = () => {
           target="_blank"
           rel="noopener noreferrer"
           aria-label={social.name}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: '0.5rem',
-            borderRadius: '4px',
-            transition: 'all 0.2s ease',
-          }}
         >
           {social.icon}
         </a>

@@ -7,8 +7,8 @@ export default function PageShell({ children }: PropsWithChildren) {
     <Container
       maxWidth="lg"
       sx={{
-        px: { xs: 2, md: 4 },
-        py: { xs: 3, md: 6 },
+        px: 5,
+        py: 6,
         bgcolor: 'background.default',
         color: 'text.primary',
       }}
@@ -17,7 +17,7 @@ export default function PageShell({ children }: PropsWithChildren) {
         sx={{
           display: 'flex',
           flexDirection: 'column',
-          gap: { xs: 2, md: 3 },
+          gap: 4,
         }}
       >
         {children}

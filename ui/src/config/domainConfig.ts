@@ -15,23 +15,13 @@ export interface DomainConfig {
   branding: BrandInfo;
 }
 
+const formspreeUrl = import.meta.env.VITE_FORMSPREE_URL || '';
+const hCaptchaSiteKey = import.meta.env.VITE_HCAPTCHA_SITEKEY || '';
+
 export const domainConfigs: Record<string, DomainConfig> = {
-  'zengineer.cloud': {
-    formspreeUrl: import.meta.env.VITE_FORMSPREE_URL || '',
-    hCaptchaSiteKey: import.meta.env.VITE_HCAPTCHA_SITEKEY || '',
-    branding: {
-      name: 'Zengineer.cloud',
-      logo: '/images/zengineer dark logo 2.png',
-      alt: 'Zengineer monogram logo',
-      subtitle: 'Cloud Architecture and Development',
-      title: 'Zengineer.cloud | Architecture and Software Engineering',
-      description:
-        'Zengineer.cloud provides expert cloud architecture and development services, specializing in scalable, modern software solutions.',
-    },
-  },
   'zennlogic.com': {
-    formspreeUrl: import.meta.env.VITE_FORMSPREE_URL || '',
-    hCaptchaSiteKey: import.meta.env.VITE_HCAPTCHA_SITEKEY || '',
+    formspreeUrl: formspreeUrl,
+    hCaptchaSiteKey: hCaptchaSiteKey,
     branding: {
       name: 'ZennLogic',
       logo: '/images/ZL monogram.png',
@@ -43,11 +33,11 @@ export const domainConfigs: Record<string, DomainConfig> = {
     },
   },
   'benhickman.dev': {
-    formspreeUrl: import.meta.env.VITE_FORMSPREE_URL || '',
-    hCaptchaSiteKey: import.meta.env.VITE_HCAPTCHA_SITEKEY || '',
+    formspreeUrl: formspreeUrl,
+    hCaptchaSiteKey: hCaptchaSiteKey,
     branding: {
       name: 'Ben Hickman',
-      logo: '/images/BH monogram.png',
+      logo: '/images/monogram.png',
       alt: 'Ben Hickman logo',
       subtitle: 'Cloud Architecture and Engineering',
       title: 'Ben Hickman | Cloud Architecture and Engineering',
@@ -56,11 +46,11 @@ export const domainConfigs: Record<string, DomainConfig> = {
     },
   },
   localhost: {
-    formspreeUrl: import.meta.env.VITE_FORMSPREE_URL || '',
-    hCaptchaSiteKey: import.meta.env.VITE_HCAPTCHA_SITEKEY || '',
+    formspreeUrl: formspreeUrl,
+    hCaptchaSiteKey: hCaptchaSiteKey,
     branding: {
       name: 'Localhost',
-      logo: '/images/BH monogram.png',
+      logo: '/images/monogram.png',
       alt: 'Ben Hickman logo',
       subtitle: 'Localhost Running',
       title: 'Localhost | Cloud Architecture and Engineering',
@@ -81,7 +71,7 @@ export const getDomainConfig = (hostname?: string): DomainConfig => {
 export const updateMetaTags = (hostname?: string) => {
   const config = getDomainConfig(hostname);
   const host =
-    hostname || (typeof window !== 'undefined' ? window.location.hostname : 'zengineer.cloud');
+    hostname || (typeof window !== 'undefined' ? window.location.hostname : 'benhickman.dev');
 
   document.title = config.branding.title;
 

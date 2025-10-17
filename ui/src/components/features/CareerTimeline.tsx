@@ -1,15 +1,15 @@
 import React from 'react';
 import {
+  Box,
+  Container,
   Typography,
   Card,
   CardContent,
-  Box,
-  useTheme,
-  Container,
-  Avatar,
   Chip,
-  styled,
+  IconButton,
+  Collapse,
 } from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 export interface TimelineItemData {
   title: string;
@@ -18,7 +18,7 @@ export interface TimelineItemData {
   timestamp: string;
   color: 'primary' | 'secondary' | 'success' | 'warning' | 'error';
   icon: React.ReactNode;
-  startDate: string; // For sorting
+  startDate: string; // e.g. "202312" or "2023"
 }
 
 interface CareerTimelineProps {
@@ -26,142 +26,44 @@ interface CareerTimelineProps {
   title?: string;
   description?: string;
   header?: React.ReactNode;
+  recentYearsToShow?: number; // default 3
 }
-
-const TimelineContainer = styled(Box)(({ theme }) => ({
-  position: 'relative',
-  padding: theme.spacing(2, 0),
-  '&::before': {
-    content: '""',
-    position: 'absolute',
-    left: '50%',
-    top: 0,
-    bottom: 0,
-    width: '2px',
-    backgroundColor: theme.palette.divider,
-    transform: 'translateX(-50%)',
-    [theme.breakpoints.down('md')]: {
-      left: '0.75rem',
-    },
-    [theme.breakpoints.down('sm')]: {
-      left: '0.5rem',
-    },
-  },
-}));
-
-const TimelineItem = styled(Box)<{ index: number }>(({ theme, index }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  marginBottom: theme.spacing(4),
-  flexDirection: index % 2 === 0 ? 'row' : 'row-reverse',
-  [theme.breakpoints.down('md')]: {
-    flexDirection: 'row',
-    paddingLeft: {
-      xs: theme.spacing(1),
-      sm: theme.spacing(1.5),
-      md: theme.spacing(2),
-    },
-    marginBottom: {
-      xs: theme.spacing(2),
-      sm: theme.spacing(3),
-      md: theme.spacing(4),
-    },
-  },
-}));
-
-const TimelineContent = styled(Box)<{ index: number }>(({ theme, index }) => ({
-  width: '45%',
-  [theme.breakpoints.down('md')]: {
-    width: 'calc(100vw - 4rem)',
-    marginLeft: { xs: theme.spacing(0.5), sm: theme.spacing(1) },
-    paddingRight: 0,
-    paddingLeft: 0,
-  },
-  ...(index % 2 === 0
-    ? {
-        paddingRight: theme.spacing(4),
-        [theme.breakpoints.down('md')]: {
-          paddingRight: 0,
-        },
-      }
-    : {
-        paddingLeft: theme.spacing(4),
-        [theme.breakpoints.down('md')]: {
-          paddingLeft: 0,
-        },
-      }),
-}));
-
-const TimelineDot = styled(Avatar)<{ color: string }>(({ theme, color }) => ({
-  position: 'absolute',
-  left: '50%',
-  transform: 'translateX(-50%)',
-  width: '3.5rem',
-  height: '3.5rem',
-  zIndex: 2,
-  boxShadow: theme.shadows[4],
-  [theme.breakpoints.down('md')]: {
-    left: '0.75rem',
-    width: '1.5rem',
-    height: '1.5rem',
-  },
-  [theme.breakpoints.down('sm')]: {
-    left: '0.5rem',
-    width: '1.25rem',
-    height: '1.25rem',
-  },
-  ...(color === 'primary' && {
-    backgroundColor: theme.palette.primary.main,
-    color: theme.palette.primary.contrastText,
-  }),
-  ...(color === 'secondary' && {
-    backgroundColor: theme.palette.secondary.main,
-    color: theme.palette.secondary.contrastText,
-  }),
-  ...(color === 'success' && {
-    backgroundColor: theme.palette.success.main,
-    color: theme.palette.success.contrastText,
-  }),
-  ...(color === 'warning' && {
-    backgroundColor: theme.palette.warning.main,
-    color: theme.palette.warning.contrastText,
-  }),
-  ...(color === 'error' && {
-    backgroundColor: theme.palette.error.main,
-    color: theme.palette.error.contrastText,
-  }),
-}));
 
 const CareerTimeline: React.FC<CareerTimelineProps> = ({
   timelineData,
   title,
   description,
   header,
+  recentYearsToShow = 3,
 }) => {
-  const theme = useTheme();
-  const sortedTimelineData = [...timelineData].sort(
-    (a, b) => parseInt(b.startDate) - parseInt(a.startDate)
-  );
+  // Normalize + sort desc by startDate
+  const sorted = [...timelineData].sort((a, b) => parseInt(b.startDate) - parseInt(a.startDate));
+
+  // Group by year
+  const groups = sorted.reduce<Record<string, TimelineItemData[]>>((acc, item) => {
+    const y = item.startDate.slice(0, 4);
+    (acc[y] ||= []).push(item);
+    return acc;
+  }, {});
+  const years = Object.keys(groups).sort((a, b) => parseInt(b) - parseInt(a));
+
+  const [showOlder, setShowOlder] = React.useState(false);
+  const recentYears = years.slice(0, recentYearsToShow);
+  const olderYears = years.slice(recentYearsToShow);
+
   return (
-    <Container
-      maxWidth="lg"
-      sx={{
-        py: { xs: 2, sm: 3, md: 4 },
-        px: { xs: 0, sm: 0.5, md: 1 },
-      }}
-    >
+    <Container maxWidth="lg" sx={{ py: { xs: 6, md: 8 }, px: { xs: 2, md: 4 } }}>
       {(title || description || header) && (
-        <Box sx={{ textAlign: 'center', mb: { xs: 3, sm: 4, md: 6 } }}>
+        <Box sx={{ textAlign: 'center', mb: { xs: 4, md: 6 } }}>
           {title && (
             <Typography
-              variant="h2"
-              component="h1"
-              gutterBottom
+              component="h2"
               sx={{
-                fontWeight: 'bold',
-                color: theme.palette.primary.main,
-                mb: { xs: 1, sm: 2 },
-                fontSize: { xs: '1.5rem', sm: '1.75rem', md: '2rem' },
+                fontWeight: 800,
+                letterSpacing: '-0.01em',
+                fontSize: { xs: '1.8rem', md: '2.2rem' },
+                color: 'var(--color-text)',
+                mb: 1,
               }}
             >
               {title}
@@ -169,97 +71,196 @@ const CareerTimeline: React.FC<CareerTimelineProps> = ({
           )}
           {description && (
             <Typography
-              variant="h5"
-              color="text.secondary"
               sx={{
-                maxWidth: '600px',
+                color: 'var(--color-text-secondary-hex)',
+                maxWidth: 720,
                 mx: 'auto',
-                fontSize: { xs: '0.875rem', sm: '1rem', md: '1.25rem' },
               }}
             >
               {description}
             </Typography>
           )}
           {header}
+          <Box
+            sx={{
+              width: { xs: 64, md: 92 },
+              height: 3,
+              borderRadius: 2,
+              background: 'var(--color-secondary-hex)',
+              mx: 'auto',
+              mt: 2,
+            }}
+          />
         </Box>
       )}
-      <TimelineContainer>
-        {sortedTimelineData.map((item, index) => (
-          <TimelineItem key={index} index={index}>
-            <TimelineDot color={item.color}>{item.icon}</TimelineDot>
-            <TimelineContent index={index}>
-              <Card
-                elevation={3}
-                sx={{
-                  width: '100%',
-                  minWidth: '100%',
-                  maxWidth: '100%',
-                  transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
-                  '&:hover': {
-                    transform: 'translateY(-2px)',
-                    boxShadow: theme.shadows[8],
-                  },
-                  border: `1px solid ${theme.palette.divider}`,
-                }}
-              >
-                <CardContent
-                  sx={{
-                    p: { xs: 1, sm: 1.5, md: 2 },
-                    '&:last-child': { pb: { xs: 1, sm: 1.5, md: 2 } },
-                  }}
-                >
-                  <Chip
-                    label={item.timestamp}
-                    color={item.color}
-                    variant="outlined"
-                    size="small"
-                    sx={{
-                      mb: { xs: 1, sm: 1.5 },
-                      fontSize: { xs: '0.7rem', sm: '0.75rem', md: '0.875rem' },
-                    }}
-                  />
-                  <Typography
-                    variant="h5"
-                    component="h3"
-                    gutterBottom
-                    sx={{
-                      fontWeight: 600,
-                      color: theme.palette.text.primary,
-                      fontSize: { xs: '1rem', sm: '1.1rem', md: '1.25rem' },
-                      lineHeight: { xs: 1.3, sm: 1.4 },
-                    }}
-                  >
-                    {item.title}
-                  </Typography>
-                  <Typography
-                    variant="h6"
-                    color="primary"
-                    sx={{
-                      mb: { xs: 1, sm: 1.5 },
-                      fontWeight: 500,
-                      fontSize: { xs: '0.875rem', sm: '0.9rem', md: '1rem' },
-                    }}
-                  >
-                    {item.subtitle}
-                  </Typography>
-                  <Typography
-                    variant="body1"
-                    color="text.secondary"
-                    sx={{
-                      lineHeight: 1.5,
-                      textAlign: 'left',
-                      fontSize: { xs: '0.8rem', sm: '0.875rem', md: '1rem' },
-                    }}
-                  >
-                    {item.description}
-                  </Typography>
-                </CardContent>
-              </Card>
-            </TimelineContent>
-          </TimelineItem>
+
+      {/* Left rail */}
+      <Box sx={{ position: 'relative' }}>
+        <Box
+          aria-hidden
+          sx={{
+            position: 'absolute',
+            left: 0,
+            top: 0,
+            bottom: 0,
+            width: 2,
+            background: 'var(--color-border)',
+            borderRadius: 1,
+          }}
+        />
+
+        {/* YEARS — Recent first */}
+        {recentYears.map((year) => (
+          <YearSection key={year} year={year} items={groups[year] || []} />
         ))}
-      </TimelineContainer>
+
+        {/* Older years (collapsed) */}
+        {olderYears.length > 0 && (
+          <Box sx={{ mt: { xs: 3, md: 4 } }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, ml: 0 }}>
+              <Typography sx={{ fontWeight: 700, color: 'var(--color-text)' }}>
+                Older entries
+              </Typography>
+              <IconButton
+                className="icon-btn"
+                aria-expanded={showOlder}
+                aria-label={showOlder ? 'Collapse older entries' : 'Show older entries'}
+                onClick={() => setShowOlder((v) => !v)}
+                size="small"
+              >
+                <ExpandMoreIcon
+                  sx={{
+                    transform: showOlder ? 'rotate(180deg)' : 'rotate(0deg)',
+                    transition: 'transform 150ms',
+                  }}
+                />
+              </IconButton>
+            </Box>
+            <Collapse in={showOlder}>
+              {olderYears.map((year) => (
+                <YearSection key={year} year={year} items={groups[year] || []} />
+              ))}
+            </Collapse>
+          </Box>
+        )}
+      </Box>
     </Container>
+  );
+};
+
+const YearSection: React.FC<{
+  year: string;
+  items: TimelineItemData[];
+}> = ({ year, items }) => {
+  return (
+    <Box sx={{ ml: { xs: 3, md: 4 }, mb: { xs: 4, md: 6 } }}>
+      {/* Year label */}
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, mb: 2 }}>
+        <Box
+          sx={{
+            width: 10,
+            height: 10,
+            borderRadius: '50%',
+            background: 'var(--color-secondary-hex)',
+            boxShadow: '0 0 0 3px color-mix(in oklch, var(--color-secondary) 25%, transparent)',
+          }}
+        />
+        <Typography
+          component="h3"
+          sx={{
+            fontWeight: 700,
+            letterSpacing: '0.01em',
+            color: 'var(--color-text)',
+          }}
+        >
+          {year}
+        </Typography>
+      </Box>
+
+      {/* Cards grid */}
+      <Box
+        sx={{
+          display: 'grid',
+          gap: { xs: 2.5, md: 3 },
+          gridTemplateColumns: {
+            xs: '1fr',
+            sm: 'repeat(auto-fit, minmax(280px, 1fr))',
+          },
+        }}
+      >
+        {items.map((item, idx) => (
+          <TimelineCard key={`${year}-${idx}`} item={item} />
+        ))}
+      </Box>
+    </Box>
+  );
+};
+
+const TimelineCard: React.FC<{ item: TimelineItemData }> = ({ item }) => {
+  return (
+    <Card
+      variant="outlined"
+      sx={{
+        background: 'var(--color-surface)',
+        border: '1px solid var(--color-border)',
+        boxShadow: 'var(--shadow-1)',
+        borderRadius: 'var(--radius-lg)',
+        transition:
+          'transform 150ms var(--easing-standard), box-shadow 150ms var(--easing-standard)',
+        '&:hover': { transform: 'translateY(-2px)', boxShadow: 'var(--shadow-2)' },
+      }}
+    >
+      <CardContent sx={{ p: { xs: 2.5, md: 3 } }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25, mb: 1 }}>
+          <Box
+            sx={{
+              width: 32,
+              height: 32,
+              borderRadius: 'var(--radius-sm)',
+              display: 'grid',
+              placeItems: 'center',
+              background: 'color-mix(in oklch, var(--color-accent) 12%, transparent)',
+              color: 'var(--color-accent-hex)',
+            }}
+          >
+            {item.icon}
+          </Box>
+          <Chip
+            label={item.timestamp}
+            size="small"
+            variant="outlined"
+            color={item.color}
+            sx={{ ml: 'auto' }}
+          />
+        </Box>
+
+        <Typography
+          component="h4"
+          sx={{
+            fontWeight: 700,
+            color: 'var(--color-text)',
+            lineHeight: 1.3,
+            mb: 0.5,
+            fontSize: { xs: '1rem', md: '1.1rem' },
+          }}
+        >
+          {item.title}
+        </Typography>
+        <Typography
+          sx={{
+            color: 'var(--color-accent-hex)',
+            fontWeight: 600,
+            mb: 1,
+            fontSize: { xs: '.9rem', md: '1rem' },
+          }}
+        >
+          {item.subtitle}
+        </Typography>
+        <Typography sx={{ color: 'var(--color-text-secondary-hex)', lineHeight: 1.6 }}>
+          {item.description}
+        </Typography>
+      </CardContent>
+    </Card>
   );
 };
 

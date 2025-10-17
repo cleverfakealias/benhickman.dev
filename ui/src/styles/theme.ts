@@ -59,7 +59,7 @@ export const createMnTheme = (mode: 'light' | 'dark') => {
       text: config.text,
     },
     shape: {
-      borderRadius: 4, // Less aggressive, subtle rounding
+      borderRadius: 'var(--radius-sm)' as unknown as number, // Less aggressive, subtle rounding
     },
     typography: {
       fontFamily: [fontFamilies.heading, fontFamilies.body].join(','),
@@ -107,7 +107,7 @@ export const createMnTheme = (mode: 'light' | 'dark') => {
       },
       button: {
         fontWeight: 600,
-        borderRadius: 12,
+        borderRadius: 'var(--radius-lg)' as unknown as number,
         textTransform: 'none',
         letterSpacing: 0,
       },
@@ -236,7 +236,7 @@ export const createMnTheme = (mode: 'light' | 'dark') => {
       // Helper functions for common patterns
       getCardStyles: () => themeUtils.getCardStyles(theme),
       getSocialStyles: () => themeUtils.getSocialStyles(theme),
-      getCallToActionStyles: () => themeUtils.getCallToActionStyles(theme),
+      getCallToActionStyles: () => themeUtils.getCtaStyles(theme),
     },
   };
 };

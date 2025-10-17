@@ -79,19 +79,19 @@ const BlogPostDetail = () => {
   }
 
   return (
-    <Container maxWidth="md" sx={{ py: 4 }}>
+    <Container maxWidth="md" sx={{ py: 5 }}>
       {/* Back to Blog Button */}
       <Button
         component={Link}
         to="/blog"
         startIcon={<ArrowBack />}
-        sx={{ mb: 3, color: theme.palette.text.secondary }}
+        sx={{ mb: 4, color: theme.palette.text.secondary }}
       >
         Back to Blog
       </Button>
 
       {/* Article Header */}
-      <Paper elevation={0} sx={{ p: { xs: 2, md: 4 }, mb: 4 }}>
+      <Paper elevation={0} sx={{ p: 5, mb: 5 }}>
         {/* Featured Image */}
         {post.mainImage && (
           <Box
@@ -108,8 +108,8 @@ const BlogPostDetail = () => {
               width: '100%',
               height: { xs: '250px', md: '400px' },
               objectFit: 'cover',
-              borderRadius: '4px', // Match other cards/images for consistency
-              mb: 3,
+              borderRadius: 'var(--radius-sm)', // Match other cards/images for consistency
+              mb: 4,
             }}
           />
         )}
@@ -124,14 +124,14 @@ const BlogPostDetail = () => {
             color: theme.palette.text.primary,
             fontSize: { xs: '2rem', md: '3rem' },
             lineHeight: 1.2,
-            mb: 3,
+            mb: 4,
           }}
         >
           {post.title}
         </Typography>
 
         {/* Meta Information */}
-        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mb: 4 }}>
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, mb: 5 }}>
           <Chip icon={<AccessTime />} label={formatDate(post.publishedAt)} variant="outlined" />
 
           {post.estimatedReadingTime && (
@@ -140,21 +140,10 @@ const BlogPostDetail = () => {
 
           {post.author && <Chip icon={<Person />} label={post.author} variant="outlined" />}
         </Box>
-
-        {/* Decorative line */}
-        <Box
-          sx={{
-            width: '100%',
-            height: '2px',
-            background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
-            borderRadius: theme.shape.borderRadius,
-            mb: 4,
-          }}
-        />
       </Paper>
 
       {/* Article Content with Paper background */}
-      <Paper elevation={1} sx={{ p: { xs: 2, md: 4 }, mb: 4 }}>
+      <Paper elevation={1} sx={{ p: 5, mb: 5 }}>
         <Box
           sx={{
             '& .blog-content': {

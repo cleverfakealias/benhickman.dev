@@ -68,7 +68,7 @@ export const themeUtils = {
     background: themeUtils.getGradient(theme.palette.mode as ThemeMode, 'card'),
     backdropFilter: 'blur(10px)',
     border: themeUtils.getBorder(theme.palette.mode as ThemeMode, 'card'),
-    borderRadius: 16,
+    borderRadius: 'var(--radius-xl)',
     boxShadow: themeUtils.getShadow(theme.palette.mode as ThemeMode, 'card'),
     overflow: 'hidden',
     position: 'relative' as const,
@@ -90,13 +90,14 @@ export const themeUtils = {
     },
   }),
 
-  getCallToActionStyles: (theme: Theme) => ({
+  // Helper for call-to-action (CTA) button styles
+  getCtaStyles: (theme: Theme) => ({
+    transition: themeUtils.getTransition('smooth'),
     background: themeUtils.getGradient(theme.palette.mode as ThemeMode, 'callToAction'),
-    border: themeUtils.getBorder(theme.palette.mode as ThemeMode, 'card'),
-    borderRadius: 4,
-    '& .MuiTypography-root': {
-      color: theme.palette.mode === 'dark' ? '#ffffff' : 'inherit',
-    },
+    borderRadius: 'var(--radius-sm)',
+    textTransform: 'none' as const,
+    fontWeight: 700,
+    padding: '12px 24px',
   }),
 };
 

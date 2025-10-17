@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { fetchPosts } from './sanity/sanityClient';
-import BlogSkeleton from './BlogSkeleton';
-import { BlogPost } from './sanity/types';
+import { fetchPosts } from '@/components/features/sanity/sanityClient';
+import BlogSkeleton from '@/components/features/blog/BlogSkeleton';
+import { BlogPost } from '@/components/features/sanity/types';
 import { Box, Container, Grid2, Typography, useTheme } from '@mui/material';
-import BlogCard from './blog/BlogCard';
+import BlogCard from '@/components/features/blog/BlogCard';
 
 export default function Blog(): React.ReactElement {
   const [posts, setPosts] = useState<BlogPost[]>([]);
@@ -13,7 +13,7 @@ export default function Blog(): React.ReactElement {
 
   useEffect(() => {
     fetchPosts()
-      .then((posts) => {
+      .then((posts: BlogPost[]) => {
         // Ensure posts are sorted newest to oldest
         const sortedPosts = posts.sort((a: BlogPost, b: BlogPost) => {
           const dateA = new Date(a.publishedAt || a._createdAt || 0);
@@ -23,7 +23,7 @@ export default function Blog(): React.ReactElement {
         setPosts(sortedPosts);
         setLoading(false);
       })
-      .catch((error) => {
+      .catch((error: unknown) => {
         setError('Failed to load blog posts. Please try again later.');
         setLoading(false);
         console.error('Error fetching posts:', error);
@@ -57,18 +57,6 @@ export default function Blog(): React.ReactElement {
         >
           Insights on software architecture, cloud technologies, and building scalable applications
         </Typography>
-
-        {/* Decorative line */}
-        <Box
-          sx={{
-            mt: 3,
-            width: { xs: '100px', md: '150px' },
-            height: '4px',
-            background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
-            borderRadius: theme.shape.borderRadius,
-            mx: 'auto',
-          }}
-        />
       </Box>
 
       {/* Blog Posts Grid */}
