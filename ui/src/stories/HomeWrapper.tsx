@@ -77,8 +77,7 @@ export default function HomeWrapper({
             alignItems: 'center',
             justifyContent: 'center',
           }}
-        >
-        </div>
+        ></div>
       </div>
       <HomeSummary />
     </Container>
