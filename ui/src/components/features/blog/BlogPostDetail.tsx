@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { getPostBySlug } from '../sanity/sanityClient';
+import { getPostBySlug, getPostBySlugPreview } from '../sanity/sanityClient';
 import imageUrlBuilder from '../sanity/imageUrl';
 import { BlogPost } from '../sanity/types';
 import { Container, Typography, Box, Chip, Button, useTheme, Skeleton, Paper } from '@mui/material';
@@ -21,7 +21,9 @@ const BlogPostDetail = () => {
       return;
     }
 
-    getPostBySlug(slug)
+    const isPreview = typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('preview');
+    const loader = isPreview ? getPostBySlugPreview : getPostBySlug;
+    loader(slug)
       .then((data: BlogPost) => {
         if (!data) {
           setError('Post not found');
@@ -79,7 +81,7 @@ const BlogPostDetail = () => {
   }
 
   return (
-    <Container maxWidth="md" sx={{ py: 5 }}>
+    <Container maxWidth="md" sx={{ py: 5 }} data-sanity-edit-target>
       {/* Back to Blog Button */}
       <Button
         component={Link}
@@ -91,7 +93,12 @@ const BlogPostDetail = () => {
       </Button>
 
       {/* Article Header */}
-      <Paper elevation={0} sx={{ p: 5, mb: 5 }}>
+      <Paper
+        elevation={0}
+        sx={{ p: 5, mb: 5 }}
+        data-sanity="post"
+        data-sanity-document-id={post._id}
+      >
         {/* Featured Image */}
         {post.mainImage && (
           <Box

@@ -7,8 +7,8 @@ import { visualizer } from 'rollup-plugin-visualizer';
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
   const isDev = mode === 'development';
-  const keyPath = path.resolve('localhost-key.pem');
-  const certPath = path.resolve('localhost.pem');
+  const keyPath = path.resolve('config/certs/localhost-key.pem');
+  const certPath = path.resolve('config/certs/localhost.pem');
   const hasLocalCerts = fs.existsSync(keyPath) && fs.existsSync(certPath);
 
   const analyze = process.env.ANALYZE === '1';
@@ -18,39 +18,38 @@ export default defineConfig(({ mode }) => {
       react(),
       ...(analyze
         ? [
-            visualizer({
-              filename: 'stats.html',
-              template: 'treemap',
-              gzipSize: true,
-              brotliSize: true,
-              open: true,
-            }),
-          ]
+          visualizer({
+            filename: 'stats.html',
+            template: 'treemap',
+            gzipSize: true,
+            brotliSize: true,
+            open: true,
+          }),
+        ]
         : []),
     ],
     resolve: {
       alias: {
-        '@': path.resolve('src'),
+        '@': path.resolve(import.meta.dirname, 'src'),
       },
     },
     server:
       isDev && hasLocalCerts
         ? {
-            https: {
-              key: fs.readFileSync(keyPath),
-              cert: fs.readFileSync(certPath),
-            },
-          }
+          https: {
+            key: fs.readFileSync(keyPath),
+            cert: fs.readFileSync(certPath),
+          },
+        }
         : {},
     define: {
       // Fix for libraries that expect process.env to be available
       'process.env': {},
-      global: 'globalThis',
     },
     build: {
-      target: 'es2020',
+      target: 'esnext',
       cssCodeSplit: true,
-      sourcemap: process.env.CI ? true : false,
+      sourcemap: !!process.env.CI,
       assetsInlineLimit: 4096,
       rollupOptions: {
         output: {

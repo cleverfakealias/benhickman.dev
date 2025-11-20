@@ -10,7 +10,6 @@ const navLinks = [
   { name: 'Home', href: '/' },
   { name: 'Experience', href: '/experience' },
   { name: 'Career', href: '/career' },
-  { name: 'About', href: '/about' },
   { name: 'Contact', href: '/contact' },
   { name: 'Blog', href: '/blog' },
 ];
@@ -80,6 +79,8 @@ const FooterQuickLinks: React.FC = () => {
     </>
   );
 };
+
+
 
 interface FooterProps {
   themeMode: string;

@@ -2,6 +2,10 @@
   "extends": "./tsconfig.app.json",
   "compilerOptions": {
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "types": [
+      "jest",
+      "@testing-library/jest-dom"
+    ]
   }
 }

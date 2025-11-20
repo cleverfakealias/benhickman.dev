@@ -63,7 +63,7 @@ export default function BlogCard({ post }: BlogCardProps): React.ReactElement {
   };
 
   return (
-    <Card sx={cardSx}>
+    <Card sx={cardSx} data-sanity-edit-target>
       <CardActionArea
         component={Link}
         to={`/blog/post/${post.slug.current}`}
@@ -73,6 +73,8 @@ export default function BlogCard({ post }: BlogCardProps): React.ReactElement {
           flexDirection: 'column',
           alignItems: 'stretch',
         }}
+        data-sanity="post"
+        data-sanity-document-id={post._id}
       >
         {post.mainImage && (
           <CardMedia

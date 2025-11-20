@@ -33,7 +33,7 @@ export const timelineData: TimelineItemData[] = [
     subtitle: 'SPS Commerce',
     description:
       'Advanced full-stack delivery using TypeScript/Java and React UI. Built a data-integration platform with reliable ingestion, persistence, and visualization. Deployed HA workloads to AWS with CloudFormation/Helm and maintained quality via robust unit/integration tests.',
-    timestamp: 'Jan 2020 – May 2021',
+    timestamp: 'Jan 2020 - May 2021',
     color: 'success',
     icon: <ConstructionIcon />,
     startDate: '2020',
@@ -50,7 +50,7 @@ export const timelineData: TimelineItemData[] = [
   },
 
   {
-    title: 'Chisago Lakes Freemasons — Public Website',
+    title: 'Chisago Lakes Freemasons - Public Website',
     subtitle: 'Next.js + Vercel + Cloudflare',
     description:
       'Responsive site with modern UX, SEO best practices, and accessibility improvements across devices; integrated content workflows and ongoing enhancements.',
@@ -85,7 +85,7 @@ export const timelineData: TimelineItemData[] = [
     title: 'AWS Associate Courses Completed',
     subtitle: 'Developer • SysOps Administrator',
     description:
-      'Coursework completed toward AWS Developer and SysOps Associate — reinforcing cloud operations and delivery.',
+      'Coursework completed toward AWS Developer and SysOps Associate - reinforcing cloud operations and delivery.',
     timestamp: '2024',
     color: 'warning',
     icon: <SchoolIcon />,

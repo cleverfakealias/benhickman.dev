@@ -37,20 +37,23 @@ npm install
    - Note your `projectId` and `dataset` (usually `production`).
 
 2. **Configure Environment**:
-   - Create a `.env` file in the `studio/` directory:
+   - Create a `.env` file in the `studio/` directory (use `.env.template` as reference):
      ```
-     SANITY_STUDIO_PROJECT_ID=your-project-id
      SANITY_STUDIO_DATASET=production
+     SANITY_STUDIO_PREVIEW_URL=http://localhost:5173
      ```
+   - **Note**: Project ID is configured in `sanity.config.ts` and `sanity.cli.ts`
 
 3. **Schemas**:
    - Schemas are defined in `schemaTypes/`.
    - Includes: `author.ts`, `blockContent.ts`, `category.ts`, `post.ts`, `index.ts`.
 
 4. **Start Studio**:
+
    ```bash
    npm run dev
    ```
+
    - Opens at `http://localhost:3333`.
 
 ## 🚀 Usage
@@ -61,10 +64,10 @@ npm install
 
 ## 📦 Scripts
 
-| Command       | Description              |
-|---------------|--------------------------|
-| `npm run dev` | Start Studio locally     |
-| `npm run build` | Build for production   |
+| Command         | Description          |
+| --------------- | -------------------- |
+| `npm run dev`   | Start Studio locally |
+| `npm run build` | Build for production |
 
 ## 🤝 Contributing
 

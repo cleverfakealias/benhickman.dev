@@ -52,7 +52,7 @@ const HomeSummary: React.FC = () => {
               variant="body1"
               sx={{ mb: 2, lineHeight: 1.75, color: 'var(--color-text)' }}
             >
-              Technology has been the through-line of my life—what began as curiosity became a
+              Technology has been the through-line of my life. What began as curiosity became a
               career in building systems that help organizations move faster and make better
               decisions. I’ve spent years bridging business goals with technical strategy,
               translating complexity into clarity.
@@ -69,7 +69,7 @@ const HomeSummary: React.FC = () => {
             </Typography>
 
             <Typography variant="body1" sx={{ lineHeight: 1.75, color: 'var(--color-text)' }}>
-              I work across the stack—Python, TypeScript, and Java—to deliver measurable outcomes:
+              I work across the stack using TypeScript, Python and Java to deliver measurable outcomes:
               systems that are stable, cost-efficient, and built to evolve. My focus is on aligning
               engineering excellence with real business value.
             </Typography>

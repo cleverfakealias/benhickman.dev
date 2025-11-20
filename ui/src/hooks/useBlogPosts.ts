@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { fetchPosts } from '../components/features/sanity/sanityClient';
+import { fetchPosts, fetchPostsPreview } from '../components/features/sanity/sanityClient';
 import { BlogPost } from '../components/features/sanity/types';
 
 export function useBlogPosts() {
@@ -7,7 +7,9 @@ export function useBlogPosts() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchPosts()
+    const isPreview = typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('preview');
+    const loader = isPreview ? fetchPostsPreview : fetchPosts;
+    loader()
       .then((posts) => {
         // Ensure posts are sorted newest to oldest
         const sortedPosts = posts.sort((a: BlogPost, b: BlogPost) => {

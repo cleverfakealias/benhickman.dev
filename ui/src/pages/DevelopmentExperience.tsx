@@ -344,7 +344,7 @@ const DevelopmentExperience: React.FC = () => {
     <Container maxWidth="lg" sx={{ py: { xs: 6, md: 8 }, px: { xs: 2, md: 4 } }}>
       <SectionHeader
         title="Development Experience"
-        subtitle="Modern engineering across the stack—focused on reliability, speed, and measurable outcomes."
+        subtitle="Modern engineering across the stack, focused on reliability, speed, and measurable outcomes."
       />
 
       {/* Segmented tabs */}
