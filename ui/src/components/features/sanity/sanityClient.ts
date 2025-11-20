@@ -11,10 +11,12 @@ const clientConfig = {
   // Prefer fresh content so editors see changes reflected quickly
   useCdn: false,
   // Enable stega encoding in preview mode
-  stega: isPreviewMode ? {
-    enabled: true,
-    studioUrl: import.meta.env.VITE_SANITY_STUDIO_URL || 'http://localhost:3333',
-  } : false,
+  stega: isPreviewMode
+    ? {
+        enabled: true,
+        studioUrl: import.meta.env.VITE_SANITY_STUDIO_URL || 'http://localhost:3333',
+      }
+    : false,
 } as const;
 
 // Only create client if we have a valid project ID

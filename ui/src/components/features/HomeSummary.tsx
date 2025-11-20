@@ -69,9 +69,9 @@ const HomeSummary: React.FC = () => {
             </Typography>
 
             <Typography variant="body1" sx={{ lineHeight: 1.75, color: 'var(--color-text)' }}>
-              I work across the stack using TypeScript, Python and Java to deliver measurable outcomes:
-              systems that are stable, cost-efficient, and built to evolve. My focus is on aligning
-              engineering excellence with real business value.
+              I work across the stack using TypeScript, Python and Java to deliver measurable
+              outcomes: systems that are stable, cost-efficient, and built to evolve. My focus is on
+              aligning engineering excellence with real business value.
             </Typography>
           </Box>
 

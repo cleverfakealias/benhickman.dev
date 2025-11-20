@@ -80,8 +80,6 @@ const FooterQuickLinks: React.FC = () => {
   );
 };
 
-
-
 interface FooterProps {
   themeMode: string;
   setThemeMode: (mode: string) => void;

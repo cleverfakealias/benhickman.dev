@@ -21,7 +21,8 @@ const BlogPostDetail = () => {
       return;
     }
 
-    const isPreview = typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('preview');
+    const isPreview =
+      typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('preview');
     const loader = isPreview ? getPostBySlugPreview : getPostBySlug;
     loader(slug)
       .then((data: BlogPost) => {

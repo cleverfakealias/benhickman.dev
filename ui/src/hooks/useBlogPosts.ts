@@ -7,7 +7,8 @@ export function useBlogPosts() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const isPreview = typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('preview');
+    const isPreview =
+      typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('preview');
     const loader = isPreview ? fetchPostsPreview : fetchPosts;
     loader()
       .then((posts) => {

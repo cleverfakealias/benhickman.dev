@@ -18,14 +18,14 @@ export default defineConfig(({ mode }) => {
       react(),
       ...(analyze
         ? [
-          visualizer({
-            filename: 'stats.html',
-            template: 'treemap',
-            gzipSize: true,
-            brotliSize: true,
-            open: true,
-          }),
-        ]
+            visualizer({
+              filename: 'stats.html',
+              template: 'treemap',
+              gzipSize: true,
+              brotliSize: true,
+              open: true,
+            }),
+          ]
         : []),
     ],
     resolve: {
@@ -36,11 +36,11 @@ export default defineConfig(({ mode }) => {
     server:
       isDev && hasLocalCerts
         ? {
-          https: {
-            key: fs.readFileSync(keyPath),
-            cert: fs.readFileSync(certPath),
-          },
-        }
+            https: {
+              key: fs.readFileSync(keyPath),
+              cert: fs.readFileSync(certPath),
+            },
+          }
         : {},
     define: {
       // Fix for libraries that expect process.env to be available
