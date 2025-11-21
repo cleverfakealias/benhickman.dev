@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
-import { fetchHomePage } from '../components/features/sanity/sanityClient';
+import { fetchHomePage, fetchHomePagePreview } from '../components/features/sanity/sanityClient';
 import { HomePage } from '../components/features/sanity/types/home';
 
-export function useSanityHomePage(organizationId: string) {
+export function useSanityHomePage(organizationId: string, isPreview: boolean = false) {
   const [homePage, setHomePage] = useState<HomePage | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
@@ -16,7 +16,9 @@ export function useSanityHomePage(organizationId: string) {
     setLoading(true);
     setError(null);
 
-    fetchHomePage(organizationId)
+    const fetcher = isPreview ? fetchHomePagePreview : fetchHomePage;
+
+    fetcher(organizationId)
       .then((data) => {
         setHomePage(data);
         setLoading(false);
@@ -26,7 +28,7 @@ export function useSanityHomePage(organizationId: string) {
         setError(err);
         setLoading(false);
       });
-  }, [organizationId]);
+  }, [organizationId, isPreview]);
 
   return { homePage, loading, error };
 }

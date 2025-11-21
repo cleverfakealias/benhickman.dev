@@ -1,9 +1,9 @@
-import { defineConfig } from 'sanity'
-import { structureTool } from 'sanity/structure'
-import { visionTool } from '@sanity/vision'
-import { presentationTool } from 'sanity/presentation'
-import { locations, mainDocuments } from './lib/presentation/resolve'
-import { schemaTypes } from './schemaTypes'
+import {defineConfig} from 'sanity'
+import {structureTool} from 'sanity/structure'
+import {visionTool} from '@sanity/vision'
+import {presentationTool} from 'sanity/presentation'
+import {locations, mainDocuments} from './lib/presentation/resolve'
+import {schemaTypes} from './schemaTypes'
 import deskStructure from './deskStructure'
 
 export default defineConfig({
@@ -12,9 +12,9 @@ export default defineConfig({
   projectId: process.env.SANITY_STUDIO_PROJECT_ID || 'your-project-id',
   dataset: process.env.SANITY_STUDIO_DATASET || 'production',
   plugins: [
-    structureTool({ structure: deskStructure }),
+    structureTool({structure: deskStructure}),
     presentationTool({
-      resolve: { locations, mainDocuments },
+      resolve: {locations, mainDocuments},
       previewUrl: {
         // Prefer env override; fallback to localhost:5173 for Vite dev; else production domain
         initial:
@@ -33,5 +33,5 @@ export default defineConfig({
     }),
     visionTool(),
   ],
-  schema: { types: schemaTypes },
+  schema: {types: schemaTypes},
 })

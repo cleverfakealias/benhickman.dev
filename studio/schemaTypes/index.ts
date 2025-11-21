@@ -3,22 +3,22 @@ import category from './category'
 import post from './post'
 import author from './author'
 import homePage, {
-    homeContentSectionModule,
-    homeCta,
-    homeHeroModule,
-    homeImageAsset,
-    homeResponsiveImagePipeline,
+  homeContentSectionModule,
+  homeCta,
+  homeHeroModule,
+  homeImageAsset,
+  homeResponsiveImagePipeline,
 } from './home/homePage'
 
 export const schemaTypes = [
-    post,
-    author,
-    category,
-    blockContent,
-    homePage,
-    homeHeroModule,
-    homeContentSectionModule,
-    homeCta,
-    homeResponsiveImagePipeline,
-    homeImageAsset,
+  post,
+  author,
+  category,
+  blockContent,
+  homePage,
+  homeHeroModule,
+  homeContentSectionModule,
+  homeCta,
+  homeResponsiveImagePipeline,
+  homeImageAsset,
 ]

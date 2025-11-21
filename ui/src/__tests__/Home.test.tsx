@@ -1,8 +1,13 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, act } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import '@testing-library/jest-dom';
 import { BlogPost } from '../components/features/sanity/types';
+
+// Mock the sanity preview utility
+jest.mock('../utils/sanityPreview', () => ({
+  isSanityPreviewMode: jest.fn().mockReturnValue(false),
+}));
 
 // Mock the sanity client module BEFORE importing Home
 jest.mock('../components/features/sanity/sanityClient', () => ({
@@ -97,9 +102,14 @@ describe('Home Page', () => {
       await waitFor(() => {
         expect(mockFetchPosts).toHaveBeenCalledTimes(1);
       });
+
+      // Wait for state updates to complete
+      await act(async () => {
+        await new Promise((resolve) => setTimeout(resolve, 0));
+      });
     });
 
-    it('should render within a Container with correct props', () => {
+    it('should render within a Container with correct props', async () => {
       jest.spyOn(sanityClient, 'fetchPosts').mockResolvedValue([]);
 
       const { container } = renderWithRouter(<Home />);
@@ -107,9 +117,14 @@ describe('Home Page', () => {
       const mainContainer = container.querySelector('.MuiContainer-root');
       expect(mainContainer).toBeInTheDocument();
       expect(mainContainer).toHaveClass('MuiContainer-maxWidthLg');
+
+      // Wait for state updates to complete
+      await act(async () => {
+        await new Promise((resolve) => setTimeout(resolve, 0));
+      });
     });
 
-    it('should render sections in the correct order', () => {
+    it('should render sections in the correct order', async () => {
       jest.spyOn(sanityClient, 'fetchPosts').mockResolvedValue([]);
 
       renderWithRouter(<Home />);
@@ -130,6 +145,11 @@ describe('Home Page', () => {
           );
         }
       }
+
+      // Wait for state updates to complete
+      await act(async () => {
+        await new Promise((resolve) => setTimeout(resolve, 0));
+      });
     });
   });
 
@@ -144,6 +164,11 @@ describe('Home Page', () => {
       await waitFor(() => {
         expect(mockFetchPosts).toHaveBeenCalledTimes(1);
       });
+
+      // Wait for state updates to complete
+      await act(async () => {
+        await new Promise((resolve) => setTimeout(resolve, 0));
+      });
     });
 
     it('should pass the most recent blog post to HomeBlogCTA', async () => {
@@ -153,6 +178,11 @@ describe('Home Page', () => {
 
       await waitFor(() => {
         expect(screen.getByTestId('featured-post-title')).toHaveTextContent('Latest Blog Post');
+      });
+
+      // Wait for state updates to complete
+      await act(async () => {
+        await new Promise((resolve) => setTimeout(resolve, 0));
       });
     });
 
@@ -164,6 +194,11 @@ describe('Home Page', () => {
       await waitFor(() => {
         expect(screen.queryByTestId('featured-post-title')).not.toBeInTheDocument();
       });
+
+      // Wait for state updates to complete
+      await act(async () => {
+        await new Promise((resolve) => setTimeout(resolve, 0));
+      });
     });
 
     it('should handle null blog posts response', async () => {
@@ -174,13 +209,18 @@ describe('Home Page', () => {
       // Should not crash and should still render components
       expect(screen.getByTestId('hero-banner')).toBeInTheDocument();
       expect(screen.getByTestId('home-blog-cta')).toBeInTheDocument();
+
+      // Wait for state updates to complete
+      await act(async () => {
+        await new Promise((resolve) => setTimeout(resolve, 0));
+      });
     });
 
     // TODO: Add error handling to Home component before enabling this test
     it.skip('should handle fetch posts error gracefully', async () => {
       // Currently skipped because Home component doesn't have .catch() handler
       // This would require updating the Home component to properly handle errors
-      const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+      const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => { });
       jest.spyOn(sanityClient, 'fetchPosts').mockRejectedValue(new Error('Fetch failed'));
 
       renderWithRouter(<Home />);
@@ -240,6 +280,11 @@ describe('Home Page', () => {
         // Should display the post with the latest publishedAt date
         expect(screen.getByTestId('featured-post-title')).toHaveTextContent('Latest Blog Post');
       });
+
+      // Wait for state updates to complete
+      await act(async () => {
+        await new Promise((resolve) => setTimeout(resolve, 0));
+      });
     });
 
     it('should fallback to _createdAt if publishedAt is missing', async () => {
@@ -274,11 +319,16 @@ describe('Home Page', () => {
         // Should use _createdAt for sorting
         expect(screen.getByTestId('featured-post-title')).toHaveTextContent('Latest Blog Post');
       });
+
+      // Wait for state updates to complete
+      await act(async () => {
+        await new Promise((resolve) => setTimeout(resolve, 0));
+      });
     });
   });
 
   describe('Responsiveness', () => {
-    it('should apply responsive padding styles', () => {
+    it('should apply responsive padding styles', async () => {
       jest.spyOn(sanityClient, 'fetchPosts').mockResolvedValue([]);
 
       const { container } = renderWithRouter(<Home />);
@@ -286,20 +336,30 @@ describe('Home Page', () => {
       const mainContainer = container.querySelector('.MuiContainer-root');
       expect(mainContainer).toHaveStyle({ paddingTop: expect.any(String) });
       expect(mainContainer).toHaveStyle({ paddingBottom: expect.any(String) });
+
+      // Wait for state updates to complete
+      await act(async () => {
+        await new Promise((resolve) => setTimeout(resolve, 0));
+      });
     });
 
-    it('should apply responsive margin bottom to sections', () => {
+    it('should apply responsive margin bottom to sections', async () => {
       jest.spyOn(sanityClient, 'fetchPosts').mockResolvedValue([]);
 
       const { container } = renderWithRouter(<Home />);
 
       const boxes = container.querySelectorAll('.MuiBox-root');
       expect(boxes.length).toBeGreaterThan(0);
+
+      // Wait for state updates to complete
+      await act(async () => {
+        await new Promise((resolve) => setTimeout(resolve, 0));
+      });
     });
   });
 
   describe('Accessibility', () => {
-    it('should have proper semantic structure', () => {
+    it('should have proper semantic structure', async () => {
       jest.spyOn(sanityClient, 'fetchPosts').mockResolvedValue([]);
 
       const { container } = renderWithRouter(<Home />);
@@ -307,9 +367,14 @@ describe('Home Page', () => {
       // Check that content is within a container
       const mainContainer = container.querySelector('.MuiContainer-root');
       expect(mainContainer).toBeInTheDocument();
+
+      // Wait for state updates to complete
+      await act(async () => {
+        await new Promise((resolve) => setTimeout(resolve, 0));
+      });
     });
 
-    it('should not have any accessibility violations in structure', () => {
+    it('should not have any accessibility violations in structure', async () => {
       jest.spyOn(sanityClient, 'fetchPosts').mockResolvedValue([]);
 
       renderWithRouter(<Home />);
@@ -318,6 +383,11 @@ describe('Home Page', () => {
       expect(screen.getByTestId('hero-banner')).toBeInTheDocument();
       expect(screen.getByTestId('home-summary')).toBeInTheDocument();
       expect(screen.getByTestId('home-blog-cta')).toBeInTheDocument();
+
+      // Wait for state updates to complete
+      await act(async () => {
+        await new Promise((resolve) => setTimeout(resolve, 0));
+      });
     });
   });
 
@@ -333,6 +403,11 @@ describe('Home Page', () => {
       // After fetch completes
       await waitFor(() => {
         expect(screen.getByTestId('featured-post-title')).toBeInTheDocument();
+      });
+
+      // Wait for state updates to complete
+      await act(async () => {
+        await new Promise((resolve) => setTimeout(resolve, 0));
       });
     });
 
@@ -356,6 +431,11 @@ describe('Home Page', () => {
 
       // Should still only be called once
       expect(mockFetchPosts).toHaveBeenCalledTimes(1);
+
+      // Wait for state updates to complete
+      await act(async () => {
+        await new Promise((resolve) => setTimeout(resolve, 0));
+      });
     });
   });
 
@@ -394,6 +474,11 @@ describe('Home Page', () => {
       await waitFor(() => {
         expect(screen.getByTestId('home-blog-cta')).toBeInTheDocument();
       });
+
+      // Wait for state updates to complete
+      await act(async () => {
+        await new Promise((resolve) => setTimeout(resolve, 0));
+      });
     });
 
     it('should handle posts with invalid date strings', async () => {
@@ -428,6 +513,11 @@ describe('Home Page', () => {
       await waitFor(() => {
         expect(screen.getByTestId('home-blog-cta')).toBeInTheDocument();
       });
+
+      // Wait for state updates to complete
+      await act(async () => {
+        await new Promise((resolve) => setTimeout(resolve, 0));
+      });
     });
 
     it('should handle single blog post', async () => {
@@ -439,6 +529,11 @@ describe('Home Page', () => {
 
       await waitFor(() => {
         expect(screen.getByTestId('featured-post-title')).toHaveTextContent('Latest Blog Post');
+      });
+
+      // Wait for state updates to complete
+      await act(async () => {
+        await new Promise((resolve) => setTimeout(resolve, 0));
       });
     });
   });

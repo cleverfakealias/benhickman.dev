@@ -14,9 +14,9 @@ const clientConfig = {
   // Enable stega encoding in preview mode (only when securely verified)
   stega: isPreviewMode
     ? {
-        enabled: true,
-        studioUrl: import.meta.env.VITE_SANITY_STUDIO_URL || 'http://localhost:3333',
-      }
+      enabled: true,
+      studioUrl: import.meta.env.VITE_SANITY_STUDIO_URL || 'http://localhost:3333',
+    }
     : false,
 } as const;
 
@@ -28,6 +28,18 @@ const hasValidConfig =
 
 export const sanityClient = hasValidConfig ? createClient(clientConfig) : null;
 
+const POSTS_QUERY = `*[_type == "post"] | order(publishedAt desc, _createdAt desc) {
+  _id,
+  title,
+  slug,
+  excerpt,
+  publishedAt,
+  _createdAt,
+  mainImage,
+  "estimatedReadingTime": round(length(pt::text(body)) / 5 / 180 ),
+  "author": author->name
+}`;
+
 export async function fetchPosts() {
   if (!sanityClient) {
     console.warn(
@@ -36,37 +48,15 @@ export async function fetchPosts() {
     return [];
   }
 
-  const query = `*[_type == "post"] | order(publishedAt desc, _createdAt desc) {
-    _id,
-    title,
-    slug,
-    excerpt,
-    publishedAt,
-    _createdAt,
-    mainImage,
-    "estimatedReadingTime": round(length(pt::text(body)) / 5 / 180 ),
-    "author": author->name
-  }`;
-  return await sanityClient.fetch(query);
+  return await sanityClient.fetch(POSTS_QUERY);
 }
 
 export async function fetchPostsPreview() {
   try {
-    const query = `*[_type == "post"] | order(publishedAt desc, _createdAt desc) {
-      _id,
-      title,
-      slug,
-      excerpt,
-      publishedAt,
-      _createdAt,
-      mainImage,
-      "estimatedReadingTime": round(length(pt::text(body)) / 5 / 180 ),
-      "author": author->name
-    }`;
     const res = await fetch('/api/sanity-proxy', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ query, params: {} }),
+      body: JSON.stringify({ query: POSTS_QUERY, params: {} }),
     });
     if (!res.ok) throw new Error(`Proxy error ${res.status}`);
     const data = await res.json();
@@ -162,6 +152,70 @@ export async function fetchHomePage(organizationId: string) {
   }`;
 
   return await sanityClient.fetch(query, { organizationId });
+}
+
+export async function fetchHomePagePreview(organizationId: string) {
+  try {
+    const query = `*[_type == "homePage" && organizationId == $organizationId][0]{
+      _id,
+      internalTitle,
+      organizationId,
+      seoDescription,
+      modules[]{
+        ...,
+        _type == "homeHeroModule" => {
+          ...,
+          media {
+            ...,
+            desktop {
+              ...,
+              image {
+                ...,
+                asset->
+              }
+            },
+            mobile {
+              ...,
+              image {
+                ...,
+                asset->
+              }
+            }
+          }
+        },
+        _type == "homeContentSectionModule" => {
+          ...,
+          body[] {
+            ...,
+            markDefs[] {
+              ...,
+              _type == "internalLink" => {
+                "slug": @.reference->slug.current
+              }
+            }
+          }
+        }
+      }
+    }`;
+    
+    const res = await fetch('/api/sanity-proxy', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ query, params: { organizationId } }),
+    });
+    
+    if (!res.ok) throw new Error(`Proxy error ${res.status}`);
+    const data = await res.json();
+    return data.result ?? null;
+  } catch (e) {
+    console.warn('Preview fetch failed for Home Page', e);
+    return null;
+  }
+}
+
+export async function debugFetchAllHomePages() {
+  if (!sanityClient) return [];
+  return await sanityClient.fetch(`*[_type == "homePage"]{ _id, organizationId, internalTitle }`);
 }
 
 export async function getAllPostSlugs() {

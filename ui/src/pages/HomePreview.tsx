@@ -1,13 +1,40 @@
 import { useParams } from 'react-router-dom';
-import { Box, Container, Typography, CircularProgress, Alert } from '@mui/material';
+import { Box, Container, Typography, CircularProgress, Alert, List, ListItem, ListItemText } from '@mui/material';
 import { useSanityHomePage } from '../hooks/useSanityHomePage';
 import HomeHero from '../components/features/home/HomeHero';
 import HomeContentSection from '../components/features/home/HomeContentSection';
 import { HomeModule } from '../components/features/sanity/types/home';
+import { useEffect, useState } from 'react';
+import { debugFetchAllHomePages } from '../components/features/sanity/sanityClient';
 
 export default function HomePreview() {
   const { organizationId } = useParams<{ organizationId: string }>();
-  const { homePage, loading, error } = useSanityHomePage(organizationId || 'benhickman.dev');
+  // Force preview mode fetching
+  const { homePage, loading, error } = useSanityHomePage(organizationId || 'benhickman.dev', true);
+  const [availablePages, setAvailablePages] = useState<any[]>([]);
+  const [debugInfo, setDebugInfo] = useState<any>({});
+
+  useEffect(() => {
+    if (!homePage && !loading) {
+      debugFetchAllHomePages()
+        .then((pages) => {
+          setAvailablePages(pages);
+          setDebugInfo((prev: any) => ({ ...prev, pagesFound: pages.length }));
+        })
+        .catch(err => {
+          console.error("Debug fetch failed", err);
+          setDebugInfo((prev: any) => ({ ...prev, fetchError: err.message }));
+        });
+
+      // Collect config info
+      setDebugInfo((prev: any) => ({
+        ...prev,
+        projectId: import.meta.env.VITE_SANITY_PROJECT_ID,
+        dataset: import.meta.env.VITE_SANITY_DATASET,
+        orgIdParam: organizationId
+      }));
+    }
+  }, [homePage, loading, organizationId]);
 
   if (loading) {
     return (
@@ -44,17 +71,44 @@ export default function HomePreview() {
   if (!homePage) {
     return (
       <Container maxWidth="lg" sx={{ py: 8 }}>
-        <Alert severity="info">
+        <Alert severity="info" sx={{ mb: 4 }}>
           <Typography variant="h6" gutterBottom>
             No Home Page Found
           </Typography>
-          <Typography variant="body2">
+          <Typography variant="body2" paragraph>
             No home page has been created for organization: <strong>{organizationId}</strong>
           </Typography>
-          <Typography variant="body2" sx={{ mt: 2 }}>
+          <Typography variant="body2">
             Create one in Sanity Studio to see it here.
           </Typography>
         </Alert>
+
+        <Box sx={{ mb: 4, p: 2, bgcolor: '#f5f5f5', borderRadius: 1, fontFamily: 'monospace', fontSize: '0.8rem' }}>
+          <Typography variant="subtitle2" gutterBottom>Debug Info:</Typography>
+          <pre>{JSON.stringify(debugInfo, null, 2)}</pre>
+        </Box>
+
+        {availablePages.length > 0 ? (
+          <Box>
+            <Typography variant="h6" gutterBottom>
+              Available Home Pages in Sanity:
+            </Typography>
+            <List sx={{ bgcolor: 'background.paper', borderRadius: 1, border: '1px solid #ddd' }}>
+              {availablePages.map((page) => (
+                <ListItem key={page._id} divider>
+                  <ListItemText
+                    primary={page.internalTitle || 'Untitled'}
+                    secondary={`Organization ID: ${page.organizationId}`}
+                  />
+                </ListItem>
+              ))}
+            </List>
+          </Box>
+        ) : (
+          <Alert severity="warning">
+            No 'homePage' documents found in the dataset. Are they published?
+          </Alert>
+        )}
       </Container>
     );
   }

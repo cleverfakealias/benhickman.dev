@@ -1,3 +1,3 @@
-import deskStructure from "./deskStructure";
+import deskStructure from './deskStructure'
 
-export default deskStructure;
+export default deskStructure

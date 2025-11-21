@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Box, Typography, Menu, MenuItem, IconButton, Tooltip, useTheme } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import './Footer.css';
 import Socials from './Socials';
 import { FaSun, FaMoon } from 'react-icons/fa';
+import { getDomainConfig } from '../../config/domainConfig';
 
 // Quick Links Dropdown Component and navLinks must be outside Footer
 const navLinks = [
@@ -88,12 +88,49 @@ interface FooterProps {
 const Footer: React.FC<FooterProps> = ({ themeMode, setThemeMode }) => {
   const theme = useTheme();
   const isDark = themeMode === 'dark';
+  const config = getDomainConfig();
 
   return (
-    <footer className="footer" role="contentinfo" aria-label="Site footer">
-      <Box className="footer-content">
+    <Box
+      component="footer"
+      role="contentinfo"
+      aria-label="Site footer"
+      sx={{
+        position: 'fixed',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        zIndex: 1000,
+        background: 'color-mix(in oklch, var(--color-bg) 90%, black 5%)',
+        backdropFilter: 'saturate(120%) blur(6px)',
+        WebkitBackdropFilter: 'saturate(120%) blur(6px)',
+        borderTop: '1px solid var(--color-border)',
+        boxShadow: '0 -1px 2px rgba(0, 0, 0, 0.04)',
+        p: 0,
+      }}
+    >
+      <Box
+        sx={{
+          maxWidth: '1200px',
+          mx: 'auto',
+          px: 'var(--space-4)',
+          height: { xs: 'auto', sm: 'clamp(44px, 6vw, 52px)' },
+          display: 'grid',
+          gridTemplateColumns: { xs: 'auto 1fr auto', sm: '1fr auto 1fr' },
+          alignItems: 'center',
+          gap: { xs: 'var(--space-2)', sm: 'var(--space-3)' },
+          py: { xs: 'var(--space-2)', sm: 0 },
+        }}
+      >
         {/* Left: Tagline with copper accent dot */}
-        <Box className="footer-cell-left" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+        <Box
+          sx={{
+            justifySelf: 'start',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 1,
+          }}
+        >
           <Box
             sx={{
               width: 6,
@@ -118,7 +155,13 @@ const Footer: React.FC<FooterProps> = ({ themeMode, setThemeMode }) => {
         </Box>
 
         {/* Center: Copyright */}
-        <Box className="footer-cell-center">
+        <Box
+          sx={{
+            justifySelf: 'center',
+            order: { xs: 3, sm: 0 },
+            gridColumn: { xs: '1 / -1', sm: 'auto' },
+          }}
+        >
           <Typography
             sx={{
               fontSize: { xs: '0.7rem', md: '0.8125rem' },
@@ -126,14 +169,14 @@ const Footer: React.FC<FooterProps> = ({ themeMode, setThemeMode }) => {
               opacity: 0.7,
             }}
           >
-            © {new Date().getFullYear()} Ben Hickman
+            © {new Date().getFullYear()} {config.branding.name}
           </Typography>
         </Box>
 
         {/* Right: Icons */}
         <Box
-          className="footer-cell-right"
           sx={{
+            justifySelf: 'end',
             display: 'flex',
             alignItems: 'center',
             gap: { xs: 0.5, md: 1 },
@@ -167,7 +210,7 @@ const Footer: React.FC<FooterProps> = ({ themeMode, setThemeMode }) => {
           </IconButton>
         </Box>
       </Box>
-    </footer>
+    </Box>
   );
 };
 

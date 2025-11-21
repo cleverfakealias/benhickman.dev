@@ -2,15 +2,13 @@ import React from 'react';
 import { Box, Typography, Button, Container } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { heroSkills } from './heroSkills';
-import './HeroBanner.css';
 
 const HeroBanner: React.FC = () => {
   return (
-    <Box component="section" className="hero" sx={{ position: 'relative', py: { xs: 6, md: 10 } }}>
+    <Box component="section" sx={{ position: 'relative', py: { xs: 6, md: 10 } }}>
       <Container maxWidth="lg" sx={{ px: { xs: 2, md: 4 } }}>
         {/* CSS Grid instead of Grid2 */}
         <Box
-          className="hero-grid"
           sx={{
             display: 'grid',
             alignItems: 'center',
@@ -21,7 +19,6 @@ const HeroBanner: React.FC = () => {
         >
           {/* Copy first on mobile, second on desktop */}
           <Box
-            className="hero-copy"
             sx={{
               order: { xs: 1, md: 2 },
               maxWidth: { md: '64ch' },
@@ -29,13 +26,21 @@ const HeroBanner: React.FC = () => {
           >
             <Typography
               variant="h1"
-              className="hero-title"
               sx={{
                 fontWeight: 800,
                 lineHeight: 1.05,
                 letterSpacing: '-0.01em',
                 fontSize: { xs: 'clamp(2rem, 8vw, 2.6rem)', md: 'clamp(2.4rem, 3.6vw, 3.2rem)' },
                 mb: 1.5,
+                '&::before': {
+                  content: '""',
+                  display: 'block',
+                  width: '3rem',
+                  height: '3px',
+                  marginBottom: 'var(--space-2)',
+                  backgroundColor: 'var(--color-secondary-hex)',
+                  borderRadius: '2px',
+                },
               }}
             >
               Systems that scale. Software that lasts.
@@ -43,7 +48,6 @@ const HeroBanner: React.FC = () => {
 
             <Typography
               variant="h5"
-              className="hero-sub"
               sx={{ fontWeight: 500, color: 'var(--color-secondary-hex)', mb: 2 }}
             >
               Cloud architecture, platform engineering, and calm reliability.
@@ -51,18 +55,16 @@ const HeroBanner: React.FC = () => {
 
             <Typography
               variant="body1"
-              className="hero-blurb"
               sx={{ color: 'var(--color-text-secondary-hex)', lineHeight: 1.75, mb: 3 }}
             >
               I help teams go from prototype to production with infrastructure that’s cost-aware,
               resilient, and easy to evolve.
             </Typography>
 
-            <Box className="hero-actions" sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', mb: 2 }}>
+            <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', mb: 2 }}>
               <Button
                 component={Link}
                 to="/contact"
-                className="button-primary"
                 variant="contained"
                 size="large"
                 sx={{ borderRadius: 'var(--radius-md)' }}
@@ -72,7 +74,6 @@ const HeroBanner: React.FC = () => {
               <Button
                 component={Link}
                 to="/experience"
-                className="button-ghost"
                 variant="outlined"
                 size="large"
                 sx={{ borderRadius: 'var(--radius-md)' }}
@@ -84,7 +85,6 @@ const HeroBanner: React.FC = () => {
             {/* Make proof chips a single row with graceful wrap; small to reduce height */}
             <Box
               component="ul"
-              className="hero-proof"
               sx={{
                 display: 'flex',
                 flexWrap: 'wrap',
@@ -116,14 +116,28 @@ const HeroBanner: React.FC = () => {
 
           {/* Media second on mobile, first on desktop */}
           <Box
-            className="hero-media"
-            sx={{ order: { xs: 2, md: 1 }, justifySelf: { md: 'start' } }}
+            sx={{
+              order: { xs: 2, md: 1 },
+              justifySelf: { md: 'start' },
+              position: 'relative',
+              borderRadius: 'var(--radius-lg)',
+              overflow: 'hidden',
+              '&::after': {
+                content: '""',
+                position: 'absolute',
+                inset: 0,
+                background:
+                  'radial-gradient(circle at 60% 40%, color-mix(in oklch, var(--color-secondary) 8%, transparent) 0%, transparent 70%)',
+                opacity: 0.2,
+                zIndex: 0,
+                pointerEvents: 'none',
+              },
+            }}
           >
             <Box
               component="img"
               src="/images/working.jpg"
               alt="Architect. Build. Elevate."
-              className="hero-image"
               loading="eager"
               fetchPriority="high"
               sx={{
@@ -135,6 +149,8 @@ const HeroBanner: React.FC = () => {
                 // keep image from getting too tall → reduces vertical feel
                 maxHeight: { md: 420 },
                 objectFit: 'cover',
+                position: 'relative',
+                zIndex: 1,
               }}
             />
           </Box>

@@ -1,5 +1,5 @@
-import { defineField, defineType } from 'sanity'
-import { ORGANIZATION_OPTIONS } from '../lib/organizations'
+import {defineField, defineType} from 'sanity'
+import {ORGANIZATION_OPTIONS} from '../lib/organizations'
 
 export default defineType({
   name: 'post',
@@ -27,27 +27,27 @@ export default defineType({
       name: 'slug',
       title: 'Slug',
       type: 'slug',
-      options: { source: 'title', maxLength: 96 },
+      options: {source: 'title', maxLength: 96},
       validation: (r) => r.required(),
     }),
     defineField({
       name: 'author',
       title: 'Author',
       type: 'reference',
-      to: { type: 'author' },
+      to: {type: 'author'},
       validation: (r) => r.required(),
     }),
     defineField({
       name: 'mainImage',
       title: 'Main image',
       type: 'image',
-      options: { hotspot: true },
+      options: {hotspot: true},
     }),
     defineField({
       name: 'categories',
       title: 'Categories',
       type: 'array',
-      of: [{ type: 'reference', to: { type: 'category' } }],
+      of: [{type: 'reference', to: {type: 'category'}}],
     }),
     defineField({
       name: 'publishedAt',
@@ -58,7 +58,7 @@ export default defineType({
       name: 'status',
       title: 'Status',
       type: 'string',
-      options: { list: ['draft', 'in_review', 'published'], layout: 'radio' },
+      options: {list: ['draft', 'in_review', 'published'], layout: 'radio'},
       initialValue: 'draft',
       validation: (r) => r.required(),
     }),
@@ -70,9 +70,9 @@ export default defineType({
     }),
   ],
   preview: {
-    select: { title: 'title', author: 'author.name', media: 'mainImage' },
-    prepare({ author, ...sel }) {
-      return { ...sel, subtitle: author && `by ${author}` }
+    select: {title: 'title', author: 'author.name', media: 'mainImage'},
+    prepare({author, ...sel}) {
+      return {...sel, subtitle: author && `by ${author}`}
     },
   },
 })

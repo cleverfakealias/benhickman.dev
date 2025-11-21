@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2022",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "module": "preserve",
     "moduleResolution": "bundler",
     "moduleDetection": "force",
@@ -20,13 +16,6 @@
     "noEmit": true,
     "incremental": true
   },
-  "include": [
-    "**/*.ts",
-    "**/*.tsx"
-  ],
-  "exclude": [
-    "node_modules",
-    ".sanity",
-    "dist"
-  ]
+  "include": ["**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules", ".sanity", "dist"]
 }
