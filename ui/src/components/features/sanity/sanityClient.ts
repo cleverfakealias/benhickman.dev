@@ -14,9 +14,9 @@ const clientConfig = {
   // Enable stega encoding in preview mode (only when securely verified)
   stega: isPreviewMode
     ? {
-      enabled: true,
-      studioUrl: import.meta.env.VITE_SANITY_STUDIO_URL || 'http://localhost:3333',
-    }
+        enabled: true,
+        studioUrl: import.meta.env.VITE_SANITY_STUDIO_URL || 'http://localhost:3333',
+      }
     : false,
 } as const;
 
@@ -197,13 +197,13 @@ export async function fetchHomePagePreview(organizationId: string) {
         }
       }
     }`;
-    
+
     const res = await fetch('/api/sanity-proxy', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ query, params: { organizationId } }),
     });
-    
+
     if (!res.ok) throw new Error(`Proxy error ${res.status}`);
     const data = await res.json();
     return data.result ?? null;

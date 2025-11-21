@@ -1,5 +1,14 @@
 import { useParams } from 'react-router-dom';
-import { Box, Container, Typography, CircularProgress, Alert, List, ListItem, ListItemText } from '@mui/material';
+import {
+  Box,
+  Container,
+  Typography,
+  CircularProgress,
+  Alert,
+  List,
+  ListItem,
+  ListItemText,
+} from '@mui/material';
 import { useSanityHomePage } from '../hooks/useSanityHomePage';
 import HomeHero from '../components/features/home/HomeHero';
 import HomeContentSection from '../components/features/home/HomeContentSection';
@@ -7,31 +16,46 @@ import { HomeModule } from '../components/features/sanity/types/home';
 import { useEffect, useState } from 'react';
 import { debugFetchAllHomePages } from '../components/features/sanity/sanityClient';
 
+interface DebugPage {
+  _id: string;
+  organizationId?: string;
+  internalTitle?: string;
+}
+
+interface DebugInfo {
+  pagesFound?: number;
+  fetchError?: string;
+  projectId?: string;
+  dataset?: string;
+  orgIdParam?: string;
+}
+
 export default function HomePreview() {
   const { organizationId } = useParams<{ organizationId: string }>();
   // Force preview mode fetching
   const { homePage, loading, error } = useSanityHomePage(organizationId || 'benhickman.dev', true);
-  const [availablePages, setAvailablePages] = useState<any[]>([]);
-  const [debugInfo, setDebugInfo] = useState<any>({});
+  const [availablePages, setAvailablePages] = useState<DebugPage[]>([]);
+  const [debugInfo, setDebugInfo] = useState<DebugInfo>({});
 
   useEffect(() => {
     if (!homePage && !loading) {
       debugFetchAllHomePages()
-        .then((pages) => {
-          setAvailablePages(pages);
-          setDebugInfo((prev: any) => ({ ...prev, pagesFound: pages.length }));
+        .then((pages: unknown) => {
+          const typedPages = pages as DebugPage[];
+          setAvailablePages(typedPages);
+          setDebugInfo((prev) => ({ ...prev, pagesFound: typedPages.length }));
         })
-        .catch(err => {
-          console.error("Debug fetch failed", err);
-          setDebugInfo((prev: any) => ({ ...prev, fetchError: err.message }));
+        .catch((err) => {
+          console.error('Debug fetch failed', err);
+          setDebugInfo((prev) => ({ ...prev, fetchError: err.message }));
         });
 
       // Collect config info
-      setDebugInfo((prev: any) => ({
+      setDebugInfo((prev) => ({
         ...prev,
         projectId: import.meta.env.VITE_SANITY_PROJECT_ID,
         dataset: import.meta.env.VITE_SANITY_DATASET,
-        orgIdParam: organizationId
+        orgIdParam: organizationId,
       }));
     }
   }, [homePage, loading, organizationId]);
@@ -78,13 +102,22 @@ export default function HomePreview() {
           <Typography variant="body2" paragraph>
             No home page has been created for organization: <strong>{organizationId}</strong>
           </Typography>
-          <Typography variant="body2">
-            Create one in Sanity Studio to see it here.
-          </Typography>
+          <Typography variant="body2">Create one in Sanity Studio to see it here.</Typography>
         </Alert>
 
-        <Box sx={{ mb: 4, p: 2, bgcolor: '#f5f5f5', borderRadius: 1, fontFamily: 'monospace', fontSize: '0.8rem' }}>
-          <Typography variant="subtitle2" gutterBottom>Debug Info:</Typography>
+        <Box
+          sx={{
+            mb: 4,
+            p: 2,
+            bgcolor: '#f5f5f5',
+            borderRadius: 1,
+            fontFamily: 'monospace',
+            fontSize: '0.8rem',
+          }}
+        >
+          <Typography variant="subtitle2" gutterBottom>
+            Debug Info:
+          </Typography>
           <pre>{JSON.stringify(debugInfo, null, 2)}</pre>
         </Box>
 

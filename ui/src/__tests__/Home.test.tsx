@@ -220,7 +220,7 @@ describe('Home Page', () => {
     it.skip('should handle fetch posts error gracefully', async () => {
       // Currently skipped because Home component doesn't have .catch() handler
       // This would require updating the Home component to properly handle errors
-      const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => { });
+      const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
       jest.spyOn(sanityClient, 'fetchPosts').mockRejectedValue(new Error('Fetch failed'));
 
       renderWithRouter(<Home />);
