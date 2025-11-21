@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { getPostBySlug, getPostBySlugPreview } from '../sanity/sanityClient';
-import imageUrlBuilder from '../sanity/imageUrl';
+import { buildImageUrl } from '../sanity/imageUrl';
 import { BlogPost } from '../sanity/types';
 import { Container, Typography, Box, Chip, Button, useTheme, Skeleton, Paper } from '@mui/material';
 import { ArrowBack, AccessTime, Person } from '@mui/icons-material';
@@ -104,13 +104,11 @@ const BlogPostDetail = () => {
         {post.mainImage && (
           <Box
             component="img"
-            src={(() => {
-              const builder = imageUrlBuilder(post.mainImage);
-              if ('width' in builder && typeof builder.width === 'function') {
-                return builder.width(800).height(400).url();
-              }
-              return builder.url();
-            })()}
+            src={buildImageUrl(post.mainImage, {
+              width: 800,
+              height: 400,
+              quality: 85,
+            })}
             alt={post.mainImage.alt || post.title}
             sx={{
               width: '100%',

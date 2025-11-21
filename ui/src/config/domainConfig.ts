@@ -32,6 +32,19 @@ export const domainConfigs: Record<string, DomainConfig> = {
         'Ben Hickman specializes in cloud architecture and engineering, offering tailored solutions for modern businesses.',
     },
   },
+  'zennlogic.com': {
+    formspreeUrl: formspreeUrl,
+    hCaptchaSiteKey: hCaptchaSiteKey,
+    branding: {
+      name: 'ZennLogic',
+      logo: '/images/monogram.png',
+      alt: 'ZennLogic logo',
+      subtitle: 'Cloud Architecture and Engineering',
+      title: 'ZennLogic | Cloud Architecture and Engineering',
+      description:
+        'ZennLogic specializes in cloud architecture and engineering, offering tailored solutions for modern businesses.',
+    },
+  },
   localhost: {
     formspreeUrl: formspreeUrl,
     hCaptchaSiteKey: hCaptchaSiteKey,
