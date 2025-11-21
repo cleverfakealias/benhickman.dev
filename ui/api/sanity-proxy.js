@@ -5,7 +5,7 @@ import { createClient } from '@sanity/client';
 const projectId = process.env.VITE_SANITY_PROJECT_ID || process.env.SANITY_PROJECT_ID || '';
 const dataset = process.env.VITE_SANITY_DATASET || process.env.SANITY_DATASET || 'production';
 const apiVersion = '2023-09-01';
-const token = process.env.SANITY_API_READ_TOKEN;
+const token = process.env.SANITY_API_READ_TOKEN || process.env.VITE_SANITY_API_READ_TOKEN;
 
 const studioUrl = process.env.SANITY_STUDIO_URL || process.env.VITE_SANITY_STUDIO_URL;
 const serverClient = createClient({
@@ -21,11 +21,11 @@ const serverClient = createClient({
 // Only permit queries for blog posts and home page content
 const ALLOWED_QUERIES = [
   // Blog posts list: *[_type == "post"] | order(...) [0..10] { fields... }
-  /^\*\[_type\s*==\s*"post"\s*(?:&&\s*slug\.current\s*==\s*\$slug)?\]\s*(?:\|\s*order\([^)]+\))?\s*(?:\[\d+\.\.\d+\])?\s*\{[^}]+\}$/,
+  /^\*\[_type\s*==\s*"post"/,
   // Single blog post by slug: *[_type == "post" && slug.current == $slug][0] { fields... }
-  /^\*\[_type\s*==\s*"post"\s*&&\s*slug\.current\s*==\s*\$slug\]\[0\]\s*\{[^}]+\}$/,
-  // Home page: *[_type == "homePage"][0] { fields... }
-  /^\*\[_type\s*==\s*"homePage"\]\[0\]\s*\{[^}]+\}$/,
+  /^\*\[_type\s*==\s*"post"\s*&&\s*slug\.current\s*==\s*\$slug/,
+  // Home page queries: *[_type == "homePage" ... 
+  /^\*\[_type\s*==\s*"homePage"/,
 ];
 
 // Validate query against whitelist
@@ -51,8 +51,8 @@ function validateParams(params) {
     }
 
     // Prevent GROQ injection in slug parameter - only allow safe characters
-    if (key === 'slug' && typeof value === 'string') {
-      if (!/^[a-z0-9-]+$/i.test(value)) {
+    if ((key === 'slug' || key === 'organizationId') && typeof value === 'string') {
+      if (!/^[a-z0-9-.]+$/i.test(value)) {
         return false;
       }
     }
