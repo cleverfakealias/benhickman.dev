@@ -21,14 +21,12 @@ const serverClient = createClient({
 // Only permit queries for blog posts and home page content
 const ALLOWED_QUERIES = [
   // Blog posts list: *[_type == "post"] | order(...) [0..10] { fields... }
-  /^\*\[_type\s*==\s*"post"/,
+  /^\*\[_type\s*==\s*"post"\s*(?:&&\s*slug\.current\s*==\s*\$slug)?\]\s*(?:\|\s*order\([^)]+\))?\s*(?:\[\d+\.\.\d+\])?\s*\{[\s\S]*?\}$/,
   // Single blog post by slug: *[_type == "post" && slug.current == $slug][0] { fields... }
-  /^\*\[_type\s*==\s*"post"\s*&&\s*slug\.current\s*==\s*\$slug/,
-  // Home page queries: *[_type == "homePage" ...
-  /^\*\[_type\s*==\s*"homePage"/,
-];
-
-// Validate query against whitelist
+  /^\*\[_type\s*==\s*"post"\s*&&\s*slug\.current\s*==\s*\$slug\]\[0\]\s*\{[\s\S]*?\}$/,
+  // Home page: *[_type == "homePage" && organizationId == $organizationId][0] { complex fields... }
+  /^\*\[_type\s*==\s*"homePage"\s*&&\s*organizationId\s*==\s*\$organizationId\]\[0\]\s*\{[\s\S]*?\}$/,
+]; // Validate query against whitelist
 function isQueryAllowed(query) {
   if (!query || typeof query !== 'string') {
     return false;
