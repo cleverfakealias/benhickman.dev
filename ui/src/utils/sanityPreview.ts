@@ -90,7 +90,13 @@ function isTrustedStudioOrigin(): boolean {
     const parentOrigin = window.parent.location.origin;
     return allowedOrigins.some((allowed) => allowed && parentOrigin.startsWith(allowed));
   } catch {
-    // Cross-origin parent - can't verify, deny access
+    // Cross-origin parent - for local dev, allow if we're on localhost preview route
+    if (
+      window.location.pathname.startsWith('/preview/') &&
+      window.location.hostname === 'localhost'
+    ) {
+      return true;
+    }
     return false;
   }
 }

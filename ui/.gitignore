@@ -30,3 +30,4 @@ coverage
 *storybook.log
 
 *.env*
+.vercel
