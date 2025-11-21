@@ -60,7 +60,7 @@ export async function fetchPostsPreview() {
 // Home Page queries
 export async function fetchHomePage(organizationId: string) {
   console.log('fetchHomePage called for:', organizationId, 'client exists:', !!sanityClient);
-  
+
   if (!sanityClient) {
     console.error('Sanity client not configured. Check VITE_SANITY_PROJECT_ID env var.');
     return null;
@@ -121,26 +121,30 @@ export async function debugFetchAllHomePages() {
     console.error('No sanityClient available for debug fetch');
     return [];
   }
-  
+
   console.log('Client config being used:', {
     projectId: sanityClient.config().projectId,
     dataset: sanityClient.config().dataset,
     useCdn: sanityClient.config().useCdn,
     apiVersion: sanityClient.config().apiVersion,
   });
-  
+
   // Try fetching by exact document ID
   const byId = await sanityClient.fetch(`*[_id == "homePage-benhickman.dev"][0]`);
   console.log('Direct ID query result:', byId);
-  
+
   // Try the exact query that works in Vision
-  const exactVisionQuery = await sanityClient.fetch(`*[_type == "homePage"][0]{ _id, organizationId, internalTitle }`);
+  const exactVisionQuery = await sanityClient.fetch(
+    `*[_type == "homePage"][0]{ _id, organizationId, internalTitle }`
+  );
   console.log('Exact Vision query result:', exactVisionQuery);
-  
+
   // Check ALL document types
-  const allDocs = await sanityClient.fetch(`*[_id == "homePage-benhickman.dev" || _type == "homePage"]{ _id, _type, organizationId, internalTitle }`);
+  const allDocs = await sanityClient.fetch(
+    `*[_id == "homePage-benhickman.dev" || _type == "homePage"]{ _id, _type, organizationId, internalTitle }`
+  );
   console.log('All matching documents:', allDocs);
-  
+
   return allDocs;
 }
 
