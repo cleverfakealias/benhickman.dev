@@ -21,11 +21,11 @@ const serverClient = createClient({
 // Only permit queries for blog posts and home page content
 const ALLOWED_QUERIES = [
   // Blog posts list: *[_type == "post"] | order(...) [0..10] { fields... }
-  /^\*\[_type\s*==\s*"post"\s*(?:&&\s*slug\.current\s*==\s*\$slug)?\]\s*(?:\|\s*order\([^)]+\))?\s*(?:\[\d+\.\.\d+\])?\s*\{[^}]+\}$/,
+  /^\*\[_type\s*==\s*"post"/,
   // Single blog post by slug: *[_type == "post" && slug.current == $slug][0] { fields... }
-  /^\*\[_type\s*==\s*"post"\s*&&\s*slug\.current\s*==\s*\$slug\]\[0\]\s*\{[^}]+\}$/,
-  // Home page: *[_type == "homePage"][0] { fields... }
-  /^\*\[_type\s*==\s*"homePage"\]\[0\]\s*\{[^}]+\}$/,
+  /^\*\[_type\s*==\s*"post"\s*&&\s*slug\.current\s*==\s*\$slug/,
+  // Home page queries: *[_type == "homePage" ... 
+  /^\*\[_type\s*==\s*"homePage"/,
 ];
 
 // Validate query against whitelist

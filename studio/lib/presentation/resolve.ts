@@ -21,7 +21,7 @@ export const locations = {
         locations: [
           {
             title: 'Preview Home',
-            href: `/preview/home/${organizationId}`,
+            href: `/preview/home/${organizationId.toLowerCase()}`,
           },
         ],
       }
@@ -37,6 +37,6 @@ export const mainDocuments = defineDocuments([
   },
   {
     route: '/preview/home/:organizationId',
-    filter: `_type == "homePage" && organizationId == $organizationId`,
+    filter: `_type == "homePage" && lower(organizationId) == lower($organizationId)`,
   },
 ])
