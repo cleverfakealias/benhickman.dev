@@ -132,3 +132,4 @@ dist
 # Local development certificates
 **/localhost-key.pem
 **/localhost.pem
+.vercel

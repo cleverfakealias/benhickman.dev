@@ -9,6 +9,7 @@ import {
   ListItem,
   ListItemText,
 } from '@mui/material';
+import { VisualEditing } from '@sanity/visual-editing/react';
 import { useSanityHomePage } from '../hooks/useSanityHomePage';
 import HomeHero from '../components/features/home/HomeHero';
 import HomeContentSection from '../components/features/home/HomeContentSection';
@@ -28,6 +29,51 @@ interface DebugInfo {
   projectId?: string;
   dataset?: string;
   orgIdParam?: string;
+}
+
+
+export async function fetchHomePage() {
+  if (!sanityClient) {
+    console.error('Sanity client not configured. Check VITE_SANITY_PROJECT_ID env var.');
+    return null;
+  }
+
+  const query = `*[_type == "homePage"][0]{
+    _id,
+    organizationId,
+    internalTitle,
+    seoDescription,
+    modules[]{
+      _type,
+      _key,
+      internalTitle,
+      eyebrow,
+      headline,
+      lede,
+      layout,
+      emphasis,
+      primaryCta,
+      secondaryCta,
+      media{
+        desktop{
+          _type,
+          alt,
+          image{asset->}
+        },
+        mobile{
+          _type,
+          alt,
+          image{asset->}
+        }
+      },
+      body,
+      cta
+    }
+  }`;
+
+  const result = await sanityClient.fetch(query);
+  console.log('fetchHomePage result:', result);
+  return result;
 }
 
 export default function HomePreview() {
@@ -149,18 +195,21 @@ export default function HomePreview() {
   }
 
   return (
-    <Box sx={{ width: '100%' }}>
-      {/* Render modules in sequence */}
-      {homePage.modules.map((module: HomeModule) => {
-        switch (module._type) {
-          case 'homeHeroModule':
-            return <HomeHero key={module._key} module={module} />;
-          case 'homeContentSectionModule':
-            return <HomeContentSection key={module._key} module={module} />;
-          default:
-            return null;
-        }
-      })}
-    </Box>
+    <>
+      <VisualEditing />
+      <Box sx={{ width: '100%' }}>
+        {/* Render modules in sequence */}
+        {homePage.modules.map((module: HomeModule) => {
+          switch (module._type) {
+            case 'homeHeroModule':
+              return <HomeHero key={module._key} module={module} />;
+            case 'homeContentSectionModule':
+              return <HomeContentSection key={module._key} module={module} />;
+            default:
+              return null;
+          }
+        })}
+      </Box>
+    </>
   );
 }

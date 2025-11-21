@@ -4,13 +4,14 @@ import { isSanityPreviewMode } from '../../../utils/sanityPreview';
 // Check if we're in Presentation mode with secure origin verification
 const isPreviewMode = isSanityPreviewMode();
 
-// Fallback configuration for development
+// Client configuration for public content
 const clientConfig = {
   projectId: import.meta.env.VITE_SANITY_PROJECT_ID || 'your-project-id',
   dataset: import.meta.env.VITE_SANITY_DATASET || 'production',
   apiVersion: '2023-09-01',
-  // Prefer fresh content so editors see changes reflected quickly
-  useCdn: false,
+  useCdn: true,
+  token: undefined,
+  ignoreBrowserTokenWarning: true,
   // Enable stega encoding in preview mode (only when securely verified)
   stega: isPreviewMode
     ? {
@@ -52,170 +53,95 @@ export async function fetchPosts() {
 }
 
 export async function fetchPostsPreview() {
-  try {
-    const res = await fetch('/api/sanity-proxy', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ query: POSTS_QUERY, params: {} }),
-    });
-    if (!res.ok) throw new Error(`Proxy error ${res.status}`);
-    const data = await res.json();
-    return data.result ?? [];
-  } catch (e) {
-    console.warn('Preview fetch failed, falling back to public client', e);
-    return fetchPosts();
-  }
+  // With public reads enabled, just use the standard fetch
+  return fetchPosts();
 }
 
 // Home Page queries
 export async function fetchHomePage(organizationId: string) {
+  console.log('fetchHomePage called for:', organizationId, 'client exists:', !!sanityClient);
+  
   if (!sanityClient) {
-    console.warn('Sanity client not configured.');
+    console.error('Sanity client not configured. Check VITE_SANITY_PROJECT_ID env var.');
     return null;
   }
 
-  const query = `*[_type == "homePage" && organizationId == $organizationId][0] {
+  // Test query without parameters first
+  const query = `*[_type == "homePage"][0]{
     _id,
     organizationId,
     internalTitle,
     seoDescription,
-    modules[] {
+    modules[]{
       _type,
       _key,
       internalTitle,
       eyebrow,
       headline,
       lede,
-      body,
       layout,
       emphasis,
       primaryCta,
       secondaryCta,
-      cta,
-      media {
-        desktop {
-          image {
-            asset-> {
-              _id,
-              url,
-              metadata {
-                lqip,
-                dimensions {
-                  width,
-                  height,
-                  aspectRatio
-                }
-              }
-            }
-          },
+      media{
+        desktop{
+          _type,
           alt,
-          caption
+          image{asset->}
         },
-        tablet {
-          image {
-            asset-> {
-              _id,
-              url,
-              metadata {
-                lqip,
-                dimensions {
-                  width,
-                  height,
-                  aspectRatio
-                }
-              }
-            }
-          },
+        mobile{
+          _type,
           alt,
-          caption
-        },
-        mobile {
-          image {
-            asset-> {
-              _id,
-              url,
-              metadata {
-                lqip,
-                dimensions {
-                  width,
-                  height,
-                  aspectRatio
-                }
-              }
-            }
-          },
-          alt,
-          caption
+          image{asset->}
         }
-      }
+      },
+      body,
+      cta
     }
   }`;
 
-  return await sanityClient.fetch(query, { organizationId });
-}
-
-export async function fetchHomePagePreview(organizationId: string) {
   try {
-    const query = `*[_type == "homePage" && organizationId == $organizationId][0]{
-      _id,
-      internalTitle,
-      organizationId,
-      seoDescription,
-      modules[]{
-        ...,
-        _type == "homeHeroModule" => {
-          ...,
-          media {
-            ...,
-            desktop {
-              ...,
-              image {
-                ...,
-                asset->
-              }
-            },
-            mobile {
-              ...,
-              image {
-                ...,
-                asset->
-              }
-            }
-          }
-        },
-        _type == "homeContentSectionModule" => {
-          ...,
-          body[] {
-            ...,
-            markDefs[] {
-              ...,
-              _type == "internalLink" => {
-                "slug": @.reference->slug.current
-              }
-            }
-          }
-        }
-      }
-    }`;
-
-    const res = await fetch('/api/sanity-proxy', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ query, params: { organizationId } }),
-    });
-
-    if (!res.ok) throw new Error(`Proxy error ${res.status}`);
-    const data = await res.json();
-    return data.result ?? null;
-  } catch (e) {
-    console.warn('Preview fetch failed for Home Page', e);
-    return null;
+    console.log('Fetching homePage with query...');
+    const result = await sanityClient.fetch(query);
+    console.log('fetchHomePage result:', result);
+    return result;
+  } catch (err) {
+    console.error('fetchHomePage error:', err);
+    throw err;
   }
 }
 
+export async function fetchHomePagePreview(organizationId: string) {
+  // With public reads enabled, just use the standard fetch
+  return fetchHomePage(organizationId);
+}
+
 export async function debugFetchAllHomePages() {
-  if (!sanityClient) return [];
-  return await sanityClient.fetch(`*[_type == "homePage"]{ _id, organizationId, internalTitle }`);
+  if (!sanityClient) {
+    console.error('No sanityClient available for debug fetch');
+    return [];
+  }
+  
+  console.log('Client config being used:', {
+    projectId: sanityClient.config().projectId,
+    dataset: sanityClient.config().dataset,
+    useCdn: sanityClient.config().useCdn,
+    apiVersion: sanityClient.config().apiVersion,
+  });
+  
+  // Try fetching by exact document ID
+  const byId = await sanityClient.fetch(`*[_id == "homePage-benhickman.dev"][0]`);
+  console.log('Direct ID query result:', byId);
+  
+  // Try the exact query that works in Vision
+  const exactVisionQuery = await sanityClient.fetch(`*[_type == "homePage"][0]{ _id, organizationId, internalTitle }`);
+  console.log('Exact Vision query result:', exactVisionQuery);
+  
+  // Check ALL document types
+  const allDocs = await sanityClient.fetch(`*[_id == "homePage-benhickman.dev" || _type == "homePage"]{ _id, _type, organizationId, internalTitle }`);
+  console.log('All matching documents:', allDocs);
+  
+  return allDocs;
 }
 
 export async function getAllPostSlugs() {
@@ -249,30 +175,8 @@ export async function getPostBySlug(slug: string) {
 }
 
 export async function getPostBySlugPreview(slug: string) {
-  try {
-    const query = `*[_type == "post" && slug.current == $slug][0]{
-      _id,
-      title,
-      body,
-      excerpt,
-      publishedAt,
-      "slug": slug.current,
-      mainImage,
-      "author": author->name,
-      "estimatedReadingTime": round(length(pt::text(body)) / 5 / 180 )
-    }`;
-    const res = await fetch('/api/sanity-proxy', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ query, params: { slug } }),
-    });
-    if (!res.ok) throw new Error(`Proxy error ${res.status}`);
-    const data = await res.json();
-    return data.result ?? null;
-  } catch (e) {
-    console.warn('Preview fetch failed, falling back to public client', e);
-    return getPostBySlug(slug);
-  }
+  // With public reads enabled, just use the standard fetch
+  return getPostBySlug(slug);
 }
 
 export default sanityClient;
