@@ -24,7 +24,7 @@ const ALLOWED_QUERIES = [
   /^\*\[_type\s*==\s*"post"/,
   // Single blog post by slug: *[_type == "post" && slug.current == $slug][0] { fields... }
   /^\*\[_type\s*==\s*"post"\s*&&\s*slug\.current\s*==\s*\$slug/,
-  // Home page queries: *[_type == "homePage" ... 
+  // Home page queries: *[_type == "homePage" ...
   /^\*\[_type\s*==\s*"homePage"/,
 ];
 
