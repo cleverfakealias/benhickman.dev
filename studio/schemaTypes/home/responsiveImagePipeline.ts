@@ -11,12 +11,14 @@ export const homeResponsiveImagePipeline = defineType({
             type: 'homeImageAsset',
             description: '16:9 or similar crop for large viewports (>= 1024px).',
             validation: (rule) => rule.required(),
+            options: { collapsed: false, collapsible: true },
         }),
         defineField({
             name: 'tablet',
             title: 'Tablet',
             type: 'homeImageAsset',
             description: 'Optional crop tuned for medium breakpoints (768-1023px).',
+            options: { collapsed: false, collapsible: true },
         }),
         defineField({
             name: 'mobile',
@@ -24,6 +26,7 @@ export const homeResponsiveImagePipeline = defineType({
             type: 'homeImageAsset',
             description: '4:5 or square crop to avoid layout shift on phones.',
             validation: (rule) => rule.required(),
+            options: { collapsed: false, collapsible: true },
         }),
     ],
     options: { columns: 3 },
