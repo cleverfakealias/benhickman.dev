@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { getPostBySlug } from '../sanity/sanityClient';
-import imageUrlBuilder from '../sanity/imageUrl';
+import { getPostBySlug, getPostBySlugPreview } from '../sanity/sanityClient';
+import { buildImageUrl } from '../sanity/imageUrl';
 import { BlogPost } from '../sanity/types';
 import { Container, Typography, Box, Chip, Button, useTheme, Skeleton, Paper } from '@mui/material';
 import { ArrowBack, AccessTime, Person } from '@mui/icons-material';
@@ -21,7 +21,11 @@ const BlogPostDetail = () => {
       return;
     }
 
-    getPostBySlug(slug)
+    // Check for preview mode via query parameter
+    const isPreview =
+      typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('preview');
+    const loader = isPreview ? getPostBySlugPreview : getPostBySlug;
+    loader(slug)
       .then((data: BlogPost) => {
         if (!data) {
           setError('Post not found');
@@ -79,7 +83,7 @@ const BlogPostDetail = () => {
   }
 
   return (
-    <Container maxWidth="md" sx={{ py: 5 }}>
+    <Container maxWidth="md" sx={{ py: 5 }} data-sanity-edit-target>
       {/* Back to Blog Button */}
       <Button
         component={Link}
@@ -91,18 +95,21 @@ const BlogPostDetail = () => {
       </Button>
 
       {/* Article Header */}
-      <Paper elevation={0} sx={{ p: 5, mb: 5 }}>
+      <Paper
+        elevation={0}
+        sx={{ p: 5, mb: 5 }}
+        data-sanity="post"
+        data-sanity-document-id={post._id}
+      >
         {/* Featured Image */}
         {post.mainImage && (
           <Box
             component="img"
-            src={(() => {
-              const builder = imageUrlBuilder(post.mainImage);
-              if ('width' in builder && typeof builder.width === 'function') {
-                return builder.width(800).height(400).url();
-              }
-              return builder.url();
-            })()}
+            src={buildImageUrl(post.mainImage, {
+              width: 800,
+              height: 400,
+              quality: 85,
+            })}
             alt={post.mainImage.alt || post.title}
             sx={{
               width: '100%',

@@ -5,19 +5,16 @@ export default defineType({
   title: 'Author',
   type: 'document',
   fields: [
-    defineField({
-      name: 'name',
-      title: 'Name',
-      type: 'string',
-    }),
+    defineField({name: 'userId', title: 'User ID (IdP)', type: 'string'}),
+
+    defineField({name: 'name', title: 'Name', type: 'string', validation: (r) => r.required()}),
+
     defineField({
       name: 'slug',
       title: 'Slug',
       type: 'slug',
-      options: {
-        source: 'name',
-        maxLength: 96,
-      },
+      options: {source: 'name', maxLength: 96},
+      validation: (r) => r.required(),
     }),
     defineField({
       name: 'image',

@@ -17,7 +17,6 @@ import { Link, useLocation, matchPath } from 'react-router-dom';
 import { getDomainConfig } from '../../config/domainConfig';
 import MobileDrawer from './MobileDrawer';
 import Socials from './Socials';
-import './Header.css';
 
 const navLinks = [
   { name: 'Home', href: '/' },
@@ -45,12 +44,13 @@ const Header: React.FC<HeaderProps> = ({ themeMode, setThemeMode }) => {
   const toggleTheme = () => setThemeMode(themeMode === 'light' ? 'dark' : 'light');
 
   return (
-    <header
-      className="site-header"
+    <Box
+      component="header"
       role="banner"
-      style={{
+      sx={{
         background: 'color-mix(in oklch, var(--color-bg) 92%, transparent)',
         backdropFilter: 'saturate(120%) blur(6px)',
+        WebkitBackdropFilter: 'saturate(120%) blur(6px)',
         borderBottom: '1px solid var(--color-border)',
         position: 'sticky',
         top: 0,
@@ -60,7 +60,6 @@ const Header: React.FC<HeaderProps> = ({ themeMode, setThemeMode }) => {
       <Container maxWidth="lg" sx={{ px: { xs: 2, md: 4 } }}>
         {/* 3-zone layout */}
         <Box
-          className="header-inner"
           sx={{
             display: 'grid',
             gridTemplateColumns: 'auto 1fr auto',
@@ -70,11 +69,25 @@ const Header: React.FC<HeaderProps> = ({ themeMode, setThemeMode }) => {
           }}
         >
           {/* Left: Brand */}
-          <Link
+          <Box
+            component={Link}
             to="/"
             aria-label={`Go to ${brand.name} home`}
-            className="header-logo"
-            style={{ display: 'flex', gap: 12, alignItems: 'center', height: '100%' }}
+            sx={{
+              display: 'flex',
+              gap: 1.5,
+              alignItems: 'center',
+              height: '100%',
+              textDecoration: 'none',
+              color: 'inherit',
+              transition: 'opacity 200ms var(--easing-standard)',
+              '&:hover': { opacity: 0.85 },
+              '&:focus-visible': {
+                outline: '2px solid var(--color-focus)',
+                outlineOffset: '2px',
+                borderRadius: 'var(--radius-sm)',
+              },
+            }}
           >
             <Avatar
               src={brand.logo}
@@ -117,34 +130,55 @@ const Header: React.FC<HeaderProps> = ({ themeMode, setThemeMode }) => {
                 {brand.subtitle}
               </Typography>
             </Box>
-          </Link>
+          </Box>
 
-          {/* Center: Nav (no absolute positioning) */}
+          {/* Center: Nav (Desktop) */}
           {!isMobile && (
-            <nav aria-label="Primary" style={{ justifySelf: 'center' }}>
-              <ul
-                className="header-links"
-                style={{
-                  display: 'flex',
-                  gap: 'clamp(12px,2.4vw,24px)',
-                  margin: 0,
-                  padding: 0,
-                  listStyle: 'none',
-                }}
-              >
-                {navLinks.map((link) => (
-                  <li key={link.name}>
-                    <Link
-                      to={link.href}
-                      className={isActiveLink(link.href) ? 'active' : ''}
-                      aria-current={isActiveLink(link.href) ? 'page' : undefined}
-                    >
-                      {link.name}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </nav>
+            <Box
+              component="nav"
+              sx={{
+                display: 'flex',
+                gap: { md: 2, lg: 3 },
+                justifyContent: 'center',
+              }}
+            >
+              {navLinks.map((link) => {
+                const active = isActiveLink(link.href);
+                return (
+                  <Box
+                    key={link.name}
+                    component={Link}
+                    to={link.href}
+                    sx={{
+                      position: 'relative',
+                      fontSize: '0.9375rem',
+                      fontWeight: 500,
+                      color: active ? 'var(--color-text)' : 'var(--color-text-secondary)',
+                      textDecoration: 'none',
+                      py: 0.5,
+                      transition: 'color 0.2s ease',
+                      '&:hover': {
+                        color: 'var(--color-accent-hex)',
+                      },
+                      '&::after': {
+                        content: '""',
+                        position: 'absolute',
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        height: '2px',
+                        bgcolor: 'var(--color-accent-hex)',
+                        transform: active ? 'scaleX(1)' : 'scaleX(0)',
+                        transformOrigin: 'bottom left',
+                        transition: 'transform 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
+                      },
+                    }}
+                  >
+                    {link.name}
+                  </Box>
+                );
+              })}
+            </Box>
           )}
 
           {/* Right: Utilities */}
@@ -189,7 +223,7 @@ const Header: React.FC<HeaderProps> = ({ themeMode, setThemeMode }) => {
           // You can render socials inside the drawer footer
         />
       )}
-    </header>
+    </Box>
   );
 };
 

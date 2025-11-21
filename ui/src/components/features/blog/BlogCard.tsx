@@ -11,7 +11,7 @@ import {
   useTheme,
 } from '@mui/material';
 import { AccessTime, Person } from '@mui/icons-material';
-import imageUrlBuilder from '../sanity/imageUrl';
+import { buildImageUrl } from '../sanity/imageUrl';
 import { BlogPost } from '../sanity/types';
 
 interface BlogCardProps {
@@ -30,14 +30,13 @@ export default function BlogCard({ post }: BlogCardProps): React.ReactElement {
     });
   };
 
-  const imageSrc = (() => {
-    if (!post.mainImage) return undefined;
-    const builder = imageUrlBuilder(post.mainImage);
-    if ('width' in builder && typeof builder.width === 'function') {
-      return builder.width(400).height(200).url();
-    }
-    return builder.url();
-  })();
+  // Generate optimized image URL for card display
+  const imageSrc =
+    buildImageUrl(post.mainImage, {
+      width: 400,
+      height: 200,
+      quality: 80,
+    }) || undefined;
 
   const cardSx = {
     height: '100%',
@@ -63,7 +62,7 @@ export default function BlogCard({ post }: BlogCardProps): React.ReactElement {
   };
 
   return (
-    <Card sx={cardSx}>
+    <Card sx={cardSx} data-sanity-edit-target>
       <CardActionArea
         component={Link}
         to={`/blog/post/${post.slug.current}`}
@@ -73,6 +72,8 @@ export default function BlogCard({ post }: BlogCardProps): React.ReactElement {
           flexDirection: 'column',
           alignItems: 'stretch',
         }}
+        data-sanity="post"
+        data-sanity-document-id={post._id}
       >
         {post.mainImage && (
           <CardMedia

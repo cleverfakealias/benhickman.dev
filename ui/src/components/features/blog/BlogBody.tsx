@@ -2,7 +2,7 @@ import React from 'react';
 import { Typography, Box, useTheme, useMediaQuery, styled } from '@mui/material';
 import { PortableText, PortableTextReactComponents } from '@portabletext/react';
 import { TypedObject } from '@portabletext/types';
-import imageUrlBuilder from '../sanity/imageUrl';
+import { buildImageUrl } from '../sanity/imageUrl';
 
 interface BlogBodyProps {
   content: TypedObject[];
@@ -268,19 +268,9 @@ const BlogBody: React.FC<BlogBodyProps> = ({ content }) => {
         console.log('Image value in BlogBody:', value);
 
         // Use Sanity image URL builder for proper image rendering
-        let imageUrl = '';
-
-        if (value.asset) {
-          try {
-            const urlBuilder = imageUrlBuilder(value);
-            imageUrl = urlBuilder.url();
-          } catch (error) {
-            console.error('Error building image URL:', error);
-            imageUrl = value.asset.url || '';
-          }
-        } else {
-          imageUrl = value.url || '';
-        }
+        const imageUrl = value.asset
+          ? buildImageUrl(value, { quality: 85 }) || value.asset.url || ''
+          : value.url || '';
 
         console.log('Final image URL:', imageUrl);
 

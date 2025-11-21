@@ -13,6 +13,7 @@ const BlogPostDetail = lazy(() => import('./components/features/blog/BlogPostDet
 const Contact = lazy(() => import('./pages/Contact'));
 const DevelopmentExperience = lazy(() => import('./pages/DevelopmentExperience'));
 const Playground = lazy(() => import('./pages/Playground'));
+const HomePreview = lazy(() => import('./pages/HomePreview'));
 import { buildTheme } from './theme/theme';
 import { getDomainConfig } from './config/domainConfig';
 import './theme/tokens.css';
@@ -57,6 +58,7 @@ function AnimatedPageContainer() {
             <Route path="experience" element={<DevelopmentExperience />} />
             <Route path="contact" element={<Contact />} />
             <Route path="playground" element={<Playground />} />
+            <Route path="preview/home/:organizationId" element={<HomePreview />} />
           </Routes>
         </Suspense>
       </ErrorBoundary>

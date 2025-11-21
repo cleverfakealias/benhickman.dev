@@ -34,7 +34,7 @@ const FormField: React.FC<FormFieldProps> = ({
   const inputProps = startIcon
     ? {
         startAdornment: multiline
-          ? React.cloneElement(startIcon as React.ReactElement, {
+          ? React.cloneElement(startIcon as React.ReactElement<{ sx?: unknown }>, {
               sx: {
                 mr: 1,
                 color: 'action.active',
@@ -42,7 +42,7 @@ const FormField: React.FC<FormFieldProps> = ({
                 mt: 1,
               },
             })
-          : React.cloneElement(startIcon as React.ReactElement, {
+          : React.cloneElement(startIcon as React.ReactElement<{ sx?: unknown }>, {
               sx: { mr: 1, color: 'action.active' },
             }),
       }

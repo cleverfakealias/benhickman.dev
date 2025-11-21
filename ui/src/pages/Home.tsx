@@ -1,26 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Box, Container } from '@mui/material';
 import HeroBanner from '../components/common/HeroBanner';
 import HomeSummary from '../components/features/HomeSummary';
 import HomeBlogCTA from '../components/features/HomeBlogCTA';
-import { fetchPosts } from '../components/features/sanity/sanityClient';
-import { BlogPost } from '../components/features/sanity/types';
+import { useBlogPosts } from '../hooks/useBlogPosts';
 
 export default function Home(): React.ReactElement {
-  const [firstPost, setFirstPost] = useState<BlogPost | null>(null);
-
-  useEffect(() => {
-    fetchPosts().then((posts) => {
-      if (posts && posts.length > 0) {
-        const sorted = posts.sort(
-          (a: BlogPost, b: BlogPost) =>
-            new Date(b.publishedAt || b._createdAt || '').getTime() -
-            new Date(a.publishedAt || a._createdAt || '').getTime()
-        );
-        setFirstPost(sorted[0]);
-      }
-    });
-  }, []);
+  const { posts } = useBlogPosts();
+  const firstPost = posts && posts.length > 0 ? posts[0] : null;
 
   return (
     <Container maxWidth="lg" sx={{ py: { xs: 3, md: 4 } }}>

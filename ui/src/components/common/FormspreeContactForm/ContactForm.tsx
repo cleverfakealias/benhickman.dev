@@ -21,7 +21,7 @@ interface ContactFormProps {
   submitError: string | null;
   configError: string | null;
   hCaptchaSiteKey: string;
-  captchaRef: React.RefObject<HCaptcha>;
+  captchaRef: React.RefObject<HCaptcha | null>;
   onInputChange: (
     field: keyof FormData
   ) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;

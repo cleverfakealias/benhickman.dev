@@ -26,42 +26,53 @@ html[data-brand='northwoods'] {
   --radius-sm: 4px;
   --radius-md: 8px;
   --radius-lg: 12px;
-  --radius-xl: clamp(14px, 1.4vw, 20px); /* grows on big screens */
+  --radius-xl: clamp(14px, 1.4vw, 20px);
+  /* grows on big screens */
 
   /* Semantic spacers */
   --gap-card: var(--space-4);
-  --gap-stack: var(--space-5); /* gaps between related items */
-  --gap-section: var(--space-7); /* gaps between sections */
+  --gap-stack: var(--space-5);
+  /* gaps between related items */
+  --gap-section: var(--space-7);
+  /* gaps between sections */
   --pad-card: var(--space-4);
   --pad-section: var(--space-7);
 
   /* Accents (desaturated evergreen; copper for highlight only) */
   --color-accent: oklch(0.55 0.07 170);
-  --color-accent-hex: #2e5e49; /* Evergreen (primary, toned down) */
+  --color-accent-hex: #2e5e49;
+  /* Evergreen (primary, toned down) */
   --color-accent-contrast: oklch(0.98 0.01 95);
   --color-accent-contrast-hex: #ffffff;
 
   --color-secondary: oklch(0.68 0.12 55);
-  --color-secondary-hex: #c1663e; /* Copper (highlight) */
+  --color-secondary-hex: #c1663e;
+  /* Copper (highlight) */
 
   /* Surfaces (neutral charcoal; no green tint) */
   --color-bg: oklch(0.15 0.01 180);
-  --color-bg-hex: #0c0f0d; /* Background */
+  --color-bg-hex: #0c0f0d;
+  /* Background */
   --color-surface: oklch(0.19 0.01 180);
-  --color-surface-hex: #131715; /* Elevated surface */
+  --color-surface-hex: #131715;
+  /* Elevated surface */
   --color-overlay: oklch(0.18 0.01 180 / 0.8);
 
   /* Text (neutral grays) */
   --color-text: oklch(0.94 0.01 95);
-  --color-text-hex: #e6e8e6; /* Primary text */
+  --color-text-hex: #e6e8e6;
+  /* Primary text */
   --color-text-secondary: oklch(0.82 0.01 160);
-  --color-text-secondary-hex: #b8bdb8; /* Secondary */
+  --color-text-secondary-hex: #b8bdb8;
+  /* Secondary */
   --color-text-muted: oklch(0.72 0.01 160);
-  --color-text-muted-hex: #96a098; /* Muted */
+  --color-text-muted-hex: #96a098;
+  /* Muted */
 
   /* Lines & focus */
   --color-border: oklch(0.33 0.01 180);
-  --color-border-hex: #1f2420; /* Divider */
+  --color-border-hex: #1f2420;
+  /* Divider */
   --color-focus: oklch(0.55 0.07 170 / 0.45);
   --color-focus-hex: #2e5e4973;
 
@@ -73,7 +84,8 @@ html[data-brand='northwoods'] {
   --color-danger: oklch(0.63 0.15 28);
   --color-danger-hex: #d1603d;
   --color-info: oklch(0.69 0.06 210);
-  --color-info-hex: #6ba3be; /* Lake teal (links/hover) */
+  --color-info-hex: #6ba3be;
+  /* Lake teal (links/hover) */
 
   /* Typography */
   --font-sans:
@@ -105,31 +117,38 @@ html[data-theme='light'][data-brand='northwoods'] {
 
   /* Neutrals */
   --color-bg: oklch(0.98 0.01 95);
-  --color-bg-hex: #f5f7f6; /* slightly cooler, cleaner */
+  --color-bg-hex: #f5f7f6;
+  /* slightly cooler, cleaner */
   --color-surface: oklch(0.995 0.005 95);
-  --color-surface-hex: #fafbfb; /* softer white for cards - blends better */
+  --color-surface-hex: #fafbfb;
+  /* softer white for cards - blends better */
   --color-overlay: oklch(0.97 0.01 95 / 0.85);
 
   /* Text (ink-like, not gray — boosted contrast) */
   --color-text: oklch(0.21 0.03 250);
-  --color-text-hex: #141b20; /* primary body (ink black) */
+  --color-text-hex: #141b20;
+  /* primary body (ink black) */
   --color-text-secondary: oklch(0.55 0.02 240);
-  --color-text-secondary-hex: #53616a; /* secondary */
+  --color-text-secondary-hex: #53616a;
+  /* secondary */
   --color-text-muted: oklch(0.67 0.02 240);
   --color-text-muted-hex: #7a8891;
 
   /* Accents (same brand, slightly stronger in light) */
   --color-accent: oklch(0.58 0.08 170);
-  --color-accent-hex: #2f5a47; /* evergreen */
+  --color-accent-hex: #2f5a47;
+  /* evergreen */
   --color-accent-contrast: oklch(0.98 0.01 95);
   --color-accent-contrast-hex: #ffffff;
 
   --color-secondary: oklch(0.69 0.13 55);
-  --color-secondary-hex: #b65c39; /* copper */
+  --color-secondary-hex: #b65c39;
+  /* copper */
 
   /* Hairlines/borders (1px should be visible) */
   --color-border: oklch(0.9 0.01 95);
-  --color-border-hex: #d8dedb; /* darker than before */
+  --color-border-hex: #d8dedb;
+  /* darker than before */
   --color-focus: oklch(0.58 0.08 170 / 0.35);
   --color-focus-hex: #2f5a474f;
 
@@ -141,7 +160,8 @@ html[data-theme='light'][data-brand='northwoods'] {
   --color-danger: oklch(0.58 0.15 28);
   --color-danger-hex: #b54539;
   --color-info: oklch(0.55 0.06 210);
-  --color-info-hex: #2a7a90; /* lake-teal links */
+  --color-info-hex: #2a7a90;
+  /* lake-teal links */
 
   /* Shadows (distinct but gentle — crisper edges) */
   --shadow-1: 0 1px 3px rgba(16, 24, 28, 0.08), 0 1px 1px rgba(16, 24, 28, 0.05);
@@ -163,7 +183,8 @@ html[data-theme='dark'][data-brand='northwoods'] {
   --color-accent-hex: #2e5e49;
 
   --color-secondary: oklch(0.69 0.12 55);
-  --color-secondary-hex: #d07a4e; /* a hair brighter for contrast on dark */
+  --color-secondary-hex: #d07a4e;
+  /* a hair brighter for contrast on dark */
 
   /* Shadows slightly denser on explicit dark */
   --shadow-2: 0 2px 6px rgba(0, 0, 0, 0.35), 0 1px 2px rgba(0, 0, 0, 0.26);

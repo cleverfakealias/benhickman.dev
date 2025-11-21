@@ -19,19 +19,6 @@ const formspreeUrl = import.meta.env.VITE_FORMSPREE_URL || '';
 const hCaptchaSiteKey = import.meta.env.VITE_HCAPTCHA_SITEKEY || '';
 
 export const domainConfigs: Record<string, DomainConfig> = {
-  'zennlogic.com': {
-    formspreeUrl: formspreeUrl,
-    hCaptchaSiteKey: hCaptchaSiteKey,
-    branding: {
-      name: 'ZennLogic',
-      logo: '/images/ZL monogram.png',
-      alt: 'ZennLogic logo',
-      subtitle: 'Cloud Software Engineering',
-      title: 'ZennLogic | Cloud Software Engineering',
-      description:
-        'ZennLogic delivers cloud software engineering solutions, focusing on robust, efficient, and innovative cloud applications.',
-    },
-  },
   'benhickman.dev': {
     formspreeUrl: formspreeUrl,
     hCaptchaSiteKey: hCaptchaSiteKey,
@@ -43,6 +30,19 @@ export const domainConfigs: Record<string, DomainConfig> = {
       title: 'Ben Hickman | Cloud Architecture and Engineering',
       description:
         'Ben Hickman specializes in cloud architecture and engineering, offering tailored solutions for modern businesses.',
+    },
+  },
+  'zennlogic.com': {
+    formspreeUrl: formspreeUrl,
+    hCaptchaSiteKey: hCaptchaSiteKey,
+    branding: {
+      name: 'ZennLogic',
+      logo: '/images/monogram.png',
+      alt: 'ZennLogic logo',
+      subtitle: 'Cloud Architecture and Engineering',
+      title: 'ZennLogic | Cloud Architecture and Engineering',
+      description:
+        'ZennLogic specializes in cloud architecture and engineering, offering tailored solutions for modern businesses.',
     },
   },
   localhost: {
