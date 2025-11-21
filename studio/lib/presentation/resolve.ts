@@ -1,19 +1,19 @@
-import {defineDocuments, defineLocations} from 'sanity/presentation'
+import { defineDocuments, defineLocations } from 'sanity/presentation'
 
 // Map Sanity documents to your frontend routes
 // Adjust routes if your UI paths change
 export const locations = {
   post: defineLocations({
-    select: {title: 'title', slug: 'slug.current'},
+    select: { title: 'title', slug: 'slug.current' },
     resolve: (doc) => ({
       locations: [
-        {title: (doc as any)?.title || 'Post', href: `/blog/post/${(doc as any)?.slug}`},
-        {title: 'Blog index', href: '/blog'},
+        { title: (doc as any)?.title || 'Post', href: `/blog/post/${(doc as any)?.slug}` },
+        { title: 'Blog index', href: '/blog' },
       ],
     }),
   }),
   homePage: defineLocations({
-    select: {organizationId: 'organizationId'},
+    select: { organizationId: 'organizationId' },
     resolve: (doc) => {
       const organizationId = (doc as any)?.organizationId || 'benhickman.dev'
 
@@ -21,7 +21,7 @@ export const locations = {
         locations: [
           {
             title: 'Preview Home',
-            href: `/preview/home/${organizationId}`,
+            href: `/preview/home/${organizationId.toLowerCase()}`,
           },
         ],
       }
@@ -37,6 +37,6 @@ export const mainDocuments = defineDocuments([
   },
   {
     route: '/preview/home/:organizationId',
-    filter: `_type == "homePage" && organizationId == $organizationId`,
+    filter: `_type == "homePage" && lower(organizationId) == lower($organizationId)`,
   },
 ])

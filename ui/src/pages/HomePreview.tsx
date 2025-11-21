@@ -31,7 +31,9 @@ interface DebugInfo {
 }
 
 export default function HomePreview() {
-  const { organizationId } = useParams<{ organizationId: string }>();
+  const { organizationId: rawOrgId } = useParams<{ organizationId: string }>();
+  // Normalize organizationId to lowercase to match Sanity data
+  const organizationId = rawOrgId?.toLowerCase() || 'benhickman.dev';
   // Force preview mode fetching
   const { homePage, loading, error } = useSanityHomePage(organizationId || 'benhickman.dev', true);
   const [availablePages, setAvailablePages] = useState<DebugPage[]>([]);
