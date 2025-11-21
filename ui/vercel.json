@@ -2,11 +2,13 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "/api/$1"
+      "destination": "/api/$1",
+      "_comment": "Route /api/* requests to serverless functions in /api directory. This rule must come BEFORE the SPA catch-all to prevent API routes from being handled by the React app. Used for Sanity preview proxy (sanity-proxy.js) that requires server-side token handling."
     },
     {
       "source": "/((?!api|images|favicon_io|favicon\\.ico|robots\\.txt|site\\.webmanifest|assets|static).*)",
-      "destination": "/"
+      "destination": "/",
+      "_comment": "SPA catch-all: Route all non-static requests to index.html for client-side routing. The negative lookahead (?!...) excludes: api (serverless functions), images (static assets), favicon files, robots.txt, site.webmanifest, and other static directories."
     }
   ]
 }

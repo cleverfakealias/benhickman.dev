@@ -1,14 +1,9 @@
 import { StructureBuilder } from 'sanity/structure'
+import { ORGANIZATIONS } from '../lib/organizations'
 
 const orgFilter = '_type == "post" && organizationId == $orgId'
 
 const homeDocumentId = (orgId: string) => `homePage-${orgId}`
-
-// Static organization IDs
-const ORGANIZATIONS = [
-    { id: 'zengineer.cloud', title: 'Zengineer.cloud' },
-    { id: 'benhickman.dev', title: 'BenHickman.dev' },
-]
 
 const deskStructure = (S: StructureBuilder) =>
     S.list()

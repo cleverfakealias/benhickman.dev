@@ -124,6 +124,8 @@ const HeroBanner: React.FC = () => {
               src="/images/working.jpg"
               alt="Architect. Build. Elevate."
               className="hero-image"
+              loading="eager"
+              fetchPriority="high"
               sx={{
                 display: 'block',
                 width: '100%',

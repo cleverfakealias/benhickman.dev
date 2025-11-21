@@ -21,6 +21,7 @@ const BlogPostDetail = () => {
       return;
     }
 
+    // Check for preview mode via query parameter
     const isPreview =
       typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('preview');
     const loader = isPreview ? getPostBySlugPreview : getPostBySlug;

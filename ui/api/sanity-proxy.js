@@ -17,6 +17,50 @@ const serverClient = createClient({
   stega: studioUrl ? { studioUrl } : undefined,
 });
 
+// Whitelist of allowed query patterns for preview mode
+// Only permit queries for blog posts and home page content
+const ALLOWED_QUERIES = [
+  // Blog posts list: *[_type == "post"] | order(...) [0..10] { fields... }
+  /^\*\[_type\s*==\s*"post"\s*(?:&&\s*slug\.current\s*==\s*\$slug)?\]\s*(?:\|\s*order\([^)]+\))?\s*(?:\[\d+\.\.\d+\])?\s*\{[^}]+\}$/,
+  // Single blog post by slug: *[_type == "post" && slug.current == $slug][0] { fields... }
+  /^\*\[_type\s*==\s*"post"\s*&&\s*slug\.current\s*==\s*\$slug\]\[0\]\s*\{[^}]+\}$/,
+  // Home page: *[_type == "homePage"][0] { fields... }
+  /^\*\[_type\s*==\s*"homePage"\]\[0\]\s*\{[^}]+\}$/,
+];
+
+// Validate query against whitelist
+function isQueryAllowed(query) {
+  if (!query || typeof query !== 'string') {
+    return false;
+  }
+
+  // Normalize whitespace for consistent matching
+  const normalizedQuery = query.replace(/\s+/g, ' ').trim();
+
+  return ALLOWED_QUERIES.some((pattern) => pattern.test(normalizedQuery));
+}
+
+// Validate params to prevent injection attacks
+function validateParams(params) {
+  if (!params) return true;
+
+  // Only allow simple string/number values, no objects or arrays
+  for (const [key, value] of Object.entries(params)) {
+    if (typeof value !== 'string' && typeof value !== 'number' && typeof value !== 'boolean') {
+      return false;
+    }
+
+    // Prevent GROQ injection in slug parameter - only allow safe characters
+    if (key === 'slug' && typeof value === 'string') {
+      if (!/^[a-z0-9-]+$/i.test(value)) {
+        return false;
+      }
+    }
+  }
+
+  return true;
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     res.status(405).json({ error: 'Method not allowed' });
@@ -28,6 +72,21 @@ export default async function handler(req, res) {
       res.status(400).json({ error: 'Missing query' });
       return;
     }
+
+    // Validate query against whitelist
+    if (!isQueryAllowed(query)) {
+      console.warn('Rejected unauthorized query:', query);
+      res.status(403).json({ error: 'Query not allowed' });
+      return;
+    }
+
+    // Validate params to prevent injection
+    if (!validateParams(params)) {
+      console.warn('Rejected invalid params:', params);
+      res.status(400).json({ error: 'Invalid query parameters' });
+      return;
+    }
+
     const result = await serverClient.fetch(query, params);
     res.status(200).json({ result });
   } catch (err) {

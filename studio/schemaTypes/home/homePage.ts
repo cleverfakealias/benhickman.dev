@@ -1,10 +1,5 @@
 import { defineArrayMember, defineField, defineType } from 'sanity'
-
-const ORGANIZATION_OPTIONS = [
-    { title: 'Zengineer.cloud', value: 'zengineer.cloud' },
-    { title: 'BenHickman.dev', value: 'benhickman.dev' },
-    { title: 'ChisagoLakesMasons.org', value: 'chisagolakesmasons.org' },
-]
+import { ORGANIZATION_OPTIONS } from '../../lib/organizations'
 
 export default defineType({
     name: 'homePage',

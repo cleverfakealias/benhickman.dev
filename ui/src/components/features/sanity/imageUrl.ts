@@ -16,8 +16,8 @@ export default function urlFor(source: SanityImageSource): ImageUrlBuilder {
     // Return a mock builder that returns empty string
     return {
       url: () => '',
-      width: () => ({ url: () => '' } as unknown as ImageUrlBuilder),
-      height: () => ({ url: () => '' } as unknown as ImageUrlBuilder),
+      width: () => ({ url: () => '' }) as unknown as ImageUrlBuilder,
+      height: () => ({ url: () => '' }) as unknown as ImageUrlBuilder,
     } as unknown as ImageUrlBuilder;
   }
   return builder.image(source);
@@ -35,11 +35,11 @@ interface ImageDimensions {
 /**
  * Builds an optimized image URL with specified dimensions and quality.
  * Provides a cleaner API for common image operations.
- * 
+ *
  * @param source - Sanity image source (mainImage object from BlogPost)
  * @param dimensions - Optional width, height, and quality settings
  * @returns Optimized image URL string
- * 
+ *
  * @example
  * ```tsx
  * const imageUrl = buildImageUrl(post.mainImage, { width: 400, height: 200, quality: 80 });

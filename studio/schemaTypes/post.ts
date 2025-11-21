@@ -1,4 +1,5 @@
 import { defineField, defineType } from 'sanity'
+import { ORGANIZATION_OPTIONS } from '../lib/organizations'
 
 export default defineType({
   name: 'post',
@@ -10,11 +11,7 @@ export default defineType({
       title: 'Organization',
       type: 'string',
       options: {
-        list: [
-          { title: 'Zengineer.cloud', value: 'zengineer.cloud' },
-          { title: 'BenHickman.dev', value: 'benhickman.dev' },
-          { title: 'ChisagoLakesMasons.org', value: 'chisagolakesmasons.org' },
-        ],
+        list: ORGANIZATION_OPTIONS,
         layout: 'dropdown', // or 'radio' for radio buttons
       },
       validation: (r) => r.required(),

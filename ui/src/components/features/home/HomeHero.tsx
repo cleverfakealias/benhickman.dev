@@ -1,6 +1,6 @@
 import { Box, Button, Typography, Container, useTheme, useMediaQuery } from '@mui/material';
 import { HomeHeroModule } from '../sanity/types/home';
-import urlFor from '../sanity/imageUrl';
+import { buildImageUrl } from '../sanity/imageUrl';
 
 interface HomeHeroProps {
   module: HomeHeroModule;
@@ -19,18 +19,7 @@ export default function HomeHero({ module }: HomeHeroProps) {
       : module.media.desktop;
 
   // Use Sanity's image URL builder for optimized, high-quality images
-  const imageBuilder = imageAsset?.image?.asset ? urlFor(imageAsset.image.asset) : null;
-  const imageUrl =
-    imageBuilder && 'width' in imageBuilder
-      ? (
-          imageBuilder as {
-            width: (w: number) => { quality: (q: number) => { url: () => string } };
-          }
-        )
-          .width(1200)
-          .quality(90)
-          .url()
-      : imageAsset?.image?.asset?.url || '';
+  const imageUrl = buildImageUrl(imageAsset?.image?.asset, { width: 1200, quality: 90 });
   const lqip = imageAsset?.image?.asset?.metadata?.lqip;
 
   // Map layout to flex direction
@@ -160,7 +149,8 @@ export default function HomeHero({ module }: HomeHeroProps) {
                   component="img"
                   src={imageUrl}
                   alt={imageAsset.alt}
-                  loading="lazy"
+                  loading="eager"
+                  fetchPriority="high"
                   sx={{
                     width: '100%',
                     height: 'auto',

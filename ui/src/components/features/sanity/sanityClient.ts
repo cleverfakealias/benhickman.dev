@@ -1,7 +1,8 @@
 import { createClient } from '@sanity/client';
+import { isSanityPreviewMode } from '../../../utils/sanityPreview';
 
-// Check if we're in Presentation mode (loaded in iframe)
-const isPreviewMode = typeof window !== 'undefined' && window.parent !== window;
+// Check if we're in Presentation mode with secure origin verification
+const isPreviewMode = isSanityPreviewMode();
 
 // Fallback configuration for development
 const clientConfig = {
@@ -10,7 +11,7 @@ const clientConfig = {
   apiVersion: '2023-09-01',
   // Prefer fresh content so editors see changes reflected quickly
   useCdn: false,
-  // Enable stega encoding in preview mode
+  // Enable stega encoding in preview mode (only when securely verified)
   stega: isPreviewMode
     ? {
         enabled: true,

@@ -31,11 +31,12 @@ export default function BlogCard({ post }: BlogCardProps): React.ReactElement {
   };
 
   // Generate optimized image URL for card display
-  const imageSrc = buildImageUrl(post.mainImage, {
-    width: 400,
-    height: 200,
-    quality: 80,
-  }) || undefined;
+  const imageSrc =
+    buildImageUrl(post.mainImage, {
+      width: 400,
+      height: 200,
+      quality: 80,
+    }) || undefined;
 
   const cardSx = {
     height: '100%',

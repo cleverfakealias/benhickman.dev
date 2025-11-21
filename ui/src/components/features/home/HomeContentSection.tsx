@@ -1,7 +1,7 @@
 import { Box, Button, Typography, Container } from '@mui/material';
 import { PortableText } from '@portabletext/react';
 import { HomeContentSectionModule } from '../sanity/types/home';
-import urlFor from '../sanity/imageUrl';
+import { buildImageUrl } from '../sanity/imageUrl';
 
 interface HomeContentSectionProps {
   module: HomeContentSectionModule;
@@ -11,18 +11,7 @@ export default function HomeContentSection({ module }: HomeContentSectionProps) 
   const isFullWidth = module.layout === 'full-width';
   const isContentRight = module.layout === 'content-right';
 
-  const imageBuilder = module.media?.image?.asset ? urlFor(module.media.image.asset) : null;
-  const imageUrl =
-    imageBuilder && 'width' in imageBuilder
-      ? (
-          imageBuilder as {
-            width: (w: number) => { quality: (q: number) => { url: () => string } };
-          }
-        )
-          .width(800)
-          .quality(90)
-          .url()
-      : module.media?.image?.asset?.url || '';
+  const imageUrl = buildImageUrl(module.media?.image?.asset, { width: 800, quality: 90 });
   const imageAlt = module.media?.alt || '';
   const lqip = module.media?.image?.asset?.metadata?.lqip;
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { Typography, Box, useTheme, useMediaQuery, styled } from '@mui/material';
 import { PortableText, PortableTextReactComponents } from '@portabletext/react';
 import { TypedObject } from '@portabletext/types';
-import urlFor, { buildImageUrl } from '../sanity/imageUrl';
+import { buildImageUrl } from '../sanity/imageUrl';
 
 interface BlogBodyProps {
   content: TypedObject[];

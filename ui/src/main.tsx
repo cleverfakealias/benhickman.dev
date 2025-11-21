@@ -4,6 +4,7 @@ import App from './App.tsx';
 import './styles/index.css';
 import { updateMetaTags } from './config/domainConfig';
 import { enableVisualEditing } from '@sanity/visual-editing';
+import { shouldEnableVisualEditing } from './utils/sanityPreview';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
@@ -15,8 +16,8 @@ createRoot(document.getElementById('root')!).render(
 updateMetaTags();
 
 // Enable Sanity visual editing for presentation mode
-// Only enable if loaded in an iframe (Presentation mode)
-if (window.parent !== window) {
+// Security: Only enable if in a trusted Sanity Studio iframe with verified origin
+if (shouldEnableVisualEditing()) {
   enableVisualEditing({
     zIndex: 999999,
   });
