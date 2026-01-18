@@ -6,6 +6,7 @@ declare interface ImportMetaEnv {
   readonly VITE_HCAPTCHA_SITEKEY?: string;
   readonly VITE_SANITY_PROJECT_ID?: string;
   readonly VITE_SANITY_DATASET?: string;
+  readonly VITE_GA_MEASUREMENT_ID?: string;
 }
 
 declare interface ImportMeta {

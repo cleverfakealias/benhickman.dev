@@ -32,6 +32,20 @@
       content="Ben Hickman specializes in cloud architecture and engineering, offering tailored solutions for modern businesses."
     />
     <meta property="twitter:image" content="https://benhickman.dev/images/BH monogram.png" />
+    <!-- Google tag (gtag.js) -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=%VITE_GA_MEASUREMENT_ID%"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+
+      gtag('config', '%VITE_GA_MEASUREMENT_ID%');
+    </script>
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -86,6 +100,7 @@
         color: inherit;
         margin-bottom: 0.2em;
       }
+
       .subtitle {
         font-family: 'Orbitron', sans-serif;
         font-size: 1.1rem;
@@ -113,6 +128,7 @@
       })();
     </script>
   </head>
+
   <body>
     <a
       href="#main-content"
