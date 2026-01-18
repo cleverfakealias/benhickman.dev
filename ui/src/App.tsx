@@ -15,6 +15,7 @@ const DevelopmentExperience = lazy(() => import('./pages/DevelopmentExperience')
 const Playground = lazy(() => import('./pages/Playground'));
 import { buildTheme } from './theme/theme';
 import { getDomainConfig } from './config/domainConfig';
+import { GA_MEASUREMENT_ID } from './config/analytics';
 import './theme/tokens.css';
 
 function AnimatedPageContainer() {
@@ -64,6 +65,27 @@ function AnimatedPageContainer() {
   );
 }
 
+function AnalyticsTracker() {
+  const location = useLocation();
+
+  useEffect(() => {
+    if (
+      !GA_MEASUREMENT_ID ||
+      typeof window === 'undefined' ||
+      typeof window.gtag !== 'function'
+    ) {
+      return;
+    }
+
+    const pagePath = `${location.pathname}${location.search}${location.hash}`;
+    window.gtag('config', GA_MEASUREMENT_ID, {
+      page_path: pagePath,
+    });
+  }, [location.pathname, location.search, location.hash]);
+
+  return null;
+}
+
 function App() {
   const { themeMode, setThemeMode } = useTheme();
   const { branding } = getDomainConfig();
@@ -91,6 +113,7 @@ function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+        <AnalyticsTracker />
         <Header themeMode={themeMode} setThemeMode={setThemeMode} />
         <main
           id="main-content"
