@@ -69,11 +69,7 @@ function AnalyticsTracker() {
   const location = useLocation();
 
   useEffect(() => {
-    if (
-      !GA_MEASUREMENT_ID ||
-      typeof window === 'undefined' ||
-      typeof window.gtag !== 'function'
-    ) {
+    if (!GA_MEASUREMENT_ID || typeof window === 'undefined' || typeof window.gtag !== 'function') {
       return;
     }
 

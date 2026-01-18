@@ -1,40 +1,52 @@
 <!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/images/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ben Hickman | Cloud Architecture and Engineering</title>
+    <meta
+      name="description"
+      content="Ben Hickman specializes in cloud architecture and engineering, offering tailored solutions for modern businesses."
+    />
+    <meta
+      name="keywords"
+      content="cloud architecture, web development, software solutions, Ben Hickman, cloud engineering"
+    />
+    <link rel="canonical" href="https://benhickman.dev/" />
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://benhickman.dev/" />
+    <meta property="og:title" content="Ben Hickman | Cloud Architecture and Engineering" />
+    <meta
+      property="og:description"
+      content="Ben Hickman specializes in cloud architecture and engineering, offering tailored solutions for modern businesses."
+    />
+    <meta property="og:image" content="https://benhickman.dev/images/BH monogram.png" />
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://benhickman.dev/" />
+    <meta property="twitter:title" content="Ben Hickman | Cloud Architecture and Engineering" />
+    <meta
+      property="twitter:description"
+      content="Ben Hickman specializes in cloud architecture and engineering, offering tailored solutions for modern businesses."
+    />
+    <meta property="twitter:image" content="https://benhickman.dev/images/BH monogram.png" />
+    <!-- Google tag (gtag.js) -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=%VITE_GA_MEASUREMENT_ID%"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
 
-<head>
-  <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml" href="/images/favicon.ico" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Ben Hickman | Cloud Architecture and Engineering</title>
-  <meta name="description"
-    content="Ben Hickman specializes in cloud architecture and engineering, offering tailored solutions for modern businesses." />
-  <meta name="keywords"
-    content="cloud architecture, web development, software solutions, Ben Hickman, cloud engineering" />
-  <link rel="canonical" href="https://benhickman.dev/" />
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://benhickman.dev/" />
-  <meta property="og:title" content="Ben Hickman | Cloud Architecture and Engineering" />
-  <meta property="og:description"
-    content="Ben Hickman specializes in cloud architecture and engineering, offering tailored solutions for modern businesses." />
-  <meta property="og:image" content="https://benhickman.dev/images/BH monogram.png" />
-  <!-- Twitter -->
-  <meta property="twitter:card" content="summary_large_image" />
-  <meta property="twitter:url" content="https://benhickman.dev/" />
-  <meta property="twitter:title" content="Ben Hickman | Cloud Architecture and Engineering" />
-  <meta property="twitter:description"
-    content="Ben Hickman specializes in cloud architecture and engineering, offering tailored solutions for modern businesses." />
-  <meta property="twitter:image" content="https://benhickman.dev/images/BH monogram.png" />
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=%VITE_GA_MEASUREMENT_ID%"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag() { dataLayer.push(arguments); }
-    gtag('js', new Date());
-
-    gtag('config', '%VITE_GA_MEASUREMENT_ID%');
-  </script>
-  <script type="application/ld+json">
+      gtag('config', '%VITE_GA_MEASUREMENT_ID%');
+    </script>
+    <script type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@type": "Organization",
@@ -45,7 +57,7 @@
         "sameAs": []
       }
     </script>
-  <script type="application/ld+json">
+    <script type="application/ld+json">
       {
         "@context": "https://schema.org",
         "@type": "WebSite",
@@ -58,66 +70,80 @@
         }
       }
     </script>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Pacifico&display=swap"
-    rel="stylesheet" />
-  <!-- Preconnects for Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <!-- Geist Sans (Google Early Access via variable family) -->
-  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <!-- Clash Display from Fontshare -->
-  <link href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap" rel="stylesheet" />
-  <!-- JetBrains Mono Variable (fallback to static if variable not available) -->
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400..800;1,400..800&display=swap"
-    rel="stylesheet" />
-  <style>
-    .fancy-title {
-      font-family: 'Pacifico', cursive;
-      font-size: 2.2rem;
-      letter-spacing: 0.04em;
-      color: inherit;
-      margin-bottom: 0.2em;
-    }
-
-    .subtitle {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 1.1rem;
-      color: inherit;
-      letter-spacing: 0.08em;
-    }
-  </style>
-  <script>
-    (function () {
-      try {
-        var SOURCE_KEY = 'zennlogic-theme-source';
-        var MODE_KEY = 'zennlogic-theme-mode';
-        var source = localStorage.getItem(SOURCE_KEY) || 'system';
-        var mode = (source === 'manual' && localStorage.getItem(MODE_KEY)) || null;
-        if (!mode) {
-          mode =
-            window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
-              ? 'dark'
-              : 'light';
-        }
-        document.documentElement.setAttribute('data-theme', mode);
-      } catch (e) {
-        // no-op
+    <link
+      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Pacifico&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Preconnects for Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Geist Sans (Google Early Access via variable family) -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- Clash Display from Fontshare -->
+    <link
+      href="https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700&display=swap"
+      rel="stylesheet"
+    />
+    <!-- JetBrains Mono Variable (fallback to static if variable not available) -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400..800;1,400..800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      .fancy-title {
+        font-family: 'Pacifico', cursive;
+        font-size: 2.2rem;
+        letter-spacing: 0.04em;
+        color: inherit;
+        margin-bottom: 0.2em;
       }
-    })();
-  </script>
-</head>
 
-<body>
-  <a href="#main-content" class="skip-to-content" style="
+      .subtitle {
+        font-family: 'Orbitron', sans-serif;
+        font-size: 1.1rem;
+        color: inherit;
+        letter-spacing: 0.08em;
+      }
+    </style>
+    <script>
+      (function () {
+        try {
+          var SOURCE_KEY = 'zennlogic-theme-source';
+          var MODE_KEY = 'zennlogic-theme-mode';
+          var source = localStorage.getItem(SOURCE_KEY) || 'system';
+          var mode = (source === 'manual' && localStorage.getItem(MODE_KEY)) || null;
+          if (!mode) {
+            mode =
+              window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+                ? 'dark'
+                : 'light';
+          }
+          document.documentElement.setAttribute('data-theme', mode);
+        } catch (e) {
+          // no-op
+        }
+      })();
+    </script>
+  </head>
+
+  <body>
+    <a
+      href="#main-content"
+      class="skip-to-content"
+      style="
         position: absolute;
         left: -10000px;
         top: auto;
         width: 1px;
         height: 1px;
         overflow: hidden;
-      ">Skip to content</a>
-  <div id="root"></div>
-  <script type="module" src="/src/main.tsx"></script>
-</body>
-
+      "
+      >Skip to content</a
+    >
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>
