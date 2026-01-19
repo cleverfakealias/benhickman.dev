@@ -11,7 +11,11 @@ const initialFormData: FormData = {
   message: '',
 };
 
-export const useFormspreeForm = (formspreeUrl?: string, hCaptchaSiteKey?: string) => {
+export const useFormspreeForm = (
+  formspreeUrl?: string,
+  hCaptchaSiteKey?: string,
+  defaultSubject?: string
+) => {
   const captchaRef = useRef<HCaptcha>(null);
 
   const [formData, setFormData] = useState<FormData>(initialFormData);
@@ -93,6 +97,7 @@ export const useFormspreeForm = (formspreeUrl?: string, hCaptchaSiteKey?: string
         formData,
         captchaToken,
         formspreeUrl: formspreeUrl!,
+        subject: defaultSubject,
       });
 
       if (result.success) {

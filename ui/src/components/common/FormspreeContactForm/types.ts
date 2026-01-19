@@ -8,6 +8,7 @@ export interface FormData {
 export interface FormspreeContactFormProps {
   formspreeUrl?: string;
   recaptchaSiteKey?: string;
+  defaultSubject?: string;
 }
 
 export type FormErrors = Partial<FormData>;

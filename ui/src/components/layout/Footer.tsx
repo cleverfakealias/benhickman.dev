@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
+import { useConsent } from '../../hooks/useConsent';
 import { Box, Typography, Menu, MenuItem, IconButton, Tooltip, useTheme } from '@mui/material';
+import { Link } from 'react-router-dom';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Socials from './Socials';
 import { FaSun, FaMoon } from 'react-icons/fa';
@@ -16,6 +18,7 @@ const navLinks = [
 
 const FooterQuickLinks: React.FC = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const { setSettingsOpen } = useConsent(); // Use the consent hook
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -64,6 +67,14 @@ const FooterQuickLinks: React.FC = () => {
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         transformOrigin={{ vertical: 'bottom', horizontal: 'right' }}
       >
+        <MenuItem
+          onClick={handleClose}
+          component={Link}
+          to="/privacy"
+          sx={{ fontSize: '0.95rem', minWidth: 120 }}
+        >
+          Privacy Policy
+        </MenuItem>
         {navLinks.map((link) => (
           <MenuItem
             key={link.name}
@@ -75,6 +86,17 @@ const FooterQuickLinks: React.FC = () => {
             {link.name}
           </MenuItem>
         ))}
+        <MenuItem
+          key="cookies"
+          onClick={() => {
+            // Open the settings modal
+            setSettingsOpen(true);
+            handleClose();
+          }}
+          sx={{ fontSize: '0.95rem', minWidth: 120 }}
+        >
+          Cookie Preferences
+        </MenuItem>
       </Menu>
     </>
   );

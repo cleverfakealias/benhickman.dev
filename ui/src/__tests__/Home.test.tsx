@@ -53,6 +53,7 @@ const renderWithRouter = (component: React.ReactElement) => {
 // Mock blog post data
 const mockBlogPosts: BlogPost[] = [
   {
+    _id: '1',
     title: 'Latest Blog Post',
     slug: { current: 'latest-blog-post' },
     excerpt: 'This is the latest blog post',
@@ -68,6 +69,7 @@ const mockBlogPosts: BlogPost[] = [
     estimatedReadingTime: 5,
   },
   {
+    _id: '2',
     title: 'Older Blog Post',
     slug: { current: 'older-blog-post' },
     excerpt: 'This is an older blog post',
@@ -236,6 +238,7 @@ describe('Home Page', () => {
     it('should sort blog posts by publishedAt date', async () => {
       const unsortedPosts: BlogPost[] = [
         {
+          _id: '3',
           title: mockBlogPosts[1]!.title,
           slug: mockBlogPosts[1]!.slug,
           publishedAt: '2024-01-10T00:00:00Z',
@@ -246,6 +249,7 @@ describe('Home Page', () => {
           estimatedReadingTime: mockBlogPosts[1]!.estimatedReadingTime,
         },
         {
+          _id: '4',
           title: mockBlogPosts[0]!.title,
           slug: mockBlogPosts[0]!.slug,
           publishedAt: '2024-01-20T00:00:00Z',
@@ -256,6 +260,7 @@ describe('Home Page', () => {
           estimatedReadingTime: mockBlogPosts[0]!.estimatedReadingTime,
         },
         {
+          _id: '5',
           title: 'Middle Blog Post',
           slug: { current: 'middle-blog-post' },
           excerpt: 'This is a middle blog post',
@@ -290,6 +295,7 @@ describe('Home Page', () => {
     it('should fallback to _createdAt if publishedAt is missing', async () => {
       const postsWithoutPublishedAt: BlogPost[] = [
         {
+          _id: '6',
           title: mockBlogPosts[0]!.title,
           slug: mockBlogPosts[0]!.slug,
           publishedAt: undefined,
@@ -300,6 +306,7 @@ describe('Home Page', () => {
           estimatedReadingTime: mockBlogPosts[0]!.estimatedReadingTime,
         },
         {
+          _id: '7',
           title: mockBlogPosts[1]!.title,
           slug: mockBlogPosts[1]!.slug,
           publishedAt: undefined,
@@ -443,6 +450,7 @@ describe('Home Page', () => {
     it('should handle posts with missing dates', async () => {
       const postsWithMissingDates: BlogPost[] = [
         {
+          _id: '8',
           title: mockBlogPosts[0]!.title,
           slug: mockBlogPosts[0]!.slug,
           publishedAt: undefined,
@@ -453,6 +461,7 @@ describe('Home Page', () => {
           estimatedReadingTime: mockBlogPosts[0]!.estimatedReadingTime,
         },
         {
+          _id: '9',
           title: mockBlogPosts[1]!.title,
           slug: mockBlogPosts[1]!.slug,
           publishedAt: '2024-01-10T00:00:00Z',
@@ -484,6 +493,7 @@ describe('Home Page', () => {
     it('should handle posts with invalid date strings', async () => {
       const postsWithInvalidDates: BlogPost[] = [
         {
+          _id: '10',
           title: mockBlogPosts[0]!.title,
           slug: mockBlogPosts[0]!.slug,
           publishedAt: 'invalid-date',
@@ -494,6 +504,7 @@ describe('Home Page', () => {
           estimatedReadingTime: mockBlogPosts[0]!.estimatedReadingTime,
         },
         {
+          _id: '11',
           title: mockBlogPosts[1]!.title,
           slug: mockBlogPosts[1]!.slug,
           publishedAt: '2024-01-10T00:00:00Z',

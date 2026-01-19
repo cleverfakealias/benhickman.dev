@@ -7,7 +7,7 @@ import FormHeader from './FormHeader';
 import ContactForm from './ContactForm';
 import SuccessScreen from './SuccessScreen';
 
-const FormspreeContactForm: React.FC<FormspreeContactFormProps> = () => {
+const FormspreeContactForm: React.FC<FormspreeContactFormProps> = ({ defaultSubject }) => {
   const { formspreeUrl, hCaptchaSiteKey } = getDomainConfig();
 
   const {
@@ -30,7 +30,7 @@ const FormspreeContactForm: React.FC<FormspreeContactFormProps> = () => {
     onCaptchaVerified,
     onCaptchaExpired,
     resetForm,
-  } = useFormspreeForm(formspreeUrl, hCaptchaSiteKey);
+  } = useFormspreeForm(formspreeUrl, hCaptchaSiteKey, defaultSubject);
 
   if (formSubmitted) {
     return <SuccessScreen onSendAnother={resetForm} />;

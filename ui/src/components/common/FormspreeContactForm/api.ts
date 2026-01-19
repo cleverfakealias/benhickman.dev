@@ -8,17 +8,23 @@ export interface SubmitFormOptions {
   formData: FormData;
   captchaToken: string;
   formspreeUrl: string;
+  subject?: string;
 }
 
 export const submitForm = async ({
   formData,
   captchaToken,
   formspreeUrl,
+  subject,
 }: SubmitFormOptions): Promise<{ success: boolean; error?: string }> => {
   // Build urlencoded body (Formspree-friendly) and include the reCAPTCHA token
   const params = new URLSearchParams();
   Object.entries(formData).forEach(([k, v]) => params.append(k, String(v)));
   params.append('g-recaptcha-response', captchaToken);
+
+  if (subject) {
+    params.append('_subject', subject);
+  }
 
   // Add a timeout so the UI isn't stuck if the network hangs
   const controller = new AbortController();

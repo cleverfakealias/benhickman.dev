@@ -1,6 +1,7 @@
 /// <reference types="vite/client" />
 
 declare interface ImportMetaEnv {
+  [key: string]: string | undefined;
   readonly VITE_RECAPTCHA_SITE_KEY?: string;
   readonly VITE_FORMSPREE_URL?: string;
   readonly VITE_HCAPTCHA_SITEKEY?: string;
@@ -9,6 +10,7 @@ declare interface ImportMetaEnv {
   readonly VITE_GA_MEASUREMENT_ID?: string;
 }
 
-declare interface ImportMeta {
-  readonly env: ImportMetaEnv;
+declare interface Window {
+  dataLayer?: unknown[];
+  gtag?: (...args: unknown[]) => void;
 }

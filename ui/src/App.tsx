@@ -3,7 +3,7 @@ import Footer from './components/layout/Footer';
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { useTheme } from './hooks/useTheme';
-import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, useLocation, Navigate } from 'react-router-dom';
 import { lazy, Suspense, useState, useEffect, useMemo } from 'react';
 import ErrorBoundary from './components/common/ErrorBoundary';
 import RouteSkeleton from './components/common/RouteSkeleton';
@@ -11,11 +11,15 @@ const Home = lazy(() => import('./pages/Home'));
 const Blog = lazy(() => import('./pages/Blog'));
 const BlogPostDetail = lazy(() => import('./components/features/blog/BlogPostDetail'));
 const Contact = lazy(() => import('./pages/Contact'));
-const DevelopmentExperience = lazy(() => import('./pages/DevelopmentExperience'));
 const Playground = lazy(() => import('./pages/Playground'));
+const DevelopmentExperience = lazy(() => import('./pages/DevelopmentExperience'));
 import { buildTheme } from './theme/theme';
 import { getDomainConfig } from './config/domainConfig';
-import { GA_MEASUREMENT_ID } from './config/analytics';
+import { ConsentProvider } from './contexts/consent/ConsentProvider';
+import ConsentBanner from './components/common/ConsentBanner';
+import CookieSettingsModal from './components/common/CookieSettingsModal';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import AnalyticsTracker from './components/common/AnalyticsTracker';
 import './theme/tokens.css';
 
 function AnimatedPageContainer() {
@@ -54,8 +58,11 @@ function AnimatedPageContainer() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="blog" element={<Blog />} />
-            <Route path="blog/post/:slug" element={<BlogPostDetail />} />
+            <Route path="/blog/:slug" element={<BlogPostDetail />} />
+            <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="experience" element={<DevelopmentExperience />} />
+            <Route path="career" element={<DevelopmentExperience />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
             <Route path="contact" element={<Contact />} />
             <Route path="playground" element={<Playground />} />
           </Routes>
@@ -65,22 +72,7 @@ function AnimatedPageContainer() {
   );
 }
 
-function AnalyticsTracker() {
-  const location = useLocation();
-
-  useEffect(() => {
-    if (!GA_MEASUREMENT_ID || typeof window === 'undefined' || typeof window.gtag !== 'function') {
-      return;
-    }
-
-    const pagePath = `${location.pathname}${location.search}${location.hash}`;
-    window.gtag('config', GA_MEASUREMENT_ID, {
-      page_path: pagePath,
-    });
-  }, [location.pathname, location.search, location.hash]);
-
-  return null;
-}
+// Internal AnalyticsTracker removed - replaced by src/components/common/AnalyticsTracker.tsx
 
 function App() {
   const { themeMode, setThemeMode } = useTheme();
@@ -107,24 +99,28 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-        <AnalyticsTracker />
-        <Header themeMode={themeMode} setThemeMode={setThemeMode} />
-        <main
-          id="main-content"
-          style={{
-            flex: 1,
-            display: 'flex',
-            flexDirection: 'column',
-            marginBottom: 'var(--space-5)', // Space for fixed footer
-            minHeight: 'calc(100vh - 64px - 52px)', // Full height minus header and footer
-          }}
-        >
-          <AnimatedPageContainer />
-        </main>
-        <Footer themeMode={themeMode} setThemeMode={setThemeMode} />
-      </Router>
+      <ConsentProvider>
+        <CssBaseline />
+        <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+          <AnalyticsTracker />
+          <Header themeMode={themeMode} setThemeMode={setThemeMode} />
+          <main
+            id="main-content"
+            style={{
+              flex: 1,
+              display: 'flex',
+              flexDirection: 'column',
+              marginBottom: 'var(--space-5)', // Space for fixed footer
+              minHeight: 'calc(100vh - 64px - 52px)', // Full height minus header and footer
+            }}
+          >
+            <AnimatedPageContainer />
+          </main>
+          <Footer themeMode={themeMode} setThemeMode={setThemeMode} />
+          <ConsentBanner />
+        </Router>
+        <CookieSettingsModal />
+      </ConsentProvider>
     </ThemeProvider>
   );
 }

@@ -8,6 +8,8 @@ export default {
       env: {
         VITE_SANITY_PROJECT_ID: 'test-project-id',
         VITE_SANITY_DATASET: 'test',
+        VITE_GA_MEASUREMENT_ID: 'G-TEST',
+        VITE_GA_DEBUG: 'false',
         MODE: 'test',
       },
     },
