@@ -9,7 +9,7 @@ import type { TimelineItemData } from './CareerTimeline';
 
 export const timelineData: TimelineItemData[] = [
   {
-    title: 'Founder & Principal Software Engineer',
+    title: 'Founder & Lead Software Engineer',
     subtitle: 'BenHickman.dev – Independent Consultancy',
     description:
       'Design and ship full-stack cloud apps end-to-end: UX, React/Next.js frontends, API/CMS integrations, AWS/Vercel hosting, CI/CD, monitoring, and domain/DNS/SSL. Build reusable component libraries and a multi-tenant CMS architecture to accelerate client delivery; provide ongoing SEO and accessibility improvements.',
