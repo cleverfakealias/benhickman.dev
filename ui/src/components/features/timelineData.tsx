@@ -73,7 +73,7 @@ export const timelineData: TimelineItemData[] = [
   },
   {
     title: 'AWS Certified Solutions Architect – Professional',
-    subtitle: 'Targeting Winter 2025',
+    subtitle: 'Coursework Completed',
     description:
       'Completing advanced design and operations across distributed, secure, cost-optimized AWS architectures.',
     timestamp: 'In Progress',
