@@ -87,7 +87,7 @@ const HomeSummary: React.FC = () => {
             <Box
               component="img"
               src="https://cdn.sanity.io/images/unh13egm/production/04a3b0e80225a4ced2a9233f14d0cecccfed85ff-6000x3376.jpg"
-              alt="Autumn Road"
+              alt="Tree-lined country road in autumn with golden leaves on the ground"
               sx={{
                 display: 'block',
                 width: '100%',
