@@ -59,6 +59,7 @@ function AnimatedPageContainer() {
             <Route path="/" element={<Home />} />
             <Route path="blog" element={<Blog />} />
             <Route path="/blog/post/:slug" element={<BlogPostDetail />} />
+            <Route path="/blog/:slug" element={<Navigate to="/blog/post/:slug" replace />} />
             <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="experience" element={<DevelopmentExperience />} />
             <Route path="career" element={<DevelopmentExperience />} />
