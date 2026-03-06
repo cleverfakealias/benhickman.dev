@@ -1,6 +1,6 @@
 # Sanity Studio
 
-This is the content management system (CMS) for the Zengineer Cloud platform, built with Sanity.io. It provides a user-friendly interface for editing and managing content like blog posts, authors, categories, and more.
+Content management system (CMS) for benhickman.dev, built with Sanity. It provides a user-friendly interface for editing and managing content like blog posts, authors, categories, and home page modules.
 
 ## ✨ Features
 
@@ -12,7 +12,7 @@ This is the content management system (CMS) for the Zengineer Cloud platform, bu
 
 ## 🛠️ Tech Stack
 
-- Sanity.io v3
+- Sanity v4
 - React (via Sanity Studio)
 - TypeScript
 
@@ -37,7 +37,7 @@ npm install
    - Note your `projectId` and `dataset` (usually `production`).
 
 2. **Configure Environment**:
-   - Create a `.env` file in the `studio/` directory (use `.env.template` as reference):
+    - Create a `.env` file in the `studio/` directory (use `.env.template` as reference):
      ```
      SANITY_STUDIO_DATASET=production
      SANITY_STUDIO_PREVIEW_URL=http://localhost:5173

@@ -1,10 +1,10 @@
-# Zengineer Cloud UI
+# benhickman.dev UI
 
-This is the React frontend for the Zengineer Cloud platform, built with Vite, TypeScript, and Material-UI. It integrates with Sanity CMS for content and supports multi-domain branding, contact forms with hCaptcha, and responsive design.
+React frontend for benhickman.dev, built with Vite, TypeScript, and Material-UI. It integrates with Sanity CMS content, supports multi-domain branding, and includes contact forms with hCaptcha.
 
 ## ✨ Features
 
-- **Multi-Domain Branding**: Dynamic theming for `zengineer.cloud`, `zennlogic.com`, etc.
+- **Multi-Domain Branding**: Dynamic theming for benhickman.dev, zengineer.cloud, and zennlogic.com.
 - **Responsive Design**: Material-UI with light/dark mode.
 - **Contact Forms**: Formspree integration with hCaptcha spam protection.
 - **CMS Integration**: Pulls content from Sanity.io.
@@ -13,9 +13,9 @@ This is the React frontend for the Zengineer Cloud platform, built with Vite, Ty
 
 ## 🛠️ Tech Stack
 
-- React 18, Vite 5, TypeScript 5
+- React 19, Vite 6, TypeScript 5
 - Material-UI 6, Emotion 11
-- Sanity.io client
+- Sanity client
 - Formspree + hCaptcha
 - Jest, Storybook
 
@@ -48,7 +48,7 @@ npm install
 
 ## 🚀 Usage
 
-- **Dev Server**: `npm run dev` (opens at `http://localhost:5173`)
+- **Dev Server**: `npm run dev` (opens at http://localhost:5173)
 - **Build**: `npm run build`
 - **Preview**: `npm run preview`
 - **Lint**: `npm run lint`
@@ -58,7 +58,7 @@ npm install
 
 ## 🚀 Deployment
 
-Configured for Vercel. Connect repo and deploy automatically after CI.
+Configured for Vercel. Connect the repo and deploy automatically after CI.
 
 ## 🤝 Contributing
 
