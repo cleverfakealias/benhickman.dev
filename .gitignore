@@ -133,3 +133,6 @@ dist
 **/localhost-key.pem
 **/localhost.pem
 .vercel
+
+# Claude Code local overrides
+.claude/settings.local.json
