@@ -1,6 +1,6 @@
 ---
 name: typescript-standards
-description: TypeScript/JavaScript conventions for this repo — toolchain, style, typing, testing, and security. Use when writing, reviewing, or refactoring TS/JS code, or setting up project config (tsconfig, eslint, jest, package.json).
+description: TypeScript/JavaScript conventions for this repo — toolchain, style, typing, testing, and security. Use when writing, reviewing, or refactoring TS/JS code, or setting up project config (tsconfig, biome, vitest, package.json).
 user-invocable: true
 ---
 
@@ -8,10 +8,10 @@ user-invocable: true
 
 ## Toolchain
 
-- **Prettier + ESLint** are the formatter + linter: `npm run prettier -- --write .` to format, `npm run lint` (ESLint flat config, `eslint.config.js`) to lint. Run from inside `ui/` or `studio/`.
+- **Biome 2.x** is the formatter + linter: `biome check --write .` locally, `biome ci .` in CI. One tool, one config (`biome.json`). ESLint+Prettier only if the project needs a niche ESLint plugin Biome lacks.
 - **Typecheck**: `tsc --noEmit` is the gate. TypeScript 7's native `tsgo --noEmit` is a drop-in speedup — adopt when the project's targets allow (es2021+, no downlevel emit).
-- **Jest** for tests: `npm test` (or `npm run test:coverage`). React Testing Library for components.
-- **npm** for packages in `ui/` and `studio/`. Commit the lockfile change when adding deps; keep install scripts disabled.
+- **vitest** for tests: `vitest run`. `node:test` acceptable for zero-dep libraries.
+- **pnpm** for packages. pnpm 11's `minimumReleaseAge` (24h cooldown) stays at default — it exists to block freshly-poisoned releases; don't disable it. CI installs with `--frozen-lockfile`.
 
 ## tsconfig
 
@@ -30,11 +30,11 @@ user-invocable: true
 
 - Co-locate tests as `<file>.test.ts` or in `tests/`; follow what the repo already does.
 - Test behavior through public APIs, not implementation details. Avoid snapshot tests for logic.
-- Mock only the true edges (fetch, fs, timers — Jest fake timers).
+- Mock only the true edges (fetch, fs, timers — vitest's `vi.useFakeTimers`).
 
 ## Security
 
 - Validate external data at the boundary with zod (or equivalent) — types are erased at runtime.
 - No `eval`/`new Function`/`dangerouslySetInnerHTML` with external strings.
 - Secrets via environment at runtime; never committed, never bundled into client code.
-- New dependencies: check the exact package name (typosquats), prefer established packages, keep lifecycle scripts disabled.
+- New dependencies: check the exact package name (typosquats), prefer established packages, keep lifecycle scripts disabled (pnpm default).
