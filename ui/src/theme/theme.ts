@@ -37,24 +37,18 @@ export const buildTheme = (mode: 'light' | 'dark') => {
     divider: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)',
   } as const;
 
-  const shape = { borderRadius: 'var(--radius-md)' as unknown as number } as const;
+  const shape = { borderRadius: 8 } as const;
 
-  const shadows: Shadows = [
-    'none',
-    readVar('--shadow-1', '0 1px 2px rgba(17,20,24,.06), 0 1px 1px rgba(17,20,24,.04)'),
-    readVar('--shadow-2', '0 2px 6px rgba(17,20,24,.08), 0 1px 2px rgba(17,20,24,.06)'),
-    readVar('--shadow-3', '0 6px 12px rgba(17,20,24,.10), 0 2px 4px rgba(17,20,24,.08)'),
-    readVar('--shadow-4', '0 10px 20px rgba(17,20,24,.12), 0 4px 6px rgba(17,20,24,.10)'),
-    readVar('--shadow-5', '0 18px 36px rgba(17,20,24,.16), 0 8px 12px rgba(17,20,24,.12)'),
-    ...Array(19).fill('none'),
-  ] as unknown as Shadows;
+  // Obsidian Foundry: 1px Iron borders carry depth — no shadows.
+  const shadows: Shadows = Array(25).fill('none') as unknown as Shadows;
 
   const fontFamilySans =
-    'Geist, Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif';
-  const fontFamilyDisplay = "'Clash Display', Geist, system-ui";
+    "'JetBrains Mono', 'Commit Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace";
+  const fontFamilyDisplay =
+    'Geist, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif';
   const fontFamilyMonospace =
-    "'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace";
-  const headingCommon = { letterSpacing: '-0.01em', lineHeight: 1.1 } as const;
+    "'JetBrains Mono', 'Commit Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace";
+  const headingCommon = { letterSpacing: '-0.025em', lineHeight: 1.04 } as const;
 
   const typography = {
     fontFamily: fontFamilySans,
@@ -62,17 +56,25 @@ export const buildTheme = (mode: 'light' | 'dark') => {
     h1: {
       ...headingCommon,
       fontFamily: fontFamilyDisplay,
-      fontWeight: 700,
-      fontSize: 'clamp(2.4rem, 3vw, 3.2rem)',
+      fontWeight: 500,
+      fontSize: 'clamp(2.6rem, 7vw, 4.8rem)',
+      letterSpacing: '-0.035em',
+      lineHeight: 1.02,
     },
     h2: {
       ...headingCommon,
       fontFamily: fontFamilyDisplay,
-      fontWeight: 600,
-      fontSize: 'clamp(1.8rem, 2.4vw, 2.4rem)',
+      fontWeight: 500,
+      fontSize: 'clamp(1.9rem, 4vw, 3.2rem)',
     },
-    h3: { ...headingCommon, fontWeight: 600, fontSize: '1.5rem', lineHeight: 1.2 },
-    h4: { ...headingCommon, fontWeight: 600, fontSize: '1.25rem' },
+    h3: {
+      ...headingCommon,
+      fontFamily: fontFamilyDisplay,
+      fontWeight: 500,
+      fontSize: 'clamp(1.25rem, 2.5vw, 1.6rem)',
+      lineHeight: 1.14,
+    },
+    h4: { ...headingCommon, fontFamily: fontFamilyDisplay, fontWeight: 500, fontSize: '1.2rem' },
     subtitle1: { fontWeight: 500, letterSpacing: '0', lineHeight: 1.4 },
     body1: { fontWeight: 400, lineHeight: 1.75, letterSpacing: '0.005em' },
     body2: { fontWeight: 400, lineHeight: 1.7, letterSpacing: '0.01em' },
@@ -169,7 +171,10 @@ export const buildTheme = (mode: 'light' | 'dark') => {
           contained: {
             backgroundColor: palette.primary.main as string,
             color: palette.primary.contrastText as string,
-            '&:hover': { filter: 'saturate(1.05)', boxShadow: shadows[2] as string },
+            '&:hover': {
+              backgroundColor: readVar('--color-accent-hover-hex', '#ff6316'),
+              boxShadow: 'none',
+            },
           },
           outlined: {
             borderColor: readVar('--color-border-hex', isDark ? '#2a313a' : '#e5e7eb'),
@@ -224,7 +229,9 @@ export const buildTheme = (mode: 'light' | 'dark') => {
         styleOverrides: {
           root: {
             backgroundColor: palette.background.paper as string,
-            boxShadow: shadows[1] as string,
+            border: `1px solid ${readVar('--color-border-hex', '#27272A')}`,
+            boxShadow: 'none',
+            backgroundImage: 'none',
             borderRadius: 'var(--radius-lg)',
           },
         },
@@ -232,12 +239,13 @@ export const buildTheme = (mode: 'light' | 'dark') => {
       MuiAppBar: {
         styleOverrides: {
           root: {
-            backdropFilter: 'saturate(140%) blur(10px)',
             backgroundColor: alpha(
-              readVar('--color-surface-hex', isDark ? '#0f141a' : '#f6f7f9'),
-              0.9
+              readVar('--color-surface-hex', isDark ? '#161618' : '#FFFFFF'),
+              0.92
             ),
-            boxShadow: shadows[1] as string,
+            borderBottom: `1px solid ${readVar('--color-border-hex', '#27272A')}`,
+            boxShadow: 'none',
+            backgroundImage: 'none',
           },
         },
       },
@@ -257,7 +265,9 @@ export const buildTheme = (mode: 'light' | 'dark') => {
         styleOverrides: {
           paper: {
             backgroundColor: palette.background.paper as string,
-            boxShadow: shadows[3] as string,
+            border: `1px solid ${readVar('--color-border-hex', '#27272A')}`,
+            boxShadow: 'none',
+            backgroundImage: 'none',
           },
         },
       },
