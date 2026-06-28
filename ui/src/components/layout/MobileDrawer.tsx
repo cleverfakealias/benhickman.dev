@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { Avatar, useTheme } from '@mui/material';
 import FocusTrap from 'focus-trap-react';
 import Socials from './Socials';
 
@@ -13,29 +12,22 @@ interface Props {
 }
 
 const MobileDrawer: React.FC<Props> = ({ open, onClose, navLinks, brand, isActiveLink }) => {
-  const theme = useTheme();
   const drawerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        onClose();
-      }
+      if (e.key === 'Escape') onClose();
     };
-
     if (open) {
       document.addEventListener('keydown', handleEscape);
-      // Prevent body scroll when menu is open
       document.body.style.overflow = 'hidden';
     }
-
     return () => {
       document.removeEventListener('keydown', handleEscape);
       document.body.style.overflow = '';
     };
   }, [open, onClose]);
 
-  // Animate drawer and backdrop
   const [visible, setVisible] = React.useState(open);
   React.useEffect(() => {
     if (open) setVisible(true);
@@ -45,17 +37,13 @@ const MobileDrawer: React.FC<Props> = ({ open, onClose, navLinks, brand, isActiv
 
   return (
     <>
-      {/* Animated Backdrop */}
+      {/* Backdrop */}
       <div
         style={{
           position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
+          inset: 0,
           background: 'rgba(0, 0, 0, 0.6)',
           zIndex: 1999,
-          backdropFilter: 'blur(4px)',
           cursor: 'pointer',
           opacity: open ? 1 : 0,
           transition: 'opacity 300ms cubic-bezier(0.4,0,0.2,1)',
@@ -77,15 +65,15 @@ const MobileDrawer: React.FC<Props> = ({ open, onClose, navLinks, brand, isActiv
             top: 0,
             left: 0,
             right: 0,
-            background: theme.palette.primary.main,
-            color: theme.palette.primary.contrastText,
+            background: 'var(--color-surface)',
+            color: 'var(--color-text)',
+            borderBottom: '1px solid var(--color-border)',
             padding: 'var(--space-3)',
             zIndex: 2000,
             transform: open ? 'translateY(0)' : 'translateY(-32px)',
             opacity: open ? 1 : 0,
             transition:
               'transform 300ms cubic-bezier(0.4,0,0.2,1), opacity 300ms cubic-bezier(0.4,0,0.2,1)',
-            boxShadow: theme.shadows[2],
             maxHeight: '100vh',
             overflowY: 'auto',
           }}
@@ -94,14 +82,14 @@ const MobileDrawer: React.FC<Props> = ({ open, onClose, navLinks, brand, isActiv
           }}
           onClick={(e) => e.stopPropagation()}
         >
-          {/* Header with close button */}
+          {/* Header row */}
           <div
             style={{
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
               paddingBottom: 'var(--space-3)',
-              borderBottom: `1px solid ${theme.palette.primary.contrastText}1A`,
+              borderBottom: '1px solid var(--color-border)',
               marginBottom: 'var(--space-4)',
             }}
           >
@@ -111,25 +99,21 @@ const MobileDrawer: React.FC<Props> = ({ open, onClose, navLinks, brand, isActiv
               style={{
                 display: 'flex',
                 alignItems: 'center',
-                gap: '0.75rem',
+                gap: '0.7rem',
                 textDecoration: 'none',
-                color: theme.palette.primary.contrastText,
+                color: 'var(--color-text)',
+                fontFamily: 'Geist, sans-serif',
                 fontSize: '1.1rem',
-                fontWeight: '600',
+                fontWeight: 600,
               }}
-              aria-label={`Go to ${brand.name} home page`}
+              aria-label={`${brand.name} — home`}
             >
-              <Avatar
-                src={brand.logo}
-                alt={brand.alt}
-                sx={{
-                  width: 32,
-                  height: 32,
-                  border: `2px solid ${theme.palette.secondary.main}`,
-                  boxShadow: theme.shadows[1],
-                  bgcolor: 'background.paper',
-                }}
-              />
+              <span
+                aria-hidden="true"
+                style={{ color: 'var(--color-accent-hex)', fontSize: '1.2rem' }}
+              >
+                ◉
+              </span>
               <span>{brand.name}</span>
             </Link>
 
@@ -137,32 +121,24 @@ const MobileDrawer: React.FC<Props> = ({ open, onClose, navLinks, brand, isActiv
               onClick={onClose}
               aria-label="Close navigation menu"
               style={{
-                background: 'none',
-                border: 'none',
-                color: theme.palette.primary.contrastText,
-                fontSize: '1.5rem',
+                background: 'transparent',
+                border: '1px solid var(--color-border)',
+                color: 'var(--color-text)',
+                fontSize: '1.25rem',
                 cursor: 'pointer',
-                padding: '0.5rem',
                 borderRadius: 'var(--radius-sm)',
-                transition: 'background-color 0.2s ease',
                 minWidth: '44px',
                 minHeight: '44px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
               }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = `${theme.palette.primary.contrastText}1A`;
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'transparent';
-              }}
             >
               ✕
             </button>
           </div>
 
-          {/* Navigation Links */}
+          {/* Nav */}
           <nav aria-label="Mobile navigation">
             <ul
               style={{
@@ -171,57 +147,57 @@ const MobileDrawer: React.FC<Props> = ({ open, onClose, navLinks, brand, isActiv
                 margin: 0,
                 display: 'flex',
                 flexDirection: 'column',
-                gap: '0.5rem',
+                gap: '0.25rem',
               }}
             >
-              {navLinks.map((link) => (
-                <li key={link.name}>
-                  <Link
-                    to={link.href}
-                    onClick={onClose}
-                    aria-current={isActiveLink(link.href) ? 'page' : undefined}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      padding: 'var(--space-3)',
-                      color: isActiveLink(link.href)
-                        ? theme.palette.secondary.main
-                        : theme.palette.primary.contrastText,
-                      fontWeight: isActiveLink(link.href) ? '700' : '400',
-                      textDecoration: 'none',
-                      borderRadius: 'var(--radius-md)',
-                      transition: 'all 0.2s ease',
-                      fontSize: '1.1rem',
-                      minHeight: '44px',
-                      position: 'relative',
-                    }}
-                  >
-                    {isActiveLink(link.href) && (
-                      <span
-                        style={{
-                          width: '8px',
-                          height: '8px',
-                          borderRadius: '50%',
-                          backgroundColor: theme.palette.secondary.main,
-                          boxShadow: `0 0 8px ${theme.palette.mode === 'dark' ? 'rgba(140, 210, 239, 0.3)' : 'rgba(65, 42, 145, 0.3)'}`,
-                          marginRight: '0.75rem',
-                          display: 'inline-block',
-                        }}
-                      />
-                    )}
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
+              {navLinks.map((link) => {
+                const active = isActiveLink(link.href);
+                return (
+                  <li key={link.name}>
+                    <Link
+                      to={link.href}
+                      onClick={onClose}
+                      aria-current={active ? 'page' : undefined}
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        padding: 'var(--space-3)',
+                        color: active ? 'var(--color-accent-hex)' : 'var(--color-text-secondary)',
+                        fontFamily: 'var(--font-mono)',
+                        fontWeight: active ? 600 : 400,
+                        textDecoration: 'none',
+                        borderRadius: 'var(--radius-md)',
+                        fontSize: '1rem',
+                        minHeight: '44px',
+                      }}
+                    >
+                      {active && (
+                        <span
+                          aria-hidden="true"
+                          style={{
+                            width: '7px',
+                            height: '7px',
+                            borderRadius: '50%',
+                            backgroundColor: 'var(--color-accent-hex)',
+                            marginRight: '0.7rem',
+                            display: 'inline-block',
+                          }}
+                        />
+                      )}
+                      {link.name}
+                    </Link>
+                  </li>
+                );
+              })}
             </ul>
           </nav>
 
-          {/* Social Links */}
+          {/* Socials */}
           <div
             style={{
-              marginTop: '2rem',
-              paddingTop: '1.5rem',
-              borderTop: `1px solid ${theme.palette.primary.contrastText}1A`,
+              marginTop: '1.5rem',
+              paddingTop: '1.25rem',
+              borderTop: '1px solid var(--color-border)',
               textAlign: 'center',
             }}
           >

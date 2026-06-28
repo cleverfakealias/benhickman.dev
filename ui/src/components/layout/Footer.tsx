@@ -1,61 +1,52 @@
 import React, { useState } from 'react';
 import { useConsent } from '../../hooks/useConsent';
-import { Box, Typography, Menu, MenuItem, IconButton, Tooltip, useTheme } from '@mui/material';
+import { Box, Typography, Menu, MenuItem, IconButton, Tooltip } from '@mui/material';
 import { Link } from 'react-router-dom';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Socials from './Socials';
 import { FaSun, FaMoon } from 'react-icons/fa';
 import { getDomainConfig } from '../../config/domainConfig';
 
-// Quick Links Dropdown Component and navLinks must be outside Footer
 const navLinks = [
-  { name: 'Home', href: '/' },
   { name: 'Experience', href: '/experience' },
-  { name: 'Career', href: '/career' },
+  { name: 'Writing', href: '/blog' },
+  { name: 'Playground', href: '/playground' },
   { name: 'Contact', href: '/contact' },
-  { name: 'Blog', href: '/blog' },
 ];
+
+const iconBtnSx = {
+  width: 32,
+  height: 32,
+  color: 'var(--color-text-muted)',
+  border: '1px solid transparent',
+  transition:
+    'color 0.15s var(--easing-standard), border-color 0.15s var(--easing-standard), background 0.15s var(--easing-standard)',
+  '&:hover': {
+    color: 'var(--color-accent-hex)',
+    borderColor: 'var(--color-border)',
+    background: 'color-mix(in oklch, var(--color-accent) 8%, transparent)',
+  },
+} as const;
 
 const FooterQuickLinks: React.FC = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const { setSettingsOpen } = useConsent(); // Use the consent hook
+  const { setSettingsOpen } = useConsent();
   const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
+  const handleClose = () => setAnchorEl(null);
   return (
     <>
-      <Tooltip title="Quick Links">
+      <Tooltip title="Quick links">
         <IconButton
-          aria-label="quick links"
+          aria-label="Quick links"
           aria-controls={open ? 'footer-quick-links-menu' : undefined}
           aria-haspopup="true"
           aria-expanded={open ? 'true' : undefined}
           onClick={handleClick}
           size="small"
-          sx={{
-            width: 32,
-            height: 32,
-            color: 'var(--color-text-secondary-hex)',
-            opacity: 0.7,
-            border: '1px solid transparent',
-            transition:
-              'color 0.15s var(--easing-standard), ' +
-              'opacity 0.15s var(--easing-standard), ' +
-              'border-color 0.15s var(--easing-standard), ' +
-              'background 0.15s var(--easing-standard)',
-            '&:hover': {
-              color: 'var(--color-accent-hex)',
-              opacity: 1,
-              borderColor: 'var(--color-border)',
-              background: 'color-mix(in oklch, var(--color-accent) 8%, transparent)',
-            },
-          }}
+          sx={iconBtnSx}
         >
-          <MoreVertIcon />
+          <MoreVertIcon fontSize="small" />
         </IconButton>
       </Tooltip>
       <Menu
@@ -63,7 +54,6 @@ const FooterQuickLinks: React.FC = () => {
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
-        MenuListProps={{ 'aria-labelledby': 'footer-quick-links-button' }}
         anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
         transformOrigin={{ vertical: 'bottom', horizontal: 'right' }}
       >
@@ -71,17 +61,17 @@ const FooterQuickLinks: React.FC = () => {
           onClick={handleClose}
           component={Link}
           to="/privacy"
-          sx={{ fontSize: '0.95rem', minWidth: 120 }}
+          sx={{ fontSize: '0.9rem', fontFamily: 'var(--font-mono)', minWidth: 140 }}
         >
           Privacy Policy
         </MenuItem>
         {navLinks.map((link) => (
           <MenuItem
             key={link.name}
-            component="a"
-            href={link.href}
+            component={Link}
+            to={link.href}
             onClick={handleClose}
-            sx={{ fontSize: '0.95rem', minWidth: 120 }}
+            sx={{ fontSize: '0.9rem', fontFamily: 'var(--font-mono)', minWidth: 140 }}
           >
             {link.name}
           </MenuItem>
@@ -89,11 +79,10 @@ const FooterQuickLinks: React.FC = () => {
         <MenuItem
           key="cookies"
           onClick={() => {
-            // Open the settings modal
             setSettingsOpen(true);
             handleClose();
           }}
-          sx={{ fontSize: '0.95rem', minWidth: 120 }}
+          sx={{ fontSize: '0.9rem', fontFamily: 'var(--font-mono)', minWidth: 140 }}
         >
           Cookie Preferences
         </MenuItem>
@@ -108,9 +97,8 @@ interface FooterProps {
 }
 
 const Footer: React.FC<FooterProps> = ({ themeMode, setThemeMode }) => {
-  const theme = useTheme();
   const isDark = themeMode === 'dark';
-  const config = getDomainConfig();
+  const { branding } = getDomainConfig();
 
   return (
     <Box
@@ -118,118 +106,59 @@ const Footer: React.FC<FooterProps> = ({ themeMode, setThemeMode }) => {
       role="contentinfo"
       aria-label="Site footer"
       sx={{
-        position: 'fixed',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        zIndex: 1000,
-        background: 'color-mix(in oklch, var(--color-bg) 90%, black 5%)',
-        backdropFilter: 'saturate(120%) blur(6px)',
-        WebkitBackdropFilter: 'saturate(120%) blur(6px)',
         borderTop: '1px solid var(--color-border)',
-        boxShadow: '0 -1px 2px rgba(0, 0, 0, 0.04)',
-        p: 0,
+        background: 'var(--color-bg)',
       }}
     >
       <Box
         sx={{
-          maxWidth: '1200px',
+          maxWidth: 1240,
           mx: 'auto',
-          px: 'var(--space-4)',
-          height: { xs: 'auto', sm: 'clamp(44px, 6vw, 52px)' },
-          display: 'grid',
-          gridTemplateColumns: { xs: 'auto 1fr auto', sm: '1fr auto 1fr' },
+          px: 'clamp(16px, 5vw, 40px)',
+          py: 'var(--space-3)',
+          display: 'flex',
+          flexWrap: 'wrap',
           alignItems: 'center',
-          gap: { xs: 'var(--space-2)', sm: 'var(--space-3)' },
-          py: { xs: 'var(--space-2)', sm: 0 },
+          justifyContent: 'space-between',
+          gap: 'var(--space-2) var(--space-4)',
         }}
       >
-        {/* Left: Tagline with copper accent dot */}
-        <Box
+        <Typography
           sx={{
-            justifySelf: 'start',
-            display: 'flex',
-            alignItems: 'center',
-            gap: 1,
+            fontFamily: 'var(--font-mono)',
+            fontSize: '0.75rem',
+            color: 'var(--color-text-muted)',
+            letterSpacing: '0.01em',
           }}
         >
-          <Box
-            sx={{
-              width: 6,
-              height: 6,
-              borderRadius: '50%',
-              bgcolor: 'var(--color-secondary-hex)',
-              flexShrink: 0,
-            }}
-          />
-          <Typography
-            sx={{
-              fontSize: { xs: '0.75rem', md: '0.8125rem' },
-              fontWeight: 600,
-              color: theme.palette.text.secondary,
-              letterSpacing: '0.02em',
-              whiteSpace: 'nowrap',
-            }}
-            aria-label="Mission statement"
-          >
-            Architect. Build. Elevate.
-          </Typography>
-        </Box>
+          © {new Date().getFullYear()} {branding.name} · built in an IDE
+        </Typography>
 
-        {/* Center: Copyright */}
-        <Box
-          sx={{
-            justifySelf: 'center',
-            order: { xs: 3, sm: 0 },
-            gridColumn: { xs: '1 / -1', sm: 'auto' },
-          }}
-        >
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
           <Typography
+            aria-hidden="true"
             sx={{
-              fontSize: { xs: '0.7rem', md: '0.8125rem' },
-              color: theme.palette.text.secondary,
-              opacity: 0.7,
+              fontFamily: 'var(--font-mono)',
+              fontSize: '0.7rem',
+              color: 'var(--color-text-muted)',
+              display: { xs: 'none', md: 'inline' },
+              mr: 0.5,
             }}
           >
-            © {new Date().getFullYear()} {config.branding.name}
+            ◉ model → agent → UI
           </Typography>
-        </Box>
-
-        {/* Right: Icons */}
-        <Box
-          sx={{
-            justifySelf: 'end',
-            display: 'flex',
-            alignItems: 'center',
-            gap: { xs: 0.5, md: 1 },
-          }}
-        >
           <FooterQuickLinks />
           <Socials />
-          <IconButton
-            aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
-            onClick={() => setThemeMode(isDark ? 'light' : 'dark')}
-            sx={{
-              width: 32,
-              height: 32,
-              color: theme.palette.text.secondary,
-              opacity: 0.7,
-              border: '1px solid transparent',
-              transition:
-                'color 0.15s var(--easing-standard), ' +
-                'opacity 0.15s var(--easing-standard), ' +
-                'border-color 0.15s var(--easing-standard), ' +
-                'background 0.15s var(--easing-standard)',
-              '&:hover': {
-                color: 'var(--color-accent-hex)',
-                opacity: 1,
-                borderColor: 'var(--color-border)',
-                background: 'color-mix(in oklch, var(--color-accent) 8%, transparent)',
-              },
-            }}
-          >
-            {isDark ? <FaSun size={14} /> : <FaMoon size={12} />}
-          </IconButton>
+          <Tooltip title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}>
+            <IconButton
+              aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
+              onClick={() => setThemeMode(isDark ? 'light' : 'dark')}
+              size="small"
+              sx={iconBtnSx}
+            >
+              {isDark ? <FaSun size={14} /> : <FaMoon size={12} />}
+            </IconButton>
+          </Tooltip>
         </Box>
       </Box>
     </Box>

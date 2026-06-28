@@ -4,7 +4,8 @@ import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { useTheme } from './hooks/useTheme';
 import { BrowserRouter as Router, Route, Routes, useLocation, Navigate } from 'react-router-dom';
-import { lazy, Suspense, useState, useEffect, useMemo } from 'react';
+import { lazy, Suspense, useState, useEffect, useMemo, useRef } from 'react';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import ErrorBoundary from './components/common/ErrorBoundary';
 import RouteSkeleton from './components/common/RouteSkeleton';
 const Home = lazy(() => import('./pages/Home'));
@@ -24,14 +25,34 @@ import './theme/tokens.css';
 
 function AnimatedPageContainer() {
   const location = useLocation();
+  const prefersReducedMotion = useMediaQuery('(prefers-reduced-motion: reduce)');
   const [animate, setAnimate] = useState(true);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const firstRender = useRef(true);
+
   useEffect(() => {
+    if (prefersReducedMotion) {
+      setAnimate(true);
+      return;
+    }
     setAnimate(false);
     const timeout = setTimeout(() => setAnimate(true), 0);
     return () => clearTimeout(timeout);
+  }, [location.pathname, prefersReducedMotion]);
+
+  // Move focus to the page region on navigation (skip the initial mount) for a11y.
+  useEffect(() => {
+    if (firstRender.current) {
+      firstRender.current = false;
+      return;
+    }
+    containerRef.current?.focus();
   }, [location.pathname]);
+
   return (
     <div
+      ref={containerRef}
+      tabIndex={-1}
       style={{
         flex: 1,
         display: 'flex',
@@ -41,10 +62,12 @@ function AnimatedPageContainer() {
         paddingBottom: 'var(--space-7)',
         marginBottom: 0,
         gap: 'var(--space-3)',
-        opacity: animate ? 1 : 0,
-        transform: animate ? 'translateY(0)' : 'translateY(24px)',
-        transition:
-          'opacity 400ms cubic-bezier(0.4,0,0.2,1), transform 400ms cubic-bezier(0.4,0,0.2,1)',
+        outline: 'none',
+        opacity: prefersReducedMotion || animate ? 1 : 0,
+        transform: prefersReducedMotion || animate ? 'translateY(0)' : 'translateY(24px)',
+        transition: prefersReducedMotion
+          ? 'none'
+          : 'opacity 400ms cubic-bezier(0.4,0,0.2,1), transform 400ms cubic-bezier(0.4,0,0.2,1)',
       }}
     >
       <ErrorBoundary
@@ -111,8 +134,6 @@ function App() {
               flex: 1,
               display: 'flex',
               flexDirection: 'column',
-              marginBottom: 'var(--space-5)', // Space for fixed footer
-              minHeight: 'calc(100vh - 64px - 52px)', // Full height minus header and footer
             }}
           >
             <AnimatedPageContainer />

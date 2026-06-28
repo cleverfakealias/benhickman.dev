@@ -1,30 +1,32 @@
 import React from 'react';
-import {
-  Avatar,
-  Box,
-  Typography,
-  IconButton,
-  Container,
-  Stack,
-  useTheme,
-  useMediaQuery,
-  Tooltip,
-} from '@mui/material';
+import { Box, IconButton, Tooltip, useTheme, useMediaQuery } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import { Link, useLocation, matchPath } from 'react-router-dom';
 import { getDomainConfig } from '../../config/domainConfig';
 import MobileDrawer from './MobileDrawer';
-import Socials from './Socials';
 
+// Primary nav. Work/About land in a later phase with their pages; until then
+// these point only at routes that exist so nothing dead-links.
 const navLinks = [
-  { name: 'Home', href: '/' },
   { name: 'Experience', href: '/experience' },
-  { name: 'Contact', href: '/contact' },
-  { name: 'Blog', href: '/blog' },
+  { name: 'Writing', href: '/blog' },
   { name: 'Playground', href: '/playground' },
+  { name: 'Contact', href: '/contact' },
 ];
+
+const kbdSx = {
+  fontFamily: 'var(--font-mono)',
+  fontSize: '0.65rem',
+  lineHeight: 1.4,
+  background: 'var(--color-surface-2)',
+  border: '1px solid var(--color-border)',
+  borderRadius: '4px',
+  px: '5px',
+  py: '1px',
+  color: 'var(--color-text-secondary)',
+} as const;
 
 interface HeaderProps {
   themeMode: 'light' | 'dark';
@@ -48,171 +50,194 @@ const Header: React.FC<HeaderProps> = ({ themeMode, setThemeMode }) => {
       component="header"
       role="banner"
       sx={{
-        background: 'color-mix(in oklch, var(--color-bg) 92%, transparent)',
-        backdropFilter: 'saturate(120%) blur(6px)',
-        WebkitBackdropFilter: 'saturate(120%) blur(6px)',
-        borderBottom: '1px solid var(--color-border)',
         position: 'sticky',
         top: 0,
         zIndex: 50,
+        display: 'flex',
+        justifyContent: 'center',
+        px: 'clamp(16px, 5vw, 40px)',
+        pt: '12px',
+        pb: '12px',
+        pointerEvents: 'none',
       }}
     >
-      <Container maxWidth="lg" sx={{ px: { xs: 2, md: 4 } }}>
-        {/* 3-zone layout */}
+      {/* Floating pill */}
+      <Box
+        sx={{
+          pointerEvents: 'auto',
+          width: 'min(1240px, 100%)',
+          display: 'grid',
+          gridTemplateColumns: 'auto 1fr auto',
+          alignItems: 'center',
+          gap: 1,
+          minHeight: 52,
+          px: { xs: 1.5, md: 2 },
+          py: 0.75,
+          background: 'color-mix(in oklch, var(--color-surface) 92%, transparent)',
+          border: '1px solid var(--color-border)',
+          borderRadius: 'var(--radius-pill)',
+        }}
+      >
+        {/* Brand */}
         <Box
+          component={Link}
+          to="/"
+          aria-label={`${brand.name} — home`}
           sx={{
-            display: 'grid',
-            gridTemplateColumns: 'auto 1fr auto',
+            display: 'flex',
             alignItems: 'center',
-            gap: 2,
-            height: { xs: 56, md: 64 },
+            gap: 1.1,
+            pl: 0.5,
+            textDecoration: 'none',
+            color: 'inherit',
+            '&:focus-visible': {
+              outline: '2px solid var(--color-accent-hex)',
+              outlineOffset: '2px',
+              borderRadius: 'var(--radius-sm)',
+            },
           }}
         >
-          {/* Left: Brand */}
           <Box
-            component={Link}
-            to="/"
-            aria-label={`Go to ${brand.name} home`}
+            component="span"
+            aria-hidden="true"
+            sx={{ color: 'var(--color-accent-hex)', fontSize: '1.15rem', lineHeight: 1 }}
+          >
+            ◉
+          </Box>
+          <Box
+            component="span"
             sx={{
-              display: 'flex',
-              gap: 1.5,
-              alignItems: 'center',
-              height: '100%',
-              textDecoration: 'none',
-              color: 'inherit',
-              transition: 'opacity 200ms var(--easing-standard)',
-              '&:hover': { opacity: 0.85 },
-              '&:focus-visible': {
-                outline: '2px solid var(--color-focus)',
-                outlineOffset: '2px',
-                borderRadius: 'var(--radius-sm)',
-              },
+              fontFamily: 'Geist, sans-serif',
+              fontWeight: 600,
+              fontSize: '1.05rem',
+              letterSpacing: '-0.01em',
+              color: 'var(--color-text)',
+              whiteSpace: 'nowrap',
             }}
           >
-            <Avatar
-              src={brand.logo}
-              alt={brand.alt}
-              sx={{
-                width: 40,
-                height: 40,
-                border: '1px solid var(--color-border)',
-                bgcolor: 'transparent',
-                flexShrink: 0,
-              }}
-            />
-            <Box
-              sx={{
-                display: { xs: 'none', sm: 'flex' },
-                flexDirection: 'column',
-                justifyContent: 'center',
-              }}
-            >
-              <Typography
-                component="span"
-                sx={{
-                  fontWeight: 700,
-                  fontSize: { xs: '1.1rem', md: '1.25rem' },
-                  letterSpacing: '-0.01em',
-                  color: 'var(--color-text)',
-                  lineHeight: 1.2,
-                }}
-              >
-                {brand.name}
-              </Typography>
-              <Typography
-                variant="subtitle2"
-                sx={{
-                  color: 'var(--color-text-secondary-hex)',
-                  lineHeight: 1.2,
-                  fontSize: '0.85rem',
-                }}
-              >
-                {brand.subtitle}
-              </Typography>
-            </Box>
+            {brand.name}
           </Box>
+        </Box>
 
-          {/* Center: Nav (Desktop) */}
-          {!isMobile && (
+        {/* Center: nav (desktop) */}
+        {!isMobile && (
+          <Box
+            component="nav"
+            aria-label="Primary"
+            sx={{ display: 'flex', gap: 0.25, justifyContent: 'center' }}
+          >
+            {navLinks.map((link) => {
+              const active = isActiveLink(link.href);
+              return (
+                <Box
+                  key={link.name}
+                  component={Link}
+                  to={link.href}
+                  aria-current={active ? 'page' : undefined}
+                  sx={{
+                    position: 'relative',
+                    fontFamily: 'var(--font-mono)',
+                    fontSize: '0.85rem',
+                    fontWeight: 500,
+                    color: active ? 'var(--color-text)' : 'var(--color-text-secondary)',
+                    textDecoration: 'none',
+                    px: 1.5,
+                    py: 1,
+                    borderRadius: 'var(--radius-pill)',
+                    transition: 'color 0.2s ease, background 0.2s ease',
+                    '&:hover': { color: 'var(--color-text)', background: 'var(--color-surface-2)' },
+                    '&::after': {
+                      content: '""',
+                      position: 'absolute',
+                      left: '12px',
+                      right: '12px',
+                      bottom: '4px',
+                      height: '2px',
+                      background: 'var(--color-accent-hex)',
+                      transform: active ? 'scaleX(1)' : 'scaleX(0)',
+                      transformOrigin: 'left',
+                      transition: 'transform 0.25s var(--easing-standard)',
+                    },
+                  }}
+                >
+                  {link.name}
+                </Box>
+              );
+            })}
+          </Box>
+        )}
+
+        {/* Right: ⌘K + theme + mobile menu */}
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, justifyContent: 'flex-end' }}>
+          <Tooltip title="Ask my work — coming soon">
             <Box
-              component="nav"
+              component="button"
+              type="button"
+              aria-label="Ask my work (command menu, coming soon)"
               sx={{
                 display: 'flex',
-                gap: { md: 2, lg: 3 },
-                justifyContent: 'center',
+                alignItems: 'center',
+                gap: 1,
+                fontFamily: 'var(--font-mono)',
+                fontSize: '0.75rem',
+                color: 'var(--color-text-secondary)',
+                background: 'transparent',
+                border: '1px solid var(--color-border)',
+                borderRadius: 'var(--radius-pill)',
+                px: 1.25,
+                py: 0.5,
+                cursor: 'pointer',
+                transition: 'border-color 0.2s ease, color 0.2s ease',
+                '&:hover': { borderColor: '#3a3a40', color: 'var(--color-text)' },
               }}
             >
-              {navLinks.map((link) => {
-                const active = isActiveLink(link.href);
-                return (
-                  <Box
-                    key={link.name}
-                    component={Link}
-                    to={link.href}
-                    sx={{
-                      position: 'relative',
-                      fontSize: '0.9375rem',
-                      fontWeight: 500,
-                      color: active ? 'var(--color-text)' : 'var(--color-text-secondary)',
-                      textDecoration: 'none',
-                      py: 0.5,
-                      transition: 'color 0.2s ease',
-                      '&:hover': {
-                        color: 'var(--color-accent-hex)',
-                      },
-                      '&::after': {
-                        content: '""',
-                        position: 'absolute',
-                        bottom: 0,
-                        left: 0,
-                        right: 0,
-                        height: '2px',
-                        bgcolor: 'var(--color-accent-hex)',
-                        transform: active ? 'scaleX(1)' : 'scaleX(0)',
-                        transformOrigin: 'bottom left',
-                        transition: 'transform 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
-                      },
-                    }}
-                  >
-                    {link.name}
-                  </Box>
-                );
-              })}
+              <Box component="span" sx={{ display: { xs: 'none', sm: 'inline' } }}>
+                ask my work
+              </Box>
+              <Box component="span" sx={{ display: 'inline-flex', gap: '3px' }}>
+                <Box component="kbd" sx={kbdSx}>
+                  ⌘
+                </Box>
+                <Box component="kbd" sx={kbdSx}>
+                  K
+                </Box>
+              </Box>
             </Box>
+          </Tooltip>
+
+          <Tooltip title={`Switch to ${themeMode === 'light' ? 'dark' : 'light'} mode`}>
+            <IconButton
+              onClick={toggleTheme}
+              aria-label="Toggle color scheme"
+              size="small"
+              sx={{
+                color: 'var(--color-text-secondary)',
+                '&:hover': { color: 'var(--color-accent-hex)' },
+              }}
+            >
+              {themeMode === 'light' ? (
+                <Brightness4Icon fontSize="small" />
+              ) : (
+                <Brightness7Icon fontSize="small" />
+              )}
+            </IconButton>
+          </Tooltip>
+
+          {isMobile && (
+            <IconButton
+              aria-label="Open menu"
+              aria-controls="mobile-drawer"
+              aria-expanded={drawerOpen}
+              onClick={() => setDrawerOpen(true)}
+              size="small"
+              sx={{ color: 'var(--color-text)' }}
+            >
+              <MenuIcon fontSize="small" />
+            </IconButton>
           )}
-
-          {/* Right: Utilities */}
-          <Stack direction="row" spacing={1.5} alignItems="center" justifyContent="flex-end">
-            {!isMobile && <Socials />}
-
-            {/* Theme toggle always visible */}
-            <Tooltip title={`Switch to ${themeMode === 'light' ? 'dark' : 'light'} mode`}>
-              <IconButton
-                className="icon-btn"
-                onClick={toggleTheme}
-                aria-label="Toggle color scheme"
-              >
-                {themeMode === 'light' ? <Brightness4Icon /> : <Brightness7Icon />}
-              </IconButton>
-            </Tooltip>
-
-            {/* Mobile menu */}
-            {isMobile && (
-              <IconButton
-                className="icon-btn"
-                aria-label="Open menu"
-                aria-controls="mobile-drawer"
-                aria-expanded={drawerOpen}
-                onClick={() => setDrawerOpen(true)}
-              >
-                <MenuIcon />
-              </IconButton>
-            )}
-          </Stack>
         </Box>
-      </Container>
+      </Box>
 
-      {/* Drawer holds nav + socials on mobile */}
       {isMobile && (
         <MobileDrawer
           open={drawerOpen}
@@ -220,7 +245,6 @@ const Header: React.FC<HeaderProps> = ({ themeMode, setThemeMode }) => {
           navLinks={navLinks}
           brand={brand}
           isActiveLink={isActiveLink}
-          // You can render socials inside the drawer footer
         />
       )}
     </Box>
