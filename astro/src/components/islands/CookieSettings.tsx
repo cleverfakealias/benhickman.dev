@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useStore } from '@nanostores/react';
 import { consentStore, settingsOpen, setConsent, openSettings, closeSettings } from '@/lib/consent';
 
@@ -8,6 +8,8 @@ export default function CookieSettings() {
   const open = useStore(settingsOpen);
   const consent = useStore(consentStore);
   const [analytics, setAnalytics] = useState(consent === 'granted');
+  const modalRef = useRef<HTMLDivElement>(null);
+  const returnFocusRef = useRef<HTMLElement | null>(null);
 
   // Footer "Cookie Preferences" trigger (server-rendered button).
   useEffect(() => {
@@ -26,6 +28,14 @@ export default function CookieSettings() {
   useEffect(() => {
     if (open) setAnalytics(consent === 'granted');
   }, [open, consent]);
+
+  // Focus management: remember the trigger, focus into the modal, restore on close.
+  useEffect(() => {
+    if (!open) return;
+    returnFocusRef.current = document.activeElement as HTMLElement | null;
+    modalRef.current?.querySelector<HTMLElement>('input, button')?.focus();
+    return () => returnFocusRef.current?.focus?.();
+  }, [open]);
 
   // Close on Escape.
   useEffect(() => {
@@ -47,6 +57,7 @@ export default function CookieSettings() {
   return (
     <div className="cookie-overlay" onClick={closeSettings}>
       <div
+        ref={modalRef}
         className="cookie-modal"
         role="dialog"
         aria-modal="true"

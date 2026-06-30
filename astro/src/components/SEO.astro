@@ -50,6 +50,11 @@ const websiteLd = {
 };
 const extraLd = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
 const graphs = [personLd, websiteLd, ...extraLd];
+
+// JSON.stringify does NOT escape <, > or & — a Sanity field containing
+// "</script>" would break out of the JSON-LD block. Unicode-escape them.
+const safeJsonLd = (obj: Record<string, unknown>): string =>
+  JSON.stringify(obj).replace(/</g, '\\u003c').replace(/>/g, '\\u003e').replace(/&/g, '\\u0026');
 ---
 
 <title>{fullTitle}</title>
@@ -74,6 +79,6 @@ const graphs = [personLd, websiteLd, ...extraLd];
 
 {
   graphs.map((g) => (
-    <script type="application/ld+json" is:inline set:html={JSON.stringify(g)} />
+    <script type="application/ld+json" is:inline set:html={safeJsonLd(g)} />
   ))
 }

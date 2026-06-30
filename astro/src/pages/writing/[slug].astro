@@ -17,7 +17,8 @@ export async function getStaticPaths() {
 
 const { slug } = Astro.params;
 const post = await getPostBySlug(slug!);
-if (!post) return Astro.redirect('/404');
+// Unreachable under prerender (getStaticPaths bounds the slugs); real 404 if ever SSR'd.
+if (!post) return new Response(null, { status: 404 });
 
 const cover = post.mainImage?.asset
   ? urlForImage(post.mainImage).width(1200).height(600).fit('crop').url()
