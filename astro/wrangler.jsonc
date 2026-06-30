@@ -1,0 +1,34 @@
+{
+  // Astro 7 + @astrojs/cloudflare on Workers.
+  // This is the SOURCE config the adapter reads at build time (name / compat /
+  // bindings). `astro build` rewrites it into ./dist/server/wrangler.json with
+  // the real built paths (main: entry.mjs, assets.directory: ../client) and the
+  // auto-added SESSION KV. `wrangler dev`/`deploy` run against THAT generated
+  // file (see the npm scripts), so the main/assets values here are inputs the
+  // adapter overrides — keep them, but the generated config is what ships.
+  // Docs: https://docs.astro.build/en/guides/integrations-guide/cloudflare/
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "benhickman-dev",
+  "main": "@astrojs/cloudflare/entrypoints/server",
+  "compatibility_date": "2025-05-21",
+  "compatibility_flags": ["nodejs_compat"],
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS"
+  },
+
+  // ── Bindings ─────────────────────────────────────────────────────────────
+  // KV for the ⌘K endpoint (per-IP quota + future response cache). `wrangler dev`
+  // auto-provisions a local namespace; for prod the owner creates one and fills
+  // the id: `wrangler kv namespace create CMDK_KV`.
+  "kv_namespaces": [{ "binding": "CMDK_KV" }],
+
+  // ── Secrets (set via `wrangler secret put`, never committed) ─────────────
+  // Phase 4 (contact):  TURNSTILE_SECRET, RESEND_API_KEY
+  // Phase 5 (⌘K agent): OPENROUTER_API_KEY, OPENROUTER_MODEL
+  // Public site keys live in .env / `vars`, e.g. PUBLIC_TURNSTILE_SITE_KEY.
+
+  "observability": {
+    "enabled": true
+  }
+}

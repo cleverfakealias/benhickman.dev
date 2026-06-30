@@ -1,0 +1,19 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "ui-dev",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--filter", "ui", "exec", "vite", "--port", "5184", "--strictPort"],
+      "port": 5184,
+      "autoPort": true
+    },
+    {
+      "name": "astro-dev",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "astro", "run", "dev", "--", "--port", "4331", "--strictPort"],
+      "port": 4331,
+      "autoPort": true
+    }
+  ]
+}

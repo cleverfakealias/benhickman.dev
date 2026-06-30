@@ -1,0 +1,125 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import SEO from '@/components/SEO.astro';
+import Analytics from '@/components/Analytics.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import BottomNav from '@/components/BottomNav.astro';
+import ConsentBanner from '@/components/islands/ConsentBanner';
+import CookieSettings from '@/components/islands/CookieSettings';
+import CommandPalette from '@/components/islands/CommandPalette';
+import { buildSearchIndex } from '@/lib/searchIndex';
+import '@/styles/global.css';
+
+const searchItems = await buildSearchIndex();
+
+interface Props {
+  title?: string;
+  description?: string;
+  path?: string;
+  image?: string;
+  type?: 'website' | 'article';
+  publishedTime?: string;
+  noindex?: boolean;
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+}
+const seo = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" data-brand="obsidian">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico" />
+
+    <SEO {...seo} />
+
+    <!-- Geist (display) + JetBrains Mono (body/mono) — same families as the SPA. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400..800;1,400..800&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Pre-paint theme: set data-theme before first paint (no FOUC). Same
+         localStorage keys as the SPA (zennlogic-theme-source / -mode). Also wires
+         the [data-theme-toggle] buttons via document-level delegation (registered
+         once; survives view-transition swaps) and re-applies on astro:after-swap. -->
+    <script is:inline>
+      (function () {
+        var SOURCE_KEY = 'zennlogic-theme-source';
+        var MODE_KEY = 'zennlogic-theme-mode';
+        function systemMode() {
+          return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+            ? 'dark'
+            : 'light';
+        }
+        function currentMode() {
+          try {
+            var source = localStorage.getItem(SOURCE_KEY) || 'system';
+            var mode = source === 'manual' ? localStorage.getItem(MODE_KEY) : null;
+            if (mode !== 'light' && mode !== 'dark') mode = systemMode();
+            return mode;
+          } catch (e) {
+            return 'dark';
+          }
+        }
+        function apply() {
+          document.documentElement.setAttribute('data-theme', currentMode());
+        }
+        function toggle() {
+          var next = currentMode() === 'dark' ? 'light' : 'dark';
+          try {
+            localStorage.setItem(SOURCE_KEY, 'manual');
+            localStorage.setItem(MODE_KEY, next);
+          } catch (e) {}
+          document.documentElement.setAttribute('data-theme', next);
+        }
+        apply();
+        if (!window.__themeInit) {
+          window.__themeInit = true;
+          document.addEventListener('click', function (e) {
+            var t = e.target && e.target.closest ? e.target.closest('[data-theme-toggle]') : null;
+            if (t) {
+              e.preventDefault();
+              toggle();
+            }
+          });
+          if (window.matchMedia) {
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () {
+              try {
+                if ((localStorage.getItem(SOURCE_KEY) || 'system') === 'system') apply();
+              } catch (e) {}
+            });
+          }
+          document.addEventListener('astro:after-swap', apply);
+        }
+      })();
+    </script>
+
+    <ClientRouter />
+    <Analytics />
+
+    <!-- Per-page <head> extras: SEO/meta/JSON-LD (Phase 3 SEO.astro renders here). -->
+    <slot name="head" />
+  </head>
+
+  <body>
+    <a href="#main-content" class="skip-link">Skip to content</a>
+    <Header />
+    <main id="main-content" tabindex="-1" transition:animate="fade">
+      <slot />
+    </main>
+    <Footer />
+    <BottomNav />
+    <ConsentBanner client:idle />
+    <CookieSettings client:idle />
+    <CommandPalette items={searchItems} client:load />
+  </body>
+</html>
