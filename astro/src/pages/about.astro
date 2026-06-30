@@ -1,0 +1,151 @@
+---
+export const prerender = true;
+
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { CONTACT_HREF, WORK_HREF } from '@/data/homeContent';
+
+const pillars = [
+  {
+    key: 'Build',
+    body: 'Agentic systems with tool-calling, permission tiers, and confidence gating; RAG and embedding pipelines with hybrid retrieval and citation-backed answers; full-stack apps that actually ship.',
+  },
+  {
+    key: 'Optimize',
+    body: 'Quantization, hardware-aware model selection, hybrid retrieval, eval and confidence gating, and cost tracking — right-sizing the model to the job.',
+  },
+  {
+    key: 'Ship',
+    body: 'Real deployments on Proxmox/systemd, Cloudflare Workers, and Vercel, behind CI and quality gates — and packaged, distributed tools.',
+  },
+];
+---
+
+<BaseLayout
+  title="About"
+  description="AI/ML engineer building agentic systems, RAG pipelines, and the models underneath them — enterprise by day, the full model loop by night."
+>
+  <section class="wrap section-y">
+    <header class="head">
+      <p class="eyebrow">// about</p>
+      <h1>The whole depth of the stack.</h1>
+    </header>
+
+    <div class="bio">
+      <p>
+        I'm an AI/ML engineer focused on the full depth of the stack. I build agentic systems with
+        tool-calling, permission tiers, and fallback/confidence gating; RAG and embedding pipelines
+        with hybrid retrieval and citation-backed answers; and the model layer itself — training a
+        transformer from scratch and fine-tuning instruct models with QLoRA, then exporting to GGUF
+        for local inference.
+      </p>
+      <p>
+        I ship: a production Twitch agent on Proxmox/systemd, a Rust CLI distributed via Scoop and
+        Homebrew, and front-ends on Vercel and Cloudflare. At SPS Commerce I helped build the "Max"
+        agent and its retrieval foundations.
+      </p>
+    </div>
+
+    <blockquote class="framing">
+      By day I build enterprise AI — an agent and the RAG and multimodal retrieval systems behind it.
+      By night I go down a layer: training models from scratch, fine-tuning them on my own data, and
+      shipping the tools and agents that use them.
+    </blockquote>
+
+    <div class="pillars">
+      {
+        pillars.map((p) => (
+          <div class="pillar">
+            <h2>{p.key}</h2>
+            <p>{p.body}</p>
+          </div>
+        ))
+      }
+    </div>
+
+    <div class="cta">
+      <a class="button-primary" href={CONTACT_HREF}>Start a conversation</a>
+      <a class="link" href={WORK_HREF}>See the work →</a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .head {
+    max-width: 720px;
+  }
+  .head h1 {
+    font-size: clamp(2rem, 5vw, 3rem);
+    letter-spacing: -0.02em;
+    margin-block: var(--space-2) 0;
+  }
+  .bio {
+    max-width: 680px;
+    margin-top: var(--space-5);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+  .bio p {
+    margin: 0;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--color-text-secondary);
+  }
+  .framing {
+    max-width: 680px;
+    margin: var(--space-6) 0 0;
+    padding-left: var(--space-4);
+    border-left: 2px solid var(--color-accent-hex);
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    line-height: 1.5;
+    color: var(--color-text);
+  }
+  .pillars {
+    margin-top: var(--space-6);
+    display: grid;
+    gap: var(--space-3);
+    grid-template-columns: 1fr;
+  }
+  .pillar {
+    padding: var(--pad-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface);
+  }
+  .pillar h2 {
+    margin: 0 0 var(--space-2);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-accent-hex);
+    font-weight: 500;
+  }
+  .pillar p {
+    margin: 0;
+    font-size: 0.95rem;
+    line-height: 1.55;
+    color: var(--color-text-secondary);
+  }
+  .cta {
+    margin-top: var(--space-6);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-4);
+  }
+  .button-primary {
+    display: inline-block;
+    text-decoration: none;
+  }
+  .link {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+  }
+  @media (min-width: 760px) {
+    .pillars {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>

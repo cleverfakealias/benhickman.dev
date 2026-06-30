@@ -1,0 +1,17 @@
+---
+// Link mark serializer. astro-portabletext passes the mark as `node`; the link
+// fields live on `node.markDef`, and the link text comes through the slot.
+import type { MarkProps } from 'astro-portabletext/types';
+
+type Props = MarkProps<{ href?: string }>;
+const { node } = Astro.props;
+const href = node.markDef?.href ?? '#';
+const external = /^https?:\/\//.test(href);
+---
+
+<a
+  href={href}
+  {...external ? { target: '_blank', rel: 'noopener noreferrer' } : {}}
+>
+  <slot />
+</a>

@@ -1,0 +1,99 @@
+---
+export const prerender = true;
+
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import ContactForm from '@/components/islands/ContactForm';
+import { socials } from '@/data/homeContent';
+---
+
+<BaseLayout
+  title="Contact"
+  description="Tell me about the system — what it should do, where it runs, and what good looks like."
+>
+  <section class="wrap section-y">
+    <header class="head">
+      <p class="eyebrow">// contact</p>
+      <h1>Start a conversation.</h1>
+      <p class="lede">
+        Tell me about the system — what it should do, where it runs, and what "good" looks like. I
+        read every message. Open to senior AI roles and select consulting, remote.
+      </p>
+    </header>
+
+    <div class="form-slot">
+      <ContactForm client:visible />
+      <div class="or-socials">
+        <span>or reach me on</span>
+        <div class="socials">
+          {
+            socials.map((s) => (
+              <a href={s.href} target="_blank" rel="me noopener noreferrer">
+                {s.name} <span aria-hidden="true">↗</span>
+              </a>
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .head {
+    max-width: 640px;
+  }
+  .head h1 {
+    font-size: clamp(2rem, 5vw, 3rem);
+    letter-spacing: -0.02em;
+    margin-block: var(--space-2);
+  }
+  .lede {
+    color: var(--color-text-secondary);
+    max-width: 56ch;
+  }
+  .form-slot {
+    margin-top: var(--space-6);
+    max-width: 560px;
+    padding: var(--pad-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface);
+  }
+  .or-socials {
+    margin-top: var(--space-5);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--color-border);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  .or-socials > span {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-text-muted);
+  }
+  .socials {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .socials a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 9px 16px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-pill);
+  }
+  .socials a:hover {
+    color: var(--color-text);
+    border-color: var(--color-border-hover);
+    border-bottom-color: var(--color-border-hover);
+  }
+</style>

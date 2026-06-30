@@ -1,0 +1,82 @@
+---
+import { writingTeasers, WRITING_HREF } from '@/data/homeContent';
+import SectionHeading from './SectionHeading.astro';
+---
+
+<section class="writing" aria-labelledby="writing-heading">
+  <div class="wrap">
+    <SectionHeading id="writing-heading" eyebrow="// writing" title="Notes from the stack." />
+    <div class="grid">
+      {
+        writingTeasers.map((t) => (
+          <a href={WRITING_HREF} class="wcard">
+            <span class="meta">{t.meta}</span>
+            <h3>{t.title}</h3>
+            <span class="cta">read →</span>
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .writing {
+    padding-bottom: clamp(64px, 9vw, 112px);
+  }
+  .grid {
+    display: grid;
+    gap: 8px;
+    grid-template-columns: 1fr;
+  }
+  .wcard {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 24px;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    border-bottom: 1px solid var(--color-border);
+    text-decoration: none;
+    transition:
+      border-color 200ms var(--easing-standard),
+      transform 200ms var(--easing-standard);
+  }
+  .wcard:hover {
+    border-color: var(--color-border-hover);
+    transform: translateY(-2px);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .wcard:hover {
+      transform: none;
+    }
+  }
+  .meta {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-secondary-hex);
+  }
+  h3 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 17px;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+    color: var(--color-text);
+  }
+  .cta {
+    margin-top: auto;
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    color: var(--color-text-secondary);
+  }
+  @media (min-width: 900px) {
+    .grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>

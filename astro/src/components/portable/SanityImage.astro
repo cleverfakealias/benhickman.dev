@@ -1,0 +1,43 @@
+---
+import type { Props as PtProps } from 'astro-portabletext/types';
+import { urlForImage } from '@/lib/sanity';
+
+// astro-portabletext passes the block value as `node` (must extend TypedObject).
+interface ImageValue {
+  _type: string;
+  asset?: { _ref: string };
+  alt?: string;
+  caption?: string;
+}
+type Props = PtProps<ImageValue>;
+const { node } = Astro.props;
+const src = node?.asset ? urlForImage(node).width(1200).fit('max').auto('format').url() : '';
+---
+
+{
+  src && (
+    <figure class="pt-image">
+      <img src={src} alt={node.alt ?? ''} loading="lazy" decoding="async" />
+      {node.caption && <figcaption>{node.caption}</figcaption>}
+    </figure>
+  )
+}
+
+<style>
+  .pt-image {
+    margin: var(--space-5) 0;
+  }
+  .pt-image img {
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+  }
+  figcaption {
+    margin-top: var(--space-2);
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+  }
+</style>
