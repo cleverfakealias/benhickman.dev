@@ -101,4 +101,7 @@ GROQ queries all carry over; only the component + runtime layer is new.
 
 ## Linked
 
-- Review: `astro-cloudflare-migration-review` workflow. Phase intents: `.agents/intents/open/2026-06-29-astro-p{1..6}-*.md`. PRs:
+- Review: `astro-cloudflare-migration-review` workflow.
+- Phase intents: P1–P5 **done** (`.agents/intents/done/`), P6 (deploy/CI) **open**.
+- Progress: P1–P5 built + verified, committed in `f9ab10f` on `feat/obsidian-foundry-redesign`. Pre-deploy security review + local-LLM test harness in progress before P6.
+- PRs:

@@ -67,8 +67,10 @@ html[data-brand='northwoods'] {
   --color-text-hex: #f5f5f0; /* Parchment */
   --color-text-secondary: rgba(245, 245, 240, 0.72);
   --color-text-secondary-hex: #b3b3ae;
-  --color-text-muted: #52525b;
-  --color-text-muted-hex: #52525b; /* Fossil */
+  /* Fossil, lightened from #52525b to clear WCAG AA (4.5:1) on Carbon Black —
+     it's used as real label/meta text, not just decoration. */
+  --color-text-muted: #8b8b94;
+  --color-text-muted-hex: #8b8b94; /* Fossil */
 
   /* Lines & focus — Iron border, Persimmon focus */
   --color-border: #27272a;
@@ -763,4 +765,15 @@ select {
   font-family: var(--font-mono);
   font-size: 0.85rem;
   color: var(--color-text-muted);
+}
+.cmdk-thinking {
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+/* Invisible Turnstile container — present for token minting, no layout. */
+.cmdk-turnstile {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
 }

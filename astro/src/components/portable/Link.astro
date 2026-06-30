@@ -5,7 +5,9 @@ import type { MarkProps } from 'astro-portabletext/types';
 
 type Props = MarkProps<{ href?: string }>;
 const { node } = Astro.props;
-const href = node.markDef?.href ?? '#';
+const raw = node.markDef?.href ?? '#';
+// Scheme allowlist — neutralize javascript:/data: and other XSS vectors from CMS links.
+const href = /^(https?:|mailto:|tel:|\/|#)/i.test(raw) ? raw : '#';
 const external = /^https?:\/\//.test(href);
 ---
 

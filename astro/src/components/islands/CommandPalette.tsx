@@ -12,6 +12,7 @@ interface Props {
 }
 
 const GROUP_ORDER: SearchGroup[] = ['Pages', 'Projects', 'Writing'];
+const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? '';
 
 function scoreItem(item: SearchItem, q: string): number | null {
   if (!q) return 0;
@@ -38,7 +39,14 @@ export default function CommandPalette({ items }: Props) {
   const [ask, setAsk] = useState<AskState>({ status: 'idle' });
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
   const abortRef = useRef<AbortController | null>(null);
+  // Element focused before the palette opened — restored on close (a11y).
+  const returnFocusRef = useRef<HTMLElement | null>(null);
+  // Invisible Turnstile, used to mint a fresh token per live-mode ⌘K ask.
+  const tsRef = useRef<HTMLDivElement>(null);
+  const tsId = useRef<string | null>(null);
+  const tsResolve = useRef<((t: string) => void) | null>(null);
 
   const close = useCallback(() => {
     setOpen(false);
@@ -46,6 +54,7 @@ export default function CommandPalette({ items }: Props) {
     setSelected(0);
     setAsk({ status: 'idle' });
     abortRef.current?.abort();
+    returnFocusRef.current?.focus?.();
   }, []);
 
   // Filtered + grouped results.
@@ -113,9 +122,10 @@ export default function CommandPalette({ items }: Props) {
     };
   }, [open, close]);
 
-  // Focus + scroll-lock when open.
+  // Focus the input, lock scroll, and remember what to focus on close.
   useEffect(() => {
     if (!open) return;
+    returnFocusRef.current = document.activeElement as HTMLElement | null;
     const t = setTimeout(() => inputRef.current?.focus(), 0);
     const prev = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
@@ -125,6 +135,70 @@ export default function CommandPalette({ items }: Props) {
     };
   }, [open]);
 
+  // Render an invisible Turnstile widget once open (live-mode ask needs a token).
+  useEffect(() => {
+    if (!open || !TURNSTILE_SITE_KEY) return;
+    const SRC = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+    const render = () => {
+      if (!window.turnstile || !tsRef.current || tsId.current) return;
+      tsId.current = window.turnstile.render(tsRef.current, {
+        sitekey: TURNSTILE_SITE_KEY,
+        size: 'invisible',
+        callback: (t) => {
+          tsResolve.current?.(t);
+          tsResolve.current = null;
+        },
+        'error-callback': () => {
+          tsResolve.current?.('');
+          tsResolve.current = null;
+        },
+      });
+    };
+    let iv: ReturnType<typeof setInterval> | undefined;
+    if (window.turnstile) render();
+    else if (!document.querySelector(`script[src="${SRC}"]`)) {
+      const s = document.createElement('script');
+      s.src = SRC;
+      s.async = true;
+      s.onload = render;
+      document.head.appendChild(s);
+    } else {
+      iv = setInterval(() => {
+        if (window.turnstile) {
+          clearInterval(iv);
+          render();
+        }
+      }, 200);
+    }
+    return () => {
+      if (iv) clearInterval(iv);
+    };
+  }, [open]);
+
+  // Mint a fresh Turnstile token for an ask (empty string if not configured).
+  const getToken = useCallback(async (): Promise<string> => {
+    if (!TURNSTILE_SITE_KEY) return '';
+    const ts = window.turnstile;
+    const id = tsId.current;
+    if (!ts || !id) return '';
+    return new Promise<string>((resolve) => {
+      tsResolve.current = resolve;
+      try {
+        ts.reset(id);
+        ts.execute(id);
+      } catch {
+        tsResolve.current = null;
+        resolve('');
+      }
+      setTimeout(() => {
+        if (tsResolve.current) {
+          tsResolve.current = null;
+          resolve('');
+        }
+      }, 8000);
+    });
+  }, []);
+
   const runAsk = useCallback(async () => {
     const q = query.trim();
     if (!q) return;
@@ -133,10 +207,11 @@ export default function CommandPalette({ items }: Props) {
     abortRef.current = controller;
     setAsk({ status: 'streaming', text: '' });
     try {
+      const turnstileToken = await getToken();
       const res = await fetch('/api/cmdk', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query: q }),
+        body: JSON.stringify({ query: q, turnstileToken }),
         signal: controller.signal,
       });
       if (!res.ok || !res.body) throw new Error(`HTTP ${res.status}`);
@@ -171,7 +246,7 @@ export default function CommandPalette({ items }: Props) {
       if (err instanceof Error && err.name === 'AbortError') return;
       setAsk({ status: 'error', text: '', error: 'Could not reach the assistant. Try the links below.' });
     }
-  }, [query]);
+  }, [query, getToken]);
 
   const activate = useCallback(
     (row: (typeof flat)[number]) => {
@@ -199,6 +274,22 @@ export default function CommandPalette({ items }: Props) {
     } else if (e.key === 'Escape') {
       e.preventDefault();
       close();
+    } else if (e.key === 'Tab') {
+      // Trap focus within the panel.
+      const focusables = panelRef.current?.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), input, [tabindex]:not([tabindex="-1"])',
+      );
+      if (!focusables || focusables.length === 0) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      const active = document.activeElement;
+      if (e.shiftKey && active === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && active === last) {
+        e.preventDefault();
+        first.focus();
+      }
     }
   };
 
@@ -215,6 +306,7 @@ export default function CommandPalette({ items }: Props) {
   return (
     <div className="cmdk-overlay" onMouseDown={close}>
       <div
+        ref={panelRef}
         className="cmdk-panel"
         role="dialog"
         aria-modal="true"
@@ -222,6 +314,7 @@ export default function CommandPalette({ items }: Props) {
         onMouseDown={(e) => e.stopPropagation()}
         onKeyDown={onListKey}
       >
+        {TURNSTILE_SITE_KEY && <div ref={tsRef} className="cmdk-turnstile" aria-hidden="true" />}
         <div className="cmdk-input-row">
           <span className="cmdk-prompt" aria-hidden="true">⌘K</span>
           <input
@@ -240,10 +333,18 @@ export default function CommandPalette({ items }: Props) {
 
         <div className="cmdk-list" ref={listRef}>
           {ask.status !== 'idle' && (
-            <div className="cmdk-answer" aria-live="polite">
+            <div
+              className="cmdk-answer"
+              aria-live="polite"
+              aria-busy={ask.status === 'streaming'}
+            >
               <p className="cmdk-answer-label">Ask my work</p>
               {ask.status === 'error' ? (
                 <p className="cmdk-answer-error">{ask.error}</p>
+              ) : ask.status === 'streaming' && ask.text === '' ? (
+                <p className="cmdk-answer-text cmdk-thinking">
+                  Thinking<span className="cmdk-cursor">…</span>
+                </p>
               ) : (
                 <p className="cmdk-answer-text">
                   {ask.text}

@@ -11,7 +11,8 @@ export function getStaticPaths() {
 
 const { slug } = Astro.params;
 const project = projects.find((p) => p.slug === slug);
-if (!project) return Astro.redirect('/404');
+// Unreachable under prerender (getStaticPaths bounds the slugs); real 404 if ever SSR'd.
+if (!project) return new Response(null, { status: 404 });
 ---
 
 <BaseLayout title={project.name} description={project.summary} path={`/work/${project.slug}`}>

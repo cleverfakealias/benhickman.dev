@@ -61,15 +61,18 @@ const gaId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID ?? '';
     gtag('consent', 'update', { analytics_storage: 'denied' });
   };
 
+  function grantedView() {
+    if (consentGranted()) {
+      // Returning consented visitor: re-affirm consent, ensure gtag, count the view.
+      gtag('consent', 'update', { analytics_storage: 'granted' });
+      loadGtag();
+      pageView();
+    }
+  }
   if (!window.__analyticsInit) {
     window.__analyticsInit = true;
-    document.addEventListener('astro:page-load', function () {
-      if (consentGranted()) {
-        // Returning consented visitor: re-affirm consent, ensure gtag, count the view.
-        gtag('consent', 'update', { analytics_storage: 'granted' });
-        loadGtag();
-        pageView();
-      }
-    });
+    document.addEventListener('astro:page-load', grantedView);
+    // Cover the cold load too, in case astro:page-load already fired before this ran.
+    grantedView();
   }
 </script>

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type FormEvent } from 'react';
+import { useCallback, useEffect, useRef, useState, type FormEvent } from 'react';
 
 // Contact form island (client:visible). Ports the SPA's field set + validation +
 // 15s timeout + error/success UX, swapping hCaptcha → Cloudflare Turnstile and
@@ -13,23 +13,64 @@ interface FormData {
 type Errors = Partial<Record<keyof FormData, string>>;
 type Status = 'idle' | 'submitting' | 'success' | 'error';
 
-interface TurnstileApi {
-  render: (
-    el: HTMLElement,
-    opts: {
-      sitekey: string;
-      theme?: 'auto' | 'light' | 'dark';
-      callback?: (token: string) => void;
-      'expired-callback'?: () => void;
-      'error-callback'?: () => void;
-    },
-  ) => string;
-  reset: (id?: string) => void;
-}
-declare global {
-  interface Window {
-    turnstile?: TurnstileApi;
-  }
+const TURNSTILE_SRC = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+
+// Self-contained Turnstile widget — renders on mount, removes on unmount. Remount
+// (via a changing `key`) gives a fresh challenge after submit/error.
+function TurnstileWidget({
+  siteKey,
+  onToken,
+}: {
+  siteKey: string;
+  onToken: (token: string | null) => void;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const idRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    const render = () => {
+      if (cancelled || !window.turnstile || !ref.current || idRef.current) return;
+      idRef.current = window.turnstile.render(ref.current, {
+        sitekey: siteKey,
+        theme: 'auto',
+        callback: (t) => onToken(t),
+        'expired-callback': () => onToken(null),
+        'error-callback': () => onToken(null),
+      });
+    };
+    let timer: ReturnType<typeof setInterval> | undefined;
+    if (window.turnstile) {
+      render();
+    } else if (!document.querySelector(`script[src="${TURNSTILE_SRC}"]`)) {
+      const s = document.createElement('script');
+      s.src = TURNSTILE_SRC;
+      s.async = true;
+      s.onload = render;
+      document.head.appendChild(s);
+    } else {
+      timer = setInterval(() => {
+        if (window.turnstile) {
+          clearInterval(timer);
+          render();
+        }
+      }, 200);
+    }
+    return () => {
+      cancelled = true;
+      if (timer) clearInterval(timer);
+      if (window.turnstile && idRef.current) {
+        try {
+          window.turnstile.remove(idRef.current);
+        } catch {
+          /* already gone */
+        }
+        idRef.current = null;
+      }
+    };
+  }, [siteKey, onToken]);
+
+  return <div ref={ref} className="turnstile-widget" />;
 }
 
 const EMAIL_RE =
@@ -52,48 +93,10 @@ export default function ContactForm() {
   const [status, setStatus] = useState<Status>('idle');
   const [errorMsg, setErrorMsg] = useState('');
   const [token, setToken] = useState<string | null>(null);
-  const widgetRef = useRef<HTMLDivElement>(null);
-  const widgetId = useRef<string | null>(null);
+  // Bumping this remounts TurnstileWidget for a fresh challenge.
+  const [widgetKey, setWidgetKey] = useState(0);
 
-  // Load + render the Turnstile widget once.
-  useEffect(() => {
-    if (!TURNSTILE_SITE_KEY) return;
-    const SRC = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
-
-    function renderWidget() {
-      if (!window.turnstile || !widgetRef.current || widgetId.current) return;
-      widgetId.current = window.turnstile.render(widgetRef.current, {
-        sitekey: TURNSTILE_SITE_KEY,
-        theme: 'auto',
-        callback: (t) => setToken(t),
-        'expired-callback': () => setToken(null),
-        'error-callback': () => setToken(null),
-      });
-    }
-
-    if (window.turnstile) {
-      renderWidget();
-    } else if (!document.querySelector(`script[src="${SRC}"]`)) {
-      const s = document.createElement('script');
-      s.src = SRC;
-      s.async = true;
-      s.onload = renderWidget;
-      document.head.appendChild(s);
-    } else {
-      const t = setInterval(() => {
-        if (window.turnstile) {
-          clearInterval(t);
-          renderWidget();
-        }
-      }, 200);
-      return () => clearInterval(t);
-    }
-  }, []);
-
-  const resetTurnstile = () => {
-    setToken(null);
-    if (window.turnstile && widgetId.current) window.turnstile.reset(widgetId.current);
-  };
+  const onToken = useCallback((t: string | null) => setToken(t), []);
 
   const onChange = (field: keyof FormData) => (e: { target: { value: string } }) => {
     setData((d) => ({ ...d, [field]: e.target.value }));
@@ -135,7 +138,8 @@ export default function ContactForm() {
       }
       setErrorMsg(msg);
       setStatus('error');
-      resetTurnstile();
+      setToken(null);
+      setWidgetKey((k) => k + 1); // fresh challenge for retry
     } catch (err) {
       setErrorMsg(
         err instanceof Error && err.name === 'AbortError'
@@ -143,7 +147,8 @@ export default function ContactForm() {
           : 'A network error occurred. Please try again.',
       );
       setStatus('error');
-      resetTurnstile();
+      setToken(null);
+      setWidgetKey((k) => k + 1);
     } finally {
       clearTimeout(timeout);
     }
@@ -160,7 +165,8 @@ export default function ContactForm() {
           onClick={() => {
             setData({ name: '', email: '', phone: '', message: '' });
             setStatus('idle');
-            resetTurnstile();
+            setToken(null);
+            setWidgetKey((k) => k + 1);
           }}
         >
           Send another message
@@ -179,9 +185,10 @@ export default function ContactForm() {
           value={data.name}
           onChange={onChange('name')}
           aria-invalid={!!errors.name}
+          aria-describedby={errors.name ? 'cf-name-error' : undefined}
           autoComplete="name"
         />
-        {errors.name && <span className="field-error">{errors.name}</span>}
+        {errors.name && <span id="cf-name-error" className="field-error">{errors.name}</span>}
       </div>
 
       <div className="field">
@@ -192,9 +199,10 @@ export default function ContactForm() {
           value={data.email}
           onChange={onChange('email')}
           aria-invalid={!!errors.email}
+          aria-describedby={errors.email ? 'cf-email-error' : undefined}
           autoComplete="email"
         />
-        {errors.email && <span className="field-error">{errors.email}</span>}
+        {errors.email && <span id="cf-email-error" className="field-error">{errors.email}</span>}
       </div>
 
       <div className="field">
@@ -216,12 +224,15 @@ export default function ContactForm() {
           value={data.message}
           onChange={onChange('message')}
           aria-invalid={!!errors.message}
+          aria-describedby={errors.message ? 'cf-message-error' : undefined}
         />
-        {errors.message && <span className="field-error">{errors.message}</span>}
+        {errors.message && (
+          <span id="cf-message-error" className="field-error">{errors.message}</span>
+        )}
       </div>
 
       {TURNSTILE_SITE_KEY ? (
-        <div ref={widgetRef} className="turnstile-widget" />
+        <TurnstileWidget key={widgetKey} siteKey={TURNSTILE_SITE_KEY} onToken={onToken} />
       ) : (
         <p className="field-note">Verification will appear here once configured.</p>
       )}

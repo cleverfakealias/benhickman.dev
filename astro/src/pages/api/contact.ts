@@ -26,6 +26,19 @@ interface ContactEnv {
   CONTACT_TO?: string;
   CONTACT_FROM?: string;
   CONTACT_FORWARD_URL?: string;
+  CMDK_KV?: KVNamespace;
+}
+
+const CONTACT_DAILY_PER_IP = 10;
+
+// Best-effort per-IP daily cap on top of Turnstile (KV is eventually consistent).
+async function overContactQuota(kv: KVNamespace | undefined, ip: string | null): Promise<boolean> {
+  if (!kv || !ip) return false; // no KV → rely on Turnstile alone (don't block contact)
+  const key = `contact:${ip}:${new Date().toISOString().slice(0, 10)}`;
+  const current = Number((await kv.get(key)) ?? '0');
+  if (current >= CONTACT_DAILY_PER_IP) return true;
+  await kv.put(key, String(current + 1), { expirationTtl: 60 * 60 * 24 });
+  return false;
 }
 
 function json(body: unknown, status: number): Response {
@@ -82,10 +95,16 @@ export const POST: APIRoute = async ({ request }) => {
   if (!secret) {
     return json({ error: 'Contact form is not configured yet. Please reach out via social.' }, 503);
   }
+  // `cf-connecting-ip` is set by the Cloudflare edge and cannot be spoofed by the
+  // client on Workers (would be attacker-controlled only if run off-Workers).
   const ip = request.headers.get('cf-connecting-ip');
   const ok = await verifyTurnstile(payload.turnstileToken ?? '', secret, ip);
   if (!ok) {
     return json({ error: 'Verification failed. Please try again.' }, 403);
+  }
+
+  if (await overContactQuota(e.CMDK_KV, ip)) {
+    return json({ error: 'Daily message limit reached. Please try again tomorrow.' }, 429);
   }
 
   // Forward the message. Prefer Resend; fall back to a server-side Formspree POST.

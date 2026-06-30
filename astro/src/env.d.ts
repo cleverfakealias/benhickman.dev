@@ -27,3 +27,28 @@ interface ImportMetaEnv {
 interface ImportMeta {
   readonly env: ImportMetaEnv;
 }
+
+// Cloudflare Turnstile global (loaded via the api.js script tag), shared by the
+// ContactForm (visible) and CommandPalette (invisible) islands.
+interface TurnstileApi {
+  render(
+    el: HTMLElement | string,
+    opts: {
+      sitekey: string;
+      theme?: 'auto' | 'light' | 'dark';
+      size?: 'normal' | 'compact' | 'flexible' | 'invisible';
+      appearance?: 'always' | 'execute' | 'interaction-only';
+      callback?: (token: string) => void;
+      'expired-callback'?: () => void;
+      'error-callback'?: () => void;
+    },
+  ): string;
+  reset(id?: string): void;
+  remove(id?: string): void;
+  execute(el?: HTMLElement | string, opts?: { callback?: (token: string) => void }): void;
+  getResponse(id?: string): string | undefined;
+}
+
+interface Window {
+  turnstile?: TurnstileApi;
+}
