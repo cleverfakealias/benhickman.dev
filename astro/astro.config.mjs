@@ -19,6 +19,12 @@ export default defineConfig({
   // Server output: routes are server-rendered by default; static pages opt in
   // per-route with `export const prerender = true`. Only /api/* stay dynamic.
   output: 'server',
+  session: {
+    // Sessions only carry the ⌘K chat "touch" marker. A 24h default TTL keeps
+    // entries in the auto-provisioned SESSION KV from living forever — Astro
+    // expires values on read after the TTL rather than deleting eagerly.
+    ttl: 60 * 60 * 24,
+  },
   adapter: cloudflare({
     // v14 bundles the Cloudflare Vite plugin, so `astro dev` surfaces real KV/env
     // bindings automatically (no platformProxy option needed). `wrangler dev`
@@ -33,4 +39,12 @@ export default defineConfig({
       filter: (page) => !/\/(privacy|404)\/?$/.test(page),
     }),
   ],
+  vite: {
+    build: {
+      // Never inline assets as data: URIs — the CSP in public/_headers is
+      // font-src/img-src 'self', and Vite's default 4 KB threshold would
+      // inline the small Fontsource subsets as (blocked) data: fonts.
+      assetsInlineLimit: 0,
+    },
+  },
 });

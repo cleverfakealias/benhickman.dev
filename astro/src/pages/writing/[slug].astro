@@ -7,7 +7,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import SanityImage from '@/components/portable/SanityImage.astro';
 import CodeBlock from '@/components/portable/CodeBlock.astro';
 import PortableLink from '@/components/portable/Link.astro';
-import { getAllPostSlugs, getPostBySlug, urlForImage, formatDate } from '@/lib/sanity';
+import { getAllPostSlugs, getPostBySlug, responsiveImageAttrs, formatDate } from '@/lib/sanity';
 import { site } from '@/config/site';
 
 export async function getStaticPaths() {
@@ -16,12 +16,14 @@ export async function getStaticPaths() {
 }
 
 const { slug } = Astro.params;
-const post = await getPostBySlug(slug!);
-// Unreachable under prerender (getStaticPaths bounds the slugs); real 404 if ever SSR'd.
+// Both checks are unreachable under prerender (getStaticPaths bounds the slugs);
+// real 404s if this route is ever rendered on demand.
+if (!slug) return new Response(null, { status: 404 });
+const post = await getPostBySlug(slug);
 if (!post) return new Response(null, { status: 404 });
 
 const cover = post.mainImage?.asset
-  ? urlForImage(post.mainImage).width(1200).height(600).fit('crop').url()
+  ? responsiveImageAttrs(post.mainImage, { baseWidth: 1200, aspectRatio: 2 })
   : null;
 
 const ptComponents: Partial<PortableTextComponents> = {
@@ -35,7 +37,7 @@ const articleLd = {
   headline: post.title,
   datePublished: post.publishedAt,
   author: { '@type': 'Person', name: post.author ?? site.name },
-  ...(cover ? { image: cover } : {}),
+  ...(cover ? { image: cover.src } : {}),
   mainEntityOfPage: `${site.url}/writing/${post.slug}`,
 };
 ---
@@ -44,7 +46,7 @@ const articleLd = {
   title={post.title}
   description={post.excerpt ?? site.description}
   type="article"
-  image={cover ?? site.ogImage}
+  image={cover?.src ?? site.ogImage}
   publishedTime={post.publishedAt}
   jsonLd={articleLd}
 >
@@ -60,9 +62,21 @@ const articleLd = {
     </div>
 
     {
+      /* The cover is the LCP element on post pages — fetch it eagerly at high
+         priority instead of letting it queue behind other resources. */
       cover && (
         <div class="wrap">
-          <img class="cover" src={cover} alt={post.mainImage?.alt ?? ''} width="1200" height="600" />
+          <img
+            class="cover"
+            src={cover.src}
+            srcset={cover.srcset}
+            sizes="(min-width: 1240px) 1160px, 90vw"
+            alt={post.mainImage?.alt ?? ''}
+            width="1200"
+            height="600"
+            loading="eager"
+            fetchpriority="high"
+          />
         </div>
       )
     }

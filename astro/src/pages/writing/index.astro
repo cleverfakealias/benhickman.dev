@@ -2,7 +2,7 @@
 export const prerender = true;
 
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import { getAllPosts, urlForImage, formatDate } from '@/lib/sanity';
+import { getAllPosts, responsiveImageAttrs, formatDate } from '@/lib/sanity';
 
 const posts = await getAllPosts();
 ---
@@ -27,13 +27,22 @@ const posts = await getAllPosts();
         <ul class="grid">
           {posts.map((post) => {
             const cover = post.mainImage?.asset
-              ? urlForImage(post.mainImage).width(800).height(400).fit('crop').url()
+              ? responsiveImageAttrs(post.mainImage, { baseWidth: 800, aspectRatio: 2 })
               : null;
             return (
               <li>
                 <a href={`/writing/${post.slug}`} class="card">
                   {cover && (
-                    <img class="cover" src={cover} alt={post.mainImage?.alt ?? ''} loading="lazy" width="800" height="400" />
+                    <img
+                      class="cover"
+                      src={cover.src}
+                      srcset={cover.srcset}
+                      sizes="(min-width: 980px) 370px, (min-width: 640px) 50vw, 100vw"
+                      alt={post.mainImage?.alt ?? ''}
+                      loading="lazy"
+                      width="800"
+                      height="400"
+                    />
                   )}
                   <div class="body">
                     <p class="meta">

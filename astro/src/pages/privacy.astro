@@ -4,26 +4,48 @@ export const prerender = true;
 import BaseLayout from '@/layouts/BaseLayout.astro';
 
 // Ported from the SPA's PrivacyPolicy, updated for the Cloudflare rebuild:
-// spam protection is now Cloudflare Turnstile (was hCaptcha); contact submits
-// through a Turnstile-verified Worker endpoint (Phase 4).
-const lastUpdated = new Date().toLocaleDateString('en-US', {
-  year: 'numeric',
-  month: 'long',
-  day: 'numeric',
-});
+// the contact form submits to Formspree with hCaptcha (as in the SPA); the
+// command-bar chat is protected by Cloudflare Turnstile.
+// Hardcoded on purpose: a policy's revision date is a legal statement and must
+// only move when the policy text actually changes — not on every deploy.
+const lastUpdated = '1 July 2026';
 
 const processors = [
   {
-    name: 'Contact form (Cloudflare Worker)',
+    name: 'Formspree',
     purpose: 'Message delivery',
     detail:
-      'When you send a message, your name, email address, and message content are processed by a Cloudflare Worker endpoint and forwarded by email so I can reply.',
+      'When you send a message, your name, email address, and message content are submitted to Formspree, a form-processing service that forwards the message by email so I can reply.',
+  },
+  {
+    name: 'hCaptcha',
+    purpose: 'Contact form spam protection',
+    detail:
+      'The contact form is protected from bots by hCaptcha, a privacy-focused CAPTCHA service. Completing the challenge shares limited technical data (such as IP address and browser information) with hCaptcha to verify you are human.',
   },
   {
     name: 'Cloudflare Turnstile',
-    purpose: 'Spam protection',
+    purpose: 'Chat spam protection',
     detail:
-      'The contact form is protected from bots by Cloudflare Turnstile, a privacy-preserving CAPTCHA alternative that verifies you are human without tracking you across sites.',
+      'The command-bar chat is protected from bots by Cloudflare Turnstile, a privacy-preserving CAPTCHA alternative that verifies you are human without tracking you across sites.',
+  },
+  {
+    name: 'Command-bar assistant (Cloudflare Worker + NVIDIA NIM)',
+    purpose: 'Conversational portfolio answers',
+    detail:
+      'When you use the command-bar assistant, your questions and its answers are processed by a Cloudflare Worker and NVIDIA NIM. The six most recent exchanges are stored for up to 24 hours in Cloudflare KV so follow-up questions retain context; choosing “New chat” clears that history.',
+  },
+  {
+    name: 'Langfuse (LLM observability)',
+    purpose: 'Assistant quality & abuse monitoring',
+    detail:
+      'Command-bar assistant conversations — your questions, the answers, and the lookups the assistant performs — are recorded in Langfuse, an LLM observability service (US-hosted), so I can debug answer quality and detect abuse. Conversations are grouped by a pseudonymised session identifier; your IP address is never included.',
+  },
+  {
+    name: 'Rate limiting (Cloudflare KV)',
+    purpose: 'Abuse prevention',
+    detail:
+      'To enforce fair daily usage limits on the command-bar assistant, a pseudonymised (one-way hashed) form of your IP address is stored for up to 24 hours. The raw IP address itself is not retained.',
   },
   {
     name: 'Sanity.io',
@@ -74,9 +96,10 @@ const processors = [
 
     <section>
       <h2>2. Cookies</h2>
-      <p>Cookies manage your consent preferences and enable the analytics above.</p>
+      <p>Cookies manage your consent preferences, maintain command-bar chat continuity, and enable the analytics above.</p>
       <ul>
         <li><strong>Essential cookies</strong> — remember your privacy choices (e.g. <code>benhickman_consent_v1</code>).</li>
+        <li><strong>Chat session cookie</strong> — associates command-bar follow-ups with the short-lived conversation stored in Cloudflare KV.</li>
         <li><strong>Analytics cookies (Google Analytics)</strong> — only set if you accept or enable analytics in settings.</li>
       </ul>
       <p>You can change your preferences anytime via "Cookie Preferences" in the footer.</p>

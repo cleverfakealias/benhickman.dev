@@ -4,9 +4,15 @@
 # unicode-escaped (SEO.astro) so a </script> breakout can't execute. Tighten to
 # per-script hashes/nonces later. The LLM (NVIDIA/OpenRouter) calls are
 # server-side from the Worker, so they need no browser connect-src entry.
+# challenges.cloudflare.com = Turnstile (⌘K chat only); hcaptcha.com +
+# *.hcaptcha.com = hCaptcha widget and formspree.io = the contact form's
+# direct browser POST (per docs.hcaptcha.com CSP guidance).
+# Fonts are self-hosted (Fontsource, same-origin under /_astro/), so 'self'
+# covers style-src/font-src; GA4 beacons hit regional *.google-analytics.com /
+# *.analytics.google.com hosts, hence the connect-src wildcards.
 # The adapter appends the immutable /_astro/* cache rule automatically.
 /*
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://cdn.sanity.io https://www.googletagmanager.com; connect-src 'self' https://challenges.cloudflare.com https://www.google-analytics.com; frame-src https://challenges.cloudflare.com; base-uri 'self'; form-action 'self'; frame-ancestors 'none'
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com https://hcaptcha.com https://*.hcaptcha.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://hcaptcha.com https://*.hcaptcha.com; font-src 'self'; img-src 'self' data: https://cdn.sanity.io https://www.googletagmanager.com; connect-src 'self' https://challenges.cloudflare.com https://hcaptcha.com https://*.hcaptcha.com https://formspree.io https://*.google-analytics.com https://*.analytics.google.com; frame-src https://challenges.cloudflare.com https://hcaptcha.com https://*.hcaptcha.com; base-uri 'self'; form-action 'self'; frame-ancestors 'none'
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   X-Frame-Options: DENY

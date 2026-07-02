@@ -21,8 +21,9 @@ See the intents in `../.agents/intents/` (`astro-cloudflare-rebuild` + `astro-p1
 
 ```bash
 npm install
+npm run setup:local # create .env + .dev.vars from safe templates (no overwrite)
 
-npm run dev        # astro dev — fast page iteration (mock CF bindings via platformProxy)
+npm run dev        # astro dev — fast page iteration with local Cloudflare bindings
 npm run preview    # astro build + wrangler dev — real workerd runtime + bindings (/api/*)
 npm run build      # astro build — emits ./dist/{client,server} + dist/server/wrangler.json
 npm run check      # astro check — typecheck (tsc for .astro/.ts)
@@ -30,15 +31,35 @@ npm run deploy     # build + wrangler deploy
 npm run cf-typegen # wrangler types — regenerate Worker binding types
 ```
 
+Requires Node.js 22.12.0 or newer. This package uses npm and its local `package-lock.json`.
+
+## First-time local setup
+
+```bash
+cd astro
+npm install
+npm run setup:local
+npm run dev
+```
+
+`setup:local` copies `.env.example` to `.env` and `.dev.vars.example` to `.dev.vars`. It fills
+in the shared public Sanity project (`unh13egm` / `production`) and always-pass CAPTCHA test
+keys (Cloudflare Turnstile for ⌘K, hCaptcha for the contact widget), and never overwrites a
+populated local file. Both generated files are gitignored. The site and Sanity-backed writing
+work immediately; the command bar uses its local project stub until an LLM key is added, and
+the contact form shows "not configured" until the Formspree endpoint is set.
+
 ### Local dev story
 
-- **`npm run dev`** (`astro dev`) — fastest for building pages/components. `platformProxy` is
-  enabled, so KV/env bindings are mocked locally.
-- **`npm run preview`** (`astro build` + `wrangler dev -c dist/server/wrangler.json`) — runs the
+- **`npm run dev`** (`astro dev`) — fastest for building pages/components. The Cloudflare Vite
+  plugin supplies local KV/env bindings.
+- **`npm run preview`** (`astro build` + `wrangler dev -c dist/server/wrangler.json --env-file
+  .dev.vars`) — runs the
   built Worker on the real `workerd` runtime with actual bindings. The adapter rewrites the root
   `wrangler.jsonc` into `dist/server/wrangler.json` (correct built paths + the auto-added SESSION
-  KV); both `dev` and `deploy` target that generated config. Use this to exercise `/api/*`
-  (contact, ⌘K) before deploying.
+  KV). The script explicitly loads the root `.dev.vars`, so local secrets work even though the
+  generated config lives under `dist/server`. Use this to exercise `/api/*` (⌘K) before
+  deploying.
 
 ## Rendering split
 
@@ -50,33 +71,46 @@ file under `dist/`, and the endpoint as part of the server bundle.
 
 ## Environment variables
 
-> A `.env.example` file can't be committed — the repo's secret-file guard blocks `.env*` paths.
-> Create a local `.env` (gitignored) with the **public** vars below. Secrets go in `.dev.vars`
-> for `wrangler dev`, and on the Worker via `wrangler secret put` — never in `.env`, never
-> `PUBLIC_`-prefixed, never committed.
+Safe templates are committed as `.env.example` and `.dev.vars.example`; bootstrap them with
+`npm run setup:local`. Public build-time values belong in `.env`. Worker secrets belong in
+`.dev.vars` locally and are set in production with `wrangler secret put` — never put a secret in
+`.env`, give it a `PUBLIC_` prefix, or commit it. See [LOCAL-TESTING.md](LOCAL-TESTING.md) for the
+full test matrix.
 
 **Public** (`PUBLIC_` prefix → inlined into client bundles):
 
 ```ini
-PUBLIC_SANITY_PROJECT_ID=
+PUBLIC_SANITY_PROJECT_ID=unh13egm
 PUBLIC_SANITY_DATASET=production
-PUBLIC_SANITY_API_VERSION=2025-01-01
-PUBLIC_GA_MEASUREMENT_ID=          # Phase 4
-PUBLIC_TURNSTILE_SITE_KEY=         # Phase 4/5
+PUBLIC_SANITY_API_VERSION=2025-02-19
+PUBLIC_GA_MEASUREMENT_ID=          # optional; blank disables local analytics
+PUBLIC_CMDK_TURNSTILE_SITE_KEY=    # interaction-only ⌘K chat widget (Turnstile)
+PUBLIC_FORMSPREE_URL=              # contact form endpoint (https://formspree.io/f/<id>)
+PUBLIC_HCAPTCHA_SITEKEY=           # contact form hCaptcha widget
 ```
+
+The contact form posts directly from the browser to Formspree, which verifies the hCaptcha
+token server-side (enable hCaptcha in the Formspree form settings) — no Worker secrets are
+involved. Turnstile now protects only the ⌘K chat.
 
 **Secrets** (`wrangler secret put <NAME>`; local: `.dev.vars`):
 
 ```ini
-TURNSTILE_SECRET=                  # Phase 4 — Turnstile server verify (required)
-# Contact delivery — set EITHER the Resend trio OR a server-side forward URL:
-RESEND_API_KEY=                    # Phase 4 — email via Resend
-CONTACT_TO=                        # Phase 4 — destination address (Resend)
-CONTACT_FROM=                      # Phase 4 — verified sender (Resend)
-CONTACT_FORWARD_URL=               # Phase 4 — alt: server-side Formspree endpoint
-OPENROUTER_API_KEY=                # Phase 5 — ⌘K live agent
-OPENROUTER_MODEL=                  # Phase 5 — model id
+CMDK_TURNSTILE_SECRET=             # chat widget secret (falls back to TURNSTILE_SECRET)
+LLM_API_KEY=                       # optional; blank enables the local stub
+LLM_BASE_URL=https://integrate.api.nvidia.com/v1
+LLM_MODEL=nvidia/nemotron-3-super-120b-a12b
+LLM_ENABLE_THINKING=false
+# Optional Langfuse tracing (chat observability; off when keys are blank):
+LANGFUSE_PUBLIC_KEY=
+LANGFUSE_SECRET_KEY=
+LANGFUSE_BASE_URL=https://us.cloud.langfuse.com
 ```
+
+The command-bar assistant keeps the last six user/assistant exchanges for 24 hours in the local
+or production `CMDK_KV`, keyed by Astro's session ID. Use **New chat** to clear that history. See
+[CHAT-SETUP.md](CHAT-SETUP.md) for the request flow, production provider setup, limits, and
+diagnostics.
 
 ## Deploy
 

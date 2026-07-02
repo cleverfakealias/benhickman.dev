@@ -33,7 +33,9 @@ export default function CookieSettings() {
   useEffect(() => {
     if (!open) return;
     returnFocusRef.current = document.activeElement as HTMLElement | null;
-    modalRef.current?.querySelector<HTMLElement>('input, button')?.focus();
+    // Skip the disabled Essential checkbox — focusing a disabled control is a
+    // no-op, which would leave focus outside the dialog entirely.
+    modalRef.current?.querySelector<HTMLElement>('input:not([disabled]), button')?.focus();
     return () => returnFocusRef.current?.focus?.();
   }, [open]);
 
@@ -55,7 +57,10 @@ export default function CookieSettings() {
   };
 
   return (
+    // biome-ignore lint/a11y/noStaticElementInteractions: backdrop dismiss; Escape + visible Cancel/Save buttons give full keyboard access
+    // biome-ignore lint/a11y/useKeyWithClickEvents: same — closing isn't keyboard-only-dependent on this element
     <div className="cookie-overlay" onClick={closeSettings}>
+      {/* biome-ignore lint/a11y/useKeyWithClickEvents: stops the overlay's close-on-click from bubbling; not itself an interactive control */}
       <div
         ref={modalRef}
         className="cookie-modal"

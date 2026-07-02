@@ -10,7 +10,7 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "benhickman-dev",
   "main": "@astrojs/cloudflare/entrypoints/server",
-  "compatibility_date": "2025-05-21",
+  "compatibility_date": "2026-06-01",
   "compatibility_flags": ["nodejs_compat"],
   "assets": {
     "directory": "./dist",
@@ -18,15 +18,37 @@
   },
 
   // ── Bindings ─────────────────────────────────────────────────────────────
-  // KV for the ⌘K endpoint (per-IP quota + future response cache). `wrangler dev`
-  // auto-provisions a local namespace; for prod the owner creates one and fills
-  // the id: `wrangler kv namespace create CMDK_KV`.
-  "kv_namespaces": [{ "binding": "CMDK_KV" }],
+  // KV for the ⌘K endpoint (hashed per-IP quota, sharded global quota, chat
+  // history). SESSION is Astro's
+  // session store; the adapter adds the binding automatically, but the id is
+  // pinned here so deploys are deterministic. Both namespaces created
+  // 2026-07-01 via `wrangler kv namespace create <BINDING>`; `wrangler dev`
+  // still uses local simulations of them.
+  "kv_namespaces": [
+    { "binding": "CMDK_KV", "id": "68a852a7086646a295edfb6d95be7100" },
+    { "binding": "SESSION", "id": "9166be9cfc9248f69ec50f2c55279d7b" }
+  ],
+
+  // Workers Rate Limiting: short-window burst protection for /api/cmdk, keyed
+  // on the hashed client IP (8 requests/minute). The route degrades gracefully
+  // when the binding is absent (dev/tests), so removing this only removes the
+  // burst layer — Turnstile and the daily KV quotas still apply.
+  "ratelimits": [
+    {
+      "name": "CMDK_RATE_LIMITER",
+      "namespace_id": "1001",
+      "simple": { "limit": 8, "period": 60 }
+    }
+  ],
 
   // ── Secrets (set via `wrangler secret put`, never committed) ─────────────
-  // Phase 4 (contact):  TURNSTILE_SECRET, RESEND_API_KEY
-  // Phase 5 (⌘K agent): OPENROUTER_API_KEY, OPENROUTER_MODEL
-  // Public site keys live in .env / `vars`, e.g. PUBLIC_TURNSTILE_SITE_KEY.
+  // ⌘K agent: CMDK_TURNSTILE_SECRET (falls back to TURNSTILE_SECRET) +
+  // LLM_API_KEY, plus optional LLM_BASE_URL, LLM_MODEL, and LLM_ENABLE_THINKING.
+  // Optional chat tracing: LANGFUSE_PUBLIC_KEY + LANGFUSE_SECRET_KEY
+  // (+ LANGFUSE_BASE_URL for non-US instances); blank = tracing off.
+  // The contact form posts directly to Formspree with hCaptcha — no Worker
+  // secrets; its public keys (PUBLIC_FORMSPREE_URL, PUBLIC_HCAPTCHA_SITEKEY)
+  // live in .env / `vars`, like PUBLIC_CMDK_TURNSTILE_SITE_KEY for chat.
 
   "observability": {
     "enabled": true

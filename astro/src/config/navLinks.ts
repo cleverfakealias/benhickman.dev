@@ -36,5 +36,5 @@ export const bottomNavItems: readonly BottomNavItem[] = [
 export function isActive(href: string, pathname: string): boolean {
   const path = pathname.replace(/\/+$/, '') || '/';
   if (href === '/') return path === '/';
-  return path === href || path.startsWith(href + '/');
+  return path === href || path.startsWith(`${href}/`);
 }

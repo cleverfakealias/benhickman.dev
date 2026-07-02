@@ -1,6 +1,6 @@
 ---
 import type { Props as PtProps } from 'astro-portabletext/types';
-import { urlForImage } from '@/lib/sanity';
+import { responsiveImageAttrs } from '@/lib/sanity';
 
 // astro-portabletext passes the block value as `node` (must extend TypedObject).
 interface ImageValue {
@@ -11,13 +11,21 @@ interface ImageValue {
 }
 type Props = PtProps<ImageValue>;
 const { node } = Astro.props;
-const src = node?.asset ? urlForImage(node).width(1200).fit('max').auto('format').url() : '';
+const image = node?.asset ? responsiveImageAttrs(node, { baseWidth: 1200 }) : null;
 ---
 
 {
-  src && (
+  /* sizes tracks the .prose column: capped at 720px, ~90vw once wrap padding bites. */
+  image && (
     <figure class="pt-image">
-      <img src={src} alt={node.alt ?? ''} loading="lazy" decoding="async" />
+      <img
+        src={image.src}
+        srcset={image.srcset}
+        sizes="(min-width: 800px) 720px, 90vw"
+        alt={node.alt ?? ''}
+        loading="lazy"
+        decoding="async"
+      />
       {node.caption && <figcaption>{node.caption}</figcaption>}
     </figure>
   )
