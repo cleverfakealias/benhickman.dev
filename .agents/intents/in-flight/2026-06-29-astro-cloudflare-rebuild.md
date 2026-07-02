@@ -48,7 +48,7 @@ GROQ queries all carry over; only the component + runtime layer is new.
 | IA / routes | Home / Work / Writing / About / Contact (+ Privacy, 404). **Drop Playground + the old Experience page.** |
 | URLs | `/`, `/work`, `/work/[slug]`, `/writing`, `/writing/[slug]`, `/about`, `/contact`, `/privacy`. Redirects: `/blog`→`/writing`, `/blog/post/[slug]`→`/writing/[slug]`, `/experience`→`/work`, `/career`→`/about`, `/playground`→`/`. |
 | Domain | **benhickman.dev standalone**; zennlogic.com / zengineer.cloud redirect to it. Static per-page SEO — drop the SPA's runtime `updateMetaTags` DOM-patching. |
-| ⌘K scope | **v1 projects-led** (local search over content/Sanity, no LLM). Phase-5 streaming OpenRouter agent (KV quota + Turnstile) on a Worker comes later. |
+| ⌘K scope | **v1 projects-led** (local search over content/Sanity, no LLM) with an optional live agent layered on top. Implemented: a streaming Worker endpoint (KV quota + Turnstile) — built against **NVIDIA NIM** (Nemotron) instead of the originally-planned OpenRouter, swapped during the pre-deploy pass; falls back to the local stub when no LLM key is set. |
 | Theme | Inline pre-paint FOUC script verbatim + a tiny toggle island; same localStorage keys (`zennlogic-theme-source` / `-mode`). |
 | Cutover | Build `astro/` to parity, THEN flip deploy/DNS. `ui/` stays live until then — do NOT touch `ui/`. |
 
@@ -87,21 +87,40 @@ GROQ queries all carry over; only the component + runtime layer is new.
 
 ## Out of scope (for now)
 
-- The live LLM-streaming ⌘K agent backend (OpenRouter key + KV quota at scale) — design + scaffold only; ship projects-led v1.
-- Sanity Presentation/visual-editing (stega preview) — reassess; likely deferred.
-- Migrating `ui/` content into Sanity beyond what the Work/About pages need.
+- Scaling the live ⌘K agent beyond the current per-IP/global daily KV quotas — fine for a personal
+  portfolio's traffic; revisit if usage grows.
+- Sanity Presentation/visual-editing (stega preview) — reassessed; deferred, not built.
+- Migrating `ui/` content into Sanity beyond what the Work/About pages need (Work/About are
+  currently sourced inline from the content-plan packet, not Sanity `project` docs).
 
 ## Risks / open questions
 
-- **Astro 6 + Cloudflare adapter recency:** known friction with hybrid prerender on Workers / base-prefix on static assets — pin known-good versions and verify the prerender/SSR split builds early (Phase 1).
-- **zennlogic.com internals not local:** the ⌘K/wrangler specifics are modeled from docs; confirm against the real Worker on first deploy.
-- **Astro v6 env change:** `Astro.locals.runtime.env` is removed — read Cloudflare env via `import { env } from 'cloudflare:workers'`.
-- **Secrets are a CLI step:** repo guard hooks block edits to secret/policy files — the OpenRouter/Turnstile secrets are `wrangler secret put` operations the owner runs, not agent writes.
+- **zennlogic.com internals not local:** the ⌘K/wrangler specifics were modeled from docs, then
+  confirmed working against the real `workerd` dev runtime (live NVIDIA NIM streaming, KV session
+  history, Turnstile accept/reject) — not yet confirmed against an actual production deploy.
+- **Secrets are a CLI step:** repo guard hooks block edits to secret/policy files (and reading
+  them) by design — every remaining Turnstile/LLM/delivery secret is a `wrangler secret put` the
+  owner runs; see the Phase 6 intent for the exact list.
+- **`CMDK_KV` has no production namespace id yet** — `wrangler.jsonc` declares the binding without
+  an `id`; this is the first thing Phase 6 provisions, since `wrangler deploy` needs it.
 - **Supersedes** the in-place MUI-reskin open intents (`home/blog/experience/contact/playground/privacy/site-shell-and-seo-modernization`) — those targeted `ui/`; they're now historical. Close or leave as record (owner's call); do not execute them against the Astro target.
 
 ## Linked
 
 - Review: `astro-cloudflare-migration-review` workflow.
-- Phase intents: P1–P5 **done** (`.agents/intents/done/`), P6 (deploy/CI) **open**.
-- Progress: P1–P5 built + verified, committed in `f9ab10f` on `feat/obsidian-foundry-redesign`. Pre-deploy security review + local-LLM test harness in progress before P6.
+- Phase intents: P1–P5 **done** (`.agents/intents/done/`), P6 (deploy) **open** — see that file for
+  the full, ordered Cloudflare deployment checklist.
+- Progress: P1–P5 built + verified, committed in `f9ab10f` (rebuild) and `54b7f7f` (pre-deploy
+  security/correctness pass + NVIDIA NIM ⌘K swap) on `feat/obsidian-foundry-redesign`. 2026-06-30:
+  closed out remaining gaps before Phase 6 — fixed all Biome lint findings (a systemic `.astro`
+  frontmatter/template false-positive class scoped out via override, plus real a11y/exhaustive-deps/
+  style fixes), added a `@/*` alias to `vitest.config.ts` (was unset, so no test could import
+  aliased modules), and wrote the first unit tests for the repo (31 tests: nav active-state,
+  ⌘K chat-history pairing/quota-adjacent helpers, project-matching, contact validation — all
+  previously uncovered security/correctness logic). `npm run verify` (lint + typecheck + test +
+  build) is green. Manually verified the full live stack against the real dev `workerd` runtime:
+  static prerender + redirect routes in the build output, KV-backed session continuity, Turnstile
+  accept/reject, live NVIDIA NIM streaming (correctly grounded, no hallucinated claims), and the
+  contact pipeline's fail-closed states. Nothing left for an agent to do — Phase 6 is entirely
+  owner-side Cloudflare account/secret/DNS actions.
 - PRs:
