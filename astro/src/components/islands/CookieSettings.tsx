@@ -39,11 +39,31 @@ export default function CookieSettings() {
     return () => returnFocusRef.current?.focus?.();
   }, [open]);
 
-  // Close on Escape.
+  // Close on Escape; trap Tab inside the dialog — aria-modal promises the
+  // page behind the overlay is inert, so focus must not walk out of it.
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') closeSettings();
+      if (e.key === 'Escape') {
+        closeSettings();
+        return;
+      }
+      if (e.key !== 'Tab') return;
+      const focusables = modalRef.current?.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), input:not([disabled])',
+      );
+      if (!focusables || focusables.length === 0) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      const active = document.activeElement;
+      const inside = active instanceof HTMLElement && modalRef.current?.contains(active);
+      if (e.shiftKey && (active === first || !inside)) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && (active === last || !inside)) {
+        e.preventDefault();
+        first.focus();
+      }
     };
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);

@@ -29,6 +29,8 @@ function HCaptchaWidget({
   const ref = useRef<HTMLDivElement>(null);
   const idRef = useRef<string | null>(null);
 
+  const [loadFailed, setLoadFailed] = useState(false);
+
   useEffect(() => {
     let cancelled = false;
     const render = () => {
@@ -50,12 +52,25 @@ function HCaptchaWidget({
       s.src = HCAPTCHA_SRC;
       s.async = true;
       s.onload = render;
+      // Remove the failed tag so a remount can retry with a fresh script
+      // instead of polling a tag whose error already fired.
+      s.onerror = () => {
+        s.remove();
+        if (!cancelled) setLoadFailed(true);
+      };
       document.head.appendChild(s);
     } else {
+      // Another instance is loading the script — poll for it, but not forever:
+      // if the CDN is blocked the load never completes and the user would sit
+      // in front of a silent gap where the captcha should be.
+      const deadline = Date.now() + 15_000;
       timer = setInterval(() => {
         if (window.hcaptcha) {
           clearInterval(timer);
           render();
+        } else if (Date.now() > deadline) {
+          clearInterval(timer);
+          if (!cancelled) setLoadFailed(true);
         }
       }, 200);
     }
@@ -73,6 +88,14 @@ function HCaptchaWidget({
     };
   }, [siteKey, onToken]);
 
+  if (loadFailed) {
+    return (
+      <p className="form-error" role="alert">
+        The verification widget could not load. Check your connection or ad blocker, then reload the
+        page.
+      </p>
+    );
+  }
   return <div ref={ref} className="hcaptcha-widget" />;
 }
 

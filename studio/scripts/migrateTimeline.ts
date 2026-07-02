@@ -2,8 +2,8 @@ import { createClient } from '@sanity/client';
 import dotenv from 'dotenv';
 import path from 'path';
 
-// Load the development env vars we just created
-dotenv.config({ path: path.resolve(__dirname, '.env.development') });
+// Load the development env vars from the studio root (one level above scripts/)
+dotenv.config({ path: path.resolve(__dirname, '..', '.env.development') });
 
 const client = createClient({
     projectId: process.env.SANITY_STUDIO_PROJECT_ID,
@@ -114,11 +114,17 @@ async function migrate() {
             const result = await client.create(doc);
             console.log(`Created document: ${result._id} - ${result.title}`);
         } catch (err) {
-            console.error(`Failed to create document for ${item.title}:`, err.message);
+            console.error(
+                `Failed to create document for ${item.title}:`,
+                err instanceof Error ? err.message : String(err),
+            );
         }
     }
 
     console.log('Migration complete!');
 }
 
-migrate();
+migrate().catch((err: unknown) => {
+    console.error('Migration failed:', err instanceof Error ? err.message : String(err));
+    process.exit(1);
+});

@@ -4,18 +4,15 @@
    1px Iron borders carry depth — no shadows, no glow, no blur.
    ======================================================================= */
 
-/* Base (Carbon dark) — site default. `northwoods` kept as an alias so any
-   stray data-brand reference still resolves to the new system. */
+/* Base (Carbon dark) — site default. */
 :root,
-html[data-brand='obsidian'],
-html[data-brand='northwoods'] {
+html[data-brand='obsidian'] {
   color-scheme: dark;
 
   /* Base unit for rem */
   font-size: 16px;
 
   /* Fluid spacing scale using clamp(min, preferred, max) */
-  --space-0: 0;
   --space-1: clamp(6px, 0.6vw, 10px);
   --space-2: clamp(10px, 0.9vw, 14px);
   --space-3: clamp(14px, 1.2vw, 18px);
@@ -29,26 +26,18 @@ html[data-brand='northwoods'] {
   --radius-sm: 4px;
   --radius-md: 8px;
   --radius-lg: 12px;
-  --radius-xl: clamp(14px, 1.4vw, 20px);
   --radius-pill: 999px;
 
   /* Mobile bottom-nav height — reserves footer bottom padding so it clears the bar */
   --bottom-nav-h: 72px;
 
   /* Semantic spacers */
-  --gap-card: var(--space-4);
-  --gap-stack: var(--space-5);
-  --gap-section: var(--space-7);
   --pad-card: var(--space-4);
-  --pad-section: var(--space-7);
 
   /* Accents — Persimmon (primary), Wasabi (secondary / success) */
   --color-accent: oklch(0.59 0.2 41);
   --color-accent-hex: #e65100; /* Persimmon */
-  --color-accent-contrast: oklch(1 0 0);
   --color-accent-contrast-hex: #ffffff;
-  --color-accent-hover: oklch(0.66 0.2 44);
-  --color-accent-hover-hex: #ff6316;
 
   /* Accent used as a background FILL under white text (filled buttons, the
      bottom-nav Ask pill). Brand Persimmon is too bright for that: computed WCAG
@@ -59,44 +48,29 @@ html[data-brand='northwoods'] {
   --color-accent-fill: #c2410c;
   --color-accent-fill-hover: #a83a0a;
 
-  --color-secondary: oklch(0.66 0.11 122);
   --color-secondary-hex: #889e48; /* Wasabi */
 
   /* Surfaces — Carbon black / Weathered slate */
-  --color-bg: #0a0a0b;
-  --color-bg-hex: #0a0a0b; /* Carbon Black */
-  --color-surface: #161618;
-  --color-surface-hex: #161618; /* Weathered Slate */
-  --color-surface-2: #1c1c1f;
-  --color-surface-2-hex: #1c1c1f; /* Raised */
+  --color-bg: #0a0a0b; /* Carbon Black */
+  --color-surface: #161618; /* Weathered Slate */
+  --color-surface-2: #1c1c1f; /* Raised */
   --color-overlay: rgba(10, 10, 11, 0.82);
 
   /* Text — Parchment / Fossil */
-  --color-text: #f5f5f0;
-  --color-text-hex: #f5f5f0; /* Parchment */
+  --color-text: #f5f5f0; /* Parchment */
   --color-text-secondary: rgba(245, 245, 240, 0.72);
-  --color-text-secondary-hex: #b3b3ae;
   /* Fossil, lightened from #52525b to clear WCAG AA (4.5:1) on Carbon Black —
      it's used as real label/meta text, not just decoration. */
-  --color-text-muted: #8b8b94;
-  --color-text-muted-hex: #8b8b94; /* Fossil */
+  --color-text-muted: #8b8b94; /* Fossil */
 
   /* Lines & focus — Iron border, Persimmon focus */
-  --color-border: #27272a;
-  --color-border-hex: #27272a; /* Iron */
+  --color-border: #27272a; /* Iron */
   --color-border-hover: #3a3a40; /* Iron, raised on hover */
   --color-focus: rgba(230, 81, 0, 0.5);
-  --color-focus-hex: #e6510080;
 
   /* Status (harmonized to the Obsidian palette) */
-  --color-success: oklch(0.66 0.11 122);
-  --color-success-hex: #889e48; /* Wasabi */
-  --color-warning: oklch(0.82 0.13 75);
-  --color-warning-hex: #e9b44c;
   --color-danger: oklch(0.63 0.18 28);
   --color-danger-hex: #e5484d;
-  --color-info: oklch(0.59 0.2 41);
-  --color-info-hex: #e65100; /* links carry Persimmon */
 
   /* Typography — Geist display, JetBrains Mono (proportional-mono) body.
      Family names match the self-hosted Fontsource faces imported in
@@ -111,85 +85,49 @@ html[data-brand='northwoods'] {
     'JetBrains Mono Variable', 'JetBrains Mono', 'Commit Mono', ui-monospace, SFMono-Regular,
     Menlo, Consolas, monospace;
 
-  /* Shadows — none. 1px Iron borders do the work. */
-  --shadow-1: none;
-  --shadow-2: none;
-  --shadow-3: none;
-  --shadow-4: none;
-  --shadow-5: none;
-
-  /* Motion */
-  --motion-100: 100ms;
+  /* Motion (no shadow tokens — 1px Iron borders carry all depth) */
   --motion-150: 150ms;
   --motion-200: 200ms;
-  --motion-300: 300ms;
-  --motion-500: 500ms;
   --easing-standard: cubic-bezier(0.2, 0.8, 0.2, 1);
-  --easing-emphasized: cubic-bezier(0.2, 0.8, 0.2, 1);
-  --easing-exit: cubic-bezier(0.4, 0, 1, 1);
 }
 
 /* Light — secondary toggle (Parchment on warm white). Dark is the default. */
-html[data-theme='light'],
-html[data-theme='light'][data-brand='northwoods'],
-html[data-theme='light'][data-brand='obsidian'] {
+html[data-theme='light'] {
   color-scheme: light;
 
   --color-bg: #faf9f5;
-  --color-bg-hex: #faf9f5;
   --color-surface: #ffffff;
-  --color-surface-hex: #ffffff;
   --color-surface-2: #f2f1ec;
-  --color-surface-2-hex: #f2f1ec;
   --color-overlay: rgba(250, 249, 245, 0.85);
 
   --color-text: #18181b;
-  --color-text-hex: #18181b;
   --color-text-secondary: #52525b;
-  --color-text-secondary-hex: #52525b;
   --color-text-muted: #8a8a82;
-  --color-text-muted-hex: #8a8a82;
 
   --color-border: #e4e2db;
-  --color-border-hex: #e4e2db;
   --color-border-hover: #cfccc4; /* slightly darker than border on light surfaces */
   --color-focus: rgba(194, 65, 12, 0.4);
-  --color-focus-hex: #c2410c66;
 
   /* Slightly darker accents for AA contrast on light surfaces */
   --color-accent: oklch(0.55 0.19 38);
   --color-accent-hex: #c2410c;
-  --color-accent-hover: oklch(0.59 0.2 41);
-  --color-accent-hover-hex: #e65100;
   /* Fills track the light accents — #c2410c with white text = 5.18:1. Hover
      darkens (#a83a0a = 6.41:1); the old #e65100 hover was 3.79:1 and failed AA. */
   --color-accent-fill: #c2410c;
   --color-accent-fill-hover: #a83a0a;
-  --color-secondary: oklch(0.55 0.1 122);
   --color-secondary-hex: #5f7032;
-  --color-success-hex: #5f7032;
-  --color-info-hex: #c2410c;
-
-  --shadow-1: none;
-  --shadow-2: none;
-  --shadow-3: none;
 }
 
 /* Explicit dark — same as base (kept for the toggle + future per-mode tweaks). */
-html[data-theme='dark'],
-html[data-theme='dark'][data-brand='northwoods'],
-html[data-theme='dark'][data-brand='obsidian'] {
+html[data-theme='dark'] {
   color-scheme: dark;
 }
 
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   :root {
-    --motion-100: 0ms;
     --motion-150: 0ms;
     --motion-200: 0ms;
-    --motion-300: 0ms;
-    --motion-500: 0ms;
   }
 }
 
@@ -257,35 +195,10 @@ a:focus-visible {
   outline-offset: 2px;
 }
 
-/* Button secondary */
-.button-secondary {
-  background: transparent;
-  color: var(--color-text);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  padding: var(--space-3) var(--space-5);
-  font-weight: 600;
-  cursor: pointer;
-  transition:
-    border-color var(--motion-150) var(--easing-standard),
-    background var(--motion-150) var(--easing-standard);
-}
-
-.button-secondary:hover {
-  border-color: var(--color-accent-hex);
-  background: color-mix(in oklch, var(--color-accent) 8%, transparent);
-}
-
-.button-secondary:focus-visible {
-  outline: 2px solid var(--color-accent-hex);
-  outline-offset: 2px;
-}
-
 /* =======================================================================
    Base reset + document defaults
-   Everything above this line is ported verbatim from ui/src/theme/tokens.css.
-   This layer replaces what MUI's CssBaseline used to provide now that MUI is
-   gone — box-sizing, margin reset, and applying the tokens to <html>/<body>.
+   This layer replaces what MUI's CssBaseline used to provide in the legacy
+   SPA — box-sizing, margin reset, and applying the tokens to <html>/<body>.
    ======================================================================= */
 
 *,

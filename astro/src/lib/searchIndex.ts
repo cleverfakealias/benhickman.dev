@@ -1,5 +1,6 @@
 import { projects, getProjectsWithDetail } from '@/data/projects';
 import { getAllPosts } from '@/lib/sanity';
+import { dateLocale } from '@/config/site';
 
 // Build-time index for the ⌘K palette (v1 = local, no LLM). Served from the
 // prerendered /search-index.json endpoint and fetched by the CommandPalette
@@ -48,13 +49,19 @@ export async function buildSearchIndex(): Promise<SearchItem[]> {
       group: 'Writing',
       label: post.title,
       sublabel: post.publishedAt
-        ? new Date(post.publishedAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short' })
+        ? new Date(post.publishedAt).toLocaleDateString(dateLocale, {
+            year: 'numeric',
+            month: 'short',
+          })
         : undefined,
       href: `/writing/${post.slug}`,
       keywords: post.excerpt ?? '',
     }));
   } catch {
-    writingItems = [];
+    // Degrade this call, but do NOT memoize the degraded result — caching an
+    // empty Writing section would pin every later caller in this process to
+    // one transient Sanity failure.
+    return [...PAGES, ...projectItems];
   }
 
   cache = [...PAGES, ...projectItems, ...writingItems];

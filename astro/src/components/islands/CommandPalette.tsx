@@ -232,7 +232,9 @@ export default function CommandPalette() {
           }
           return [{ id: messageId(), role: message.role, content: message.content }];
         });
-        setMessages(restored);
+        // An ask may have started while this fetch was in flight — replacing the
+        // array would orphan the pending bubbles and drop the streamed answer.
+        setMessages((current) => (current.length > 0 ? current : restored));
       } catch (error) {
         if (!(error instanceof DOMException && error.name === 'AbortError')) {
           setChatError('The previous conversation could not be restored. You can still start a new one.');
@@ -251,12 +253,17 @@ export default function CommandPalette() {
     if (window.turnstile) return;
     if (!tsScriptPromise.current) {
       tsScriptPromise.current = new Promise<void>((resolve, reject) => {
+        // A failed tag must be removed before rejecting: if it stayed in the DOM,
+        // a retry would find it via `existing` and wait on load/error events that
+        // already fired — hanging the promise (and the ask) forever.
+        const fail = (script: HTMLScriptElement) => {
+          script.remove();
+          reject(new Error('Chat verification could not load.'));
+        };
         const existing = document.querySelector<HTMLScriptElement>(`script[src="${TURNSTILE_SRC}"]`);
         if (existing) {
           existing.addEventListener('load', () => resolve(), { once: true });
-          existing.addEventListener('error', () => reject(new Error('Chat verification could not load.')), {
-            once: true,
-          });
+          existing.addEventListener('error', () => fail(existing), { once: true });
           return;
         }
         const script = document.createElement('script');
@@ -264,7 +271,7 @@ export default function CommandPalette() {
         script.async = true;
         script.defer = true;
         script.onload = () => resolve();
-        script.onerror = () => reject(new Error('Chat verification could not load.'));
+        script.onerror = () => fail(script);
         document.head.appendChild(script);
       });
     }

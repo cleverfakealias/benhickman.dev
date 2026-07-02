@@ -1,7 +1,9 @@
 ---
 import { site } from '@/config/site';
 
-interface Props {
+// Exported so BaseLayout can re-use the exact prop shape instead of
+// maintaining a hand-copied twin that silently drifts.
+export interface SeoProps {
   title?: string;
   description?: string;
   /** Canonical path (defaults to the current route). */
@@ -14,6 +16,8 @@ interface Props {
   /** Extra JSON-LD object(s) to emit (e.g. Article, BreadcrumbList). */
   jsonLd?: Record<string, unknown> | Record<string, unknown>[];
 }
+
+type Props = SeoProps;
 
 const {
   title,
@@ -61,9 +65,16 @@ const extraLd = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
 const graphs = [personLd, websiteLd, ...extraLd];
 
 // JSON.stringify does NOT escape <, > or & — a Sanity field containing
-// "</script>" would break out of the JSON-LD block. Unicode-escape them.
+// "</script>" would break out of the JSON-LD block. Unicode-escape them,
+// plus U+2028/U+2029, which are valid JSON but illegal inside a <script>
+// body and would abort JSON-LD parsing.
 const safeJsonLd = (obj: Record<string, unknown>): string =>
-  JSON.stringify(obj).replace(/</g, '\\u003c').replace(/>/g, '\\u003e').replace(/&/g, '\\u0026');
+  JSON.stringify(obj)
+    .replace(/</g, '\\u003c')
+    .replace(/>/g, '\\u003e')
+    .replace(/&/g, '\\u0026')
+    .replace(/\u2028/g, '\\u2028')
+    .replace(/\u2029/g, '\\u2029');
 ---
 
 <title>{fullTitle}</title>

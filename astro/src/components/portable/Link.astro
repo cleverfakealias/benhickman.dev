@@ -7,7 +7,10 @@ type Props = MarkProps<{ href?: string }>;
 const { node } = Astro.props;
 const raw = node.markDef?.href ?? '#';
 // Scheme allowlist — neutralize javascript:/data: and other XSS vectors from CMS links.
-const href = /^(https?:|mailto:|tel:|\/|#)/i.test(raw) ? raw : '#';
+// Protocol-relative forms (//host, and /\host which browsers normalize to //host)
+// must be rejected before the allowlist: they start with "/" but navigate
+// off-site, dodging the external-link classification below.
+const href = /^[/\\]{2}/.test(raw) || !/^(https?:|mailto:|tel:|\/|#)/i.test(raw) ? '#' : raw;
 const external = /^https?:\/\//.test(href);
 ---
 

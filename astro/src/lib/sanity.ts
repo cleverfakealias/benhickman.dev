@@ -1,6 +1,7 @@
 import { createClient, type SanityClient } from '@sanity/client';
 import { createImageUrlBuilder, type SanityImageSource } from '@sanity/image-url';
 import type { PortableTextBlock } from '@portabletext/types';
+import { dateLocale } from '@/config/site';
 
 // Reuses the SPA's Sanity project (studio/ projectId `unh13egm`). projectId +
 // dataset are public; overridable via PUBLIC_SANITY_* env. Content is fetched at
@@ -163,7 +164,7 @@ export async function getAllPostSlugs(): Promise<string[]> {
 
 export function formatDate(dateString?: string): string {
   if (!dateString) return 'Recently';
-  return new Date(dateString).toLocaleDateString('en-US', {
+  return new Date(dateString).toLocaleDateString(dateLocale, {
     year: 'numeric',
     month: 'long',
     day: 'numeric',

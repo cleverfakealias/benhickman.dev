@@ -558,6 +558,12 @@ export async function runAssistant(
   let degraded = false;
   let toolRounds = 0;
   let roundIndex = 0;
+  // Every round's content tokens are forwarded to the client as they stream,
+  // so the persisted answer must be the concatenation of all rounds — saving
+  // only the final round's text would make restored history diverge from what
+  // the user watched stream (and mis-report "empty response" when a tool
+  // round streamed content but the final round returned none).
+  let transcript = '';
 
   for (;;) {
     const useTools = toolsEnabled && toolRounds < MAX_TOOL_ROUNDS;
@@ -594,6 +600,9 @@ export async function runAssistant(
       return { ok: false, message: providerErrorMessage(outcome.status) };
     }
 
+    // (http_error rounds returned or continued above — only streamed rounds reach here.)
+    if (outcome.text) transcript += outcome.text;
+
     if (outcome.kind === 'tool_calls' && useTools) {
       toolRounds += 1;
       messages.push({
@@ -629,7 +638,7 @@ export async function runAssistant(
       continue;
     }
 
-    const text = outcome.text.trim();
+    const text = transcript.trim();
     return text
       ? { ok: true, answer: text }
       : { ok: false, message: 'The assistant returned an empty response. Please try again.' };
@@ -738,7 +747,16 @@ export const POST: APIRoute = async ({ request, session, cookies, locals }) => {
 
   const origin = new URL(request.url).origin;
   const upstreamAbort = new AbortController();
-  const timeoutId = setTimeout(() => upstreamAbort.abort(), 60_000);
+  // Client disconnect (cancel() below) and the 60s ceiling share one abort
+  // signal, so providerRound cannot tell them apart — it returns whatever
+  // streamed so far as a normal answer either way. Record which one fired:
+  // a timeout with a live client must surface as an error, not silently
+  // persist a truncated answer as if it were complete.
+  let timedOut = false;
+  const timeoutId = setTimeout(() => {
+    timedOut = true;
+    upstreamAbort.abort();
+  }, 60_000);
   const stream = new ReadableStream({
     async start(controller) {
       // Optional Langfuse trace — created only for gated live asks, after
@@ -770,6 +788,12 @@ export const POST: APIRoute = async ({ request, session, cookies, locals }) => {
           if (!result.ok) {
             trace?.finish({ error: result.message });
             sse(controller, { type: 'error', message: result.message });
+            return;
+          }
+          if (timedOut) {
+            const message = 'The assistant took too long to respond.';
+            trace?.finish({ error: message });
+            sse(controller, { type: 'error', message });
             return;
           }
           answer = result.answer;

@@ -23,3 +23,8 @@ export const site = {
   locale: 'en_GB',
   twitter: undefined as string | undefined,
 } as const;
+
+// BCP-47 form of `site.locale` for Intl APIs — every rendered date must use
+// this (not a hardcoded 'en-US') so date formatting matches the declared
+// site language.
+export const dateLocale: string = site.locale.replace('_', '-');

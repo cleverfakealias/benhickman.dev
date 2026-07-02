@@ -67,12 +67,9 @@ import { CMDK_PLACEHOLDER, WORK_HREF, CONTACT_HREF } from '@/data/homeContent';
   }
   .cursor {
     color: var(--color-accent-hex);
+    /* `blink` is the global keyframes in global.css (shared with .cmdk-cursor) —
+       not redefined here, so Astro leaves the name unscoped. */
     animation: blink 1.1s steps(1) infinite;
-  }
-  @keyframes blink {
-    50% {
-      opacity: 0;
-    }
   }
   @media (prefers-reduced-motion: reduce) {
     .cursor {

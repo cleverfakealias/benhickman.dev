@@ -1,13 +1,22 @@
 ---
-interface Props {
+// `title` and `titleHtml` are mutually exclusive — passing both would
+// silently discard `title`, so the union makes that a type error instead.
+type Props = {
   eyebrow: string;
-  /** Title may include an <em> for the italic-serif accent — pass as a slot or html. */
-  title: string;
-  /** Raw HTML title (allows <em> accent). Prefer `title` for plain text. */
-  titleHtml?: string;
   id?: string;
   centered?: boolean;
-}
+} & (
+  | {
+      /** Plain-text title. */
+      title: string;
+      titleHtml?: never;
+    }
+  | {
+      /** Trusted, hardcoded HTML title (allows the <em> serif accent). Never CMS/user content. */
+      titleHtml: string;
+      title?: never;
+    }
+);
 const { eyebrow, title, titleHtml, id, centered } = Astro.props;
 ---
 

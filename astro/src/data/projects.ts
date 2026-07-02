@@ -12,11 +12,6 @@ export type Tier = 'hero' | 'featured' | 'supporting';
 export type Group = 'Agents' | 'RAG / Retrieval' | 'Model Development' | 'Web';
 export type Maturity = 'shipped' | 'deployed' | 'polished prototype' | 'working prototype' | 'scaffold';
 
-export interface ProjectLink {
-  label: string;
-  href: string;
-}
-
 export interface ProjectDetailSection {
   heading: string;
   body: string;
