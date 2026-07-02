@@ -85,18 +85,19 @@ export const buildTheme = (mode: 'light' | 'dark') => {
     fontFamilyMonospace: fontFamilyMonospace,
   } as const;
 
-  // Spacing system based on CSS custom properties
-  // Maps to --space-0 through --space-7, plus semantic spacers
+  // Spacing system based on CSS custom properties.
+  // Integer steps 0–7 map to the fluid Obsidian Foundry scale (--space-0…7):
+  //   0=0  1=~10px  2=~14px  3=~18px  4=~24px  5=~32px  6=~48px  7=~64px
+  // Any other value — fractional (1.5, 0.25, …), negative, or >7 — falls back
+  // to MUI's 8px base grid. Without this fallback, `sx={{ px: 1.5 }}` resolved
+  // to the undefined token `var(--space-1.5)` and collapsed to 0 (the nav
+  // links ran together; all fractional spacing app-wide silently vanished).
   const spacing = (factor: number | string): string => {
-    // If it's a number, map to --space-{n}
-    if (typeof factor === 'number') {
-      // MUI uses 8px base by default, we map to our fluid scale
-      // 0=0px, 1=~10px, 2=~14px, 3=~18px, 4=~24px, 5=~32px, 6=~48px, 7=~64px
-      const clampedFactor = Math.max(0, Math.min(7, factor));
-      return `var(--space-${clampedFactor})`;
+    if (typeof factor === 'string') return factor; // semantic spacer, e.g. 'card'
+    if (Number.isInteger(factor) && factor >= 0 && factor <= 7) {
+      return `var(--space-${factor})`;
     }
-    // If it's a semantic string like 'card' or 'section', return that
-    return factor;
+    return `${factor * 8}px`;
   };
 
   const theme = createTheme({

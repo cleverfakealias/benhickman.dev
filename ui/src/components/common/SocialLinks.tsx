@@ -1,12 +1,17 @@
 import React from 'react';
 import { Typography, Box, Link, useTheme, Fade } from '@mui/material';
 import { LinkedIn, GitHub } from '@mui/icons-material';
+import { socialProfiles } from '../../config/socialLinks';
 
 interface SocialLinksProps {
   showTitle?: boolean;
   centered?: boolean;
   compact?: boolean;
 }
+
+// URLs come from the single shared source; this page-specific component keeps
+// its own icon/color/description presentation and rendered order.
+const urlFor = (name: string) => socialProfiles.find((p) => p.name === name)?.url ?? '';
 
 const SocialLinks: React.FC<SocialLinksProps> = ({ centered = true, compact = false }) => {
   const theme = useTheme();
@@ -15,14 +20,14 @@ const SocialLinks: React.FC<SocialLinksProps> = ({ centered = true, compact = fa
     {
       icon: <LinkedIn />,
       name: 'LinkedIn',
-      url: 'https://linkedin.benhickman.dev',
+      url: urlFor('LinkedIn'),
       color: '#0077b5',
       description: 'Professional profile',
     },
     {
       icon: <GitHub />,
       name: 'GitHub',
-      url: 'https://github.benhickman.dev',
+      url: urlFor('GitHub'),
       color: '#24292f',
       description: 'Code repositories',
     },

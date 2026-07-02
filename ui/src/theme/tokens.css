@@ -32,6 +32,9 @@ html[data-brand='northwoods'] {
   --radius-xl: clamp(14px, 1.4vw, 20px);
   --radius-pill: 999px;
 
+  /* Mobile bottom-nav height — reserves footer bottom padding so it clears the bar */
+  --bottom-nav-h: 72px;
+
   /* Semantic spacers */
   --gap-card: var(--space-4);
   --gap-stack: var(--space-5);
@@ -70,6 +73,7 @@ html[data-brand='northwoods'] {
   /* Lines & focus — Iron border, Persimmon focus */
   --color-border: #27272a;
   --color-border-hex: #27272a; /* Iron */
+  --color-border-hover: #3a3a40; /* Iron, raised on hover */
   --color-focus: rgba(230, 81, 0, 0.5);
   --color-focus-hex: #e6510080;
 
@@ -131,6 +135,7 @@ html[data-theme='light'][data-brand='obsidian'] {
 
   --color-border: #e4e2db;
   --color-border-hex: #e4e2db;
+  --color-border-hover: #cfccc4; /* slightly darker than border on light surfaces */
   --color-focus: rgba(194, 65, 12, 0.4);
   --color-focus-hex: #c2410c66;
 
@@ -179,7 +184,7 @@ html[data-theme='dark'][data-brand='obsidian'] {
 }
 
 .card:hover {
-  border-color: #3a3a40;
+  border-color: var(--color-border-hover);
 }
 
 /* Eyebrow / micro label — 11px, 0.14em tracking, uppercase */

@@ -1,44 +1,26 @@
 import React from 'react';
 import { Box, IconButton, Tooltip, useTheme, useMediaQuery } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import { Link, useLocation, matchPath } from 'react-router-dom';
 import { getDomainConfig } from '../../config/domainConfig';
-import MobileDrawer from './MobileDrawer';
+import { navLinks } from '../../config/navLinks';
+import { kbdSx } from '../features/home/homeStyles';
 
-// Primary nav. Work/About land in a later phase with their pages; until then
-// these point only at routes that exist so nothing dead-links.
-const navLinks = [
-  { name: 'Experience', href: '/experience' },
-  { name: 'Writing', href: '/blog' },
-  { name: 'Playground', href: '/playground' },
-  { name: 'Contact', href: '/contact' },
-];
-
-const kbdSx = {
-  fontFamily: 'var(--font-mono)',
-  fontSize: '0.65rem',
-  lineHeight: 1.4,
-  background: 'var(--color-surface-2)',
-  border: '1px solid var(--color-border)',
-  borderRadius: '4px',
-  px: '5px',
-  py: '1px',
-  color: 'var(--color-text-secondary)',
-} as const;
+// The header keycaps are a touch smaller than the hero's, so override only the
+// size/radius/padding that genuinely differ from the shared `kbdSx` primitive.
+const headerKbdSx = [kbdSx, { fontSize: '0.65rem', borderRadius: '4px', px: '5px' }] as const;
 
 interface HeaderProps {
   themeMode: 'light' | 'dark';
   setThemeMode: (mode: 'light' | 'dark') => void;
 }
 
-const Header: React.FC<HeaderProps> = ({ themeMode, setThemeMode }) => {
+export const Header: React.FC<HeaderProps> = ({ themeMode, setThemeMode }) => {
   const { branding: brand } = getDomainConfig();
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const location = useLocation();
-  const [drawerOpen, setDrawerOpen] = React.useState(false);
 
   const isActiveLink = (href: string) =>
     !!matchPath({ path: href, end: href === '/' }, location.pathname);
@@ -167,43 +149,46 @@ const Header: React.FC<HeaderProps> = ({ themeMode, setThemeMode }) => {
           </Box>
         )}
 
-        {/* Right: ⌘K + theme + mobile menu */}
+        {/* Right: ⌘K (desktop only) + theme toggle. Mobile nav lives in the bottom bar. */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5, justifyContent: 'flex-end' }}>
-          <Tooltip title="Ask my work — coming soon">
-            <Box
-              component="button"
-              type="button"
-              aria-label="Ask my work (command menu, coming soon)"
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 1,
-                fontFamily: 'var(--font-mono)',
-                fontSize: '0.75rem',
-                color: 'var(--color-text-secondary)',
-                background: 'transparent',
-                border: '1px solid var(--color-border)',
-                borderRadius: 'var(--radius-pill)',
-                px: 1.25,
-                py: 0.5,
-                cursor: 'pointer',
-                transition: 'border-color 0.2s ease, color 0.2s ease',
-                '&:hover': { borderColor: '#3a3a40', color: 'var(--color-text)' },
-              }}
-            >
-              <Box component="span" sx={{ display: { xs: 'none', sm: 'inline' } }}>
-                ask my work
-              </Box>
-              <Box component="span" sx={{ display: 'inline-flex', gap: '3px' }}>
-                <Box component="kbd" sx={kbdSx}>
-                  ⌘
+          {!isMobile && (
+            <Tooltip title="Ask my work — coming soon">
+              <Box
+                component="button"
+                type="button"
+                aria-label="Ask my work (command menu, coming soon)"
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 1,
+                  fontFamily: 'var(--font-mono)',
+                  fontSize: '0.75rem',
+                  color: 'var(--color-text-secondary)',
+                  background: 'transparent',
+                  border: '1px solid var(--color-border)',
+                  borderRadius: 'var(--radius-pill)',
+                  px: 1.25,
+                  py: 0.5,
+                  cursor: 'pointer',
+                  transition: 'border-color 0.2s ease, color 0.2s ease',
+                  '&:hover': {
+                    borderColor: 'var(--color-border-hover)',
+                    color: 'var(--color-text)',
+                  },
+                }}
+              >
+                <Box component="span">ask my work</Box>
+                <Box component="span" sx={{ display: 'inline-flex', gap: '3px' }}>
+                  <Box component="kbd" sx={headerKbdSx}>
+                    ⌘
+                  </Box>
+                  <Box component="kbd" sx={headerKbdSx}>
+                    K
+                  </Box>
                 </Box>
-                <Box component="kbd" sx={kbdSx}>
-                  K
-                </Box>
               </Box>
-            </Box>
-          </Tooltip>
+            </Tooltip>
+          )}
 
           <Tooltip title={`Switch to ${themeMode === 'light' ? 'dark' : 'light'} mode`}>
             <IconButton
@@ -222,33 +207,8 @@ const Header: React.FC<HeaderProps> = ({ themeMode, setThemeMode }) => {
               )}
             </IconButton>
           </Tooltip>
-
-          {isMobile && (
-            <IconButton
-              aria-label="Open menu"
-              aria-controls="mobile-drawer"
-              aria-expanded={drawerOpen}
-              onClick={() => setDrawerOpen(true)}
-              size="small"
-              sx={{ color: 'var(--color-text)' }}
-            >
-              <MenuIcon fontSize="small" />
-            </IconButton>
-          )}
         </Box>
       </Box>
-
-      {isMobile && (
-        <MobileDrawer
-          open={drawerOpen}
-          onClose={() => setDrawerOpen(false)}
-          navLinks={navLinks}
-          brand={brand}
-          isActiveLink={isActiveLink}
-        />
-      )}
     </Box>
   );
 };
-
-export default Header;

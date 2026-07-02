@@ -264,29 +264,24 @@ const BlogBody: React.FC<BlogBodyProps> = ({ content }) => {
           caption?: string;
         };
       }) => {
-        // Debug: Log the image value to see what we're working with
-        console.log('Image value in BlogBody:', value);
-
         // Use Sanity image URL builder for proper image rendering
         const imageUrl = value.asset
           ? buildImageUrl(value, { quality: 85 }) || value.asset.url || ''
           : value.url || '';
-
-        console.log('Final image URL:', imageUrl);
 
         return (
           <Box sx={{ textAlign: 'center', my: 3 }}>
             <img
               src={imageUrl}
               alt={value.alt || 'Blog image'}
+              loading="lazy"
+              decoding="async"
               style={{
                 maxWidth: '100%',
                 height: 'auto',
                 borderRadius: '4px',
                 boxShadow: theme.shadows[2],
               }}
-              onError={(e) => console.error('Image failed to load:', e.currentTarget.src)}
-              onLoad={() => console.log('Image loaded successfully:', imageUrl)}
             />
             {value.caption && (
               <Typography variant="caption" sx={{ display: 'block', mt: 1, fontStyle: 'italic' }}>

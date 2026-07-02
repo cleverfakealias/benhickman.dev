@@ -6,13 +6,7 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Socials from './Socials';
 import { FaSun, FaMoon } from 'react-icons/fa';
 import { getDomainConfig } from '../../config/domainConfig';
-
-const navLinks = [
-  { name: 'Experience', href: '/experience' },
-  { name: 'Writing', href: '/blog' },
-  { name: 'Playground', href: '/playground' },
-  { name: 'Contact', href: '/contact' },
-];
+import { navLinks } from '../../config/navLinks';
 
 const iconBtnSx = {
   width: 32,
@@ -96,7 +90,7 @@ interface FooterProps {
   setThemeMode: (mode: string) => void;
 }
 
-const Footer: React.FC<FooterProps> = ({ themeMode, setThemeMode }) => {
+export const Footer: React.FC<FooterProps> = ({ themeMode, setThemeMode }) => {
   const isDark = themeMode === 'dark';
   const { branding } = getDomainConfig();
 
@@ -108,6 +102,8 @@ const Footer: React.FC<FooterProps> = ({ themeMode, setThemeMode }) => {
       sx={{
         borderTop: '1px solid var(--color-border)',
         background: 'var(--color-bg)',
+        // Clear the fixed mobile bottom tab bar (it overlays the viewport bottom).
+        pb: { xs: 'calc(var(--bottom-nav-h) + env(safe-area-inset-bottom))', md: 0 },
       }}
     >
       <Box
@@ -164,5 +160,3 @@ const Footer: React.FC<FooterProps> = ({ themeMode, setThemeMode }) => {
     </Box>
   );
 };
-
-export default Footer;

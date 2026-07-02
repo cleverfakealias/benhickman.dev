@@ -1,551 +1,119 @@
-import React from 'react';
-import { render, screen, waitFor, act } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import '@testing-library/jest-dom';
-import { BlogPost } from '../components/features/sanity/types';
-
-// Mock the sanity preview utility
-jest.mock('../utils/sanityPreview', () => ({
-  isSanityPreviewMode: jest.fn().mockReturnValue(false),
-}));
-
-// Mock the sanity client module BEFORE importing Home
-jest.mock('../components/features/sanity/sanityClient', () => ({
-  sanityClient: null,
-  fetchPosts: jest.fn(),
-  getAllPostSlugs: jest.fn(),
-  getPostBySlug: jest.fn(),
-}));
-
-// Now import Home and sanityClient after mocking
 import Home from '../pages/Home';
-import * as sanityClient from '../components/features/sanity/sanityClient';
 
-// Mock the child components to isolate Home component testing
-jest.mock('../components/common/HeroBanner', () => {
-  return function MockHeroBanner() {
-    return <div data-testid="hero-banner">Hero Banner</div>;
-  };
-});
+const renderHome = () => render(<Home />, { wrapper: BrowserRouter });
 
-jest.mock('../components/features/HomeSummary', () => {
-  return function MockHomeSummary() {
-    return <div data-testid="home-summary">Home Summary</div>;
-  };
-});
-
-jest.mock('../components/features/HomeBlogCTA', () => {
-  return function MockHomeBlogCTA({ featuredPost }: { featuredPost: BlogPost | null }) {
-    return (
-      <div data-testid="home-blog-cta">
-        Home Blog CTA
-        {featuredPost && <span data-testid="featured-post-title">{featuredPost.title}</span>}
-      </div>
-    );
-  };
-});
-
-// Helper function to render with router
-const renderWithRouter = (component: React.ReactElement) => {
-  return render(<BrowserRouter>{component}</BrowserRouter>);
-};
-
-// Mock blog post data
-const mockBlogPosts: BlogPost[] = [
-  {
-    _id: '1',
-    title: 'Latest Blog Post',
-    slug: { current: 'latest-blog-post' },
-    excerpt: 'This is the latest blog post',
-    publishedAt: '2024-01-15T00:00:00Z',
-    _createdAt: '2024-01-15T00:00:00Z',
-    mainImage: {
-      asset: {
-        _ref: 'image-123',
-        _type: 'reference',
-      },
-    },
-    author: 'Ben Hickman',
-    estimatedReadingTime: 5,
-  },
-  {
-    _id: '2',
-    title: 'Older Blog Post',
-    slug: { current: 'older-blog-post' },
-    excerpt: 'This is an older blog post',
-    publishedAt: '2024-01-10T00:00:00Z',
-    _createdAt: '2024-01-10T00:00:00Z',
-    mainImage: {
-      asset: {
-        _ref: 'image-456',
-        _type: 'reference',
-      },
-    },
-    author: 'Ben Hickman',
-    estimatedReadingTime: 3,
-  },
-];
-
-describe('Home Page', () => {
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
-
-  describe('Rendering', () => {
-    it('should render all main sections', async () => {
-      const mockFetchPosts = jest.spyOn(sanityClient, 'fetchPosts').mockResolvedValue([]);
-
-      renderWithRouter(<Home />);
-
-      expect(screen.getByTestId('hero-banner')).toBeInTheDocument();
-      expect(screen.getByTestId('home-summary')).toBeInTheDocument();
-      expect(screen.getByTestId('home-blog-cta')).toBeInTheDocument();
-
-      await waitFor(() => {
-        expect(mockFetchPosts).toHaveBeenCalledTimes(1);
-      });
-
-      // Wait for state updates to complete
-      await act(async () => {
-        await new Promise((resolve) => setTimeout(resolve, 0));
-      });
+describe('Home Page (Obsidian Foundry)', () => {
+  describe('Hero', () => {
+    it('renders a single agentic <h1>', () => {
+      renderHome();
+      const headings = screen.getAllByRole('heading', { level: 1 });
+      expect(headings).toHaveLength(1);
+      expect(headings[0]).toHaveTextContent(/built from the model up/i);
     });
 
-    it('should render within a Container with correct props', async () => {
-      jest.spyOn(sanityClient, 'fetchPosts').mockResolvedValue([]);
-
-      const { container } = renderWithRouter(<Home />);
-
-      const mainContainer = container.querySelector('.MuiContainer-root');
-      expect(mainContainer).toBeInTheDocument();
-      expect(mainContainer).toHaveClass('MuiContainer-maxWidthLg');
-
-      // Wait for state updates to complete
-      await act(async () => {
-        await new Promise((resolve) => setTimeout(resolve, 0));
-      });
+    it('exposes the ⌘K "ask my work" trigger as a labeled control', () => {
+      renderHome();
+      expect(screen.getByRole('button', { name: /ask my work/i })).toBeInTheDocument();
     });
 
-    it('should render sections in the correct order', async () => {
-      jest.spyOn(sanityClient, 'fetchPosts').mockResolvedValue([]);
-
-      renderWithRouter(<Home />);
-
-      const sections = [
-        screen.getByTestId('hero-banner'),
-        screen.getByTestId('home-summary'),
-        screen.getByTestId('home-blog-cta'),
-      ];
-
-      // Check that each section appears in the DOM in order
-      for (let i = 0; i < sections.length - 1; i++) {
-        const currentSection = sections[i];
-        const nextSection = sections[i + 1];
-        if (currentSection && nextSection) {
-          expect(currentSection.compareDocumentPosition(nextSection)).toBe(
-            Node.DOCUMENT_POSITION_FOLLOWING
-          );
-        }
-      }
-
-      // Wait for state updates to complete
-      await act(async () => {
-        await new Promise((resolve) => setTimeout(resolve, 0));
-      });
-    });
-  });
-
-  describe('Blog Post Fetching', () => {
-    it('should fetch blog posts on mount', async () => {
-      const mockFetchPosts = jest
-        .spyOn(sanityClient, 'fetchPosts')
-        .mockResolvedValue(mockBlogPosts);
-
-      renderWithRouter(<Home />);
-
-      await waitFor(() => {
-        expect(mockFetchPosts).toHaveBeenCalledTimes(1);
-      });
-
-      // Wait for state updates to complete
-      await act(async () => {
-        await new Promise((resolve) => setTimeout(resolve, 0));
-      });
-    });
-
-    it('should pass the most recent blog post to HomeBlogCTA', async () => {
-      jest.spyOn(sanityClient, 'fetchPosts').mockResolvedValue(mockBlogPosts);
-
-      renderWithRouter(<Home />);
-
-      await waitFor(() => {
-        expect(screen.getByTestId('featured-post-title')).toHaveTextContent('Latest Blog Post');
-      });
-
-      // Wait for state updates to complete
-      await act(async () => {
-        await new Promise((resolve) => setTimeout(resolve, 0));
-      });
-    });
-
-    it('should handle empty blog posts array', async () => {
-      jest.spyOn(sanityClient, 'fetchPosts').mockResolvedValue([]);
-
-      renderWithRouter(<Home />);
-
-      await waitFor(() => {
-        expect(screen.queryByTestId('featured-post-title')).not.toBeInTheDocument();
-      });
-
-      // Wait for state updates to complete
-      await act(async () => {
-        await new Promise((resolve) => setTimeout(resolve, 0));
-      });
-    });
-
-    it('should handle null blog posts response', async () => {
-      jest.spyOn(sanityClient, 'fetchPosts').mockResolvedValue(null as unknown as BlogPost[]);
-
-      renderWithRouter(<Home />);
-
-      // Should not crash and should still render components
-      expect(screen.getByTestId('hero-banner')).toBeInTheDocument();
-      expect(screen.getByTestId('home-blog-cta')).toBeInTheDocument();
-
-      // Wait for state updates to complete
-      await act(async () => {
-        await new Promise((resolve) => setTimeout(resolve, 0));
-      });
-    });
-
-    // TODO: Add error handling to Home component before enabling this test
-    it.skip('should handle fetch posts error gracefully', async () => {
-      // Currently skipped because Home component doesn't have .catch() handler
-      // This would require updating the Home component to properly handle errors
-      const consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
-      jest.spyOn(sanityClient, 'fetchPosts').mockRejectedValue(new Error('Fetch failed'));
-
-      renderWithRouter(<Home />);
-
-      // Should still render the page
-      expect(screen.getByTestId('hero-banner')).toBeInTheDocument();
-      expect(screen.getByTestId('home-summary')).toBeInTheDocument();
-      expect(screen.getByTestId('home-blog-cta')).toBeInTheDocument();
-
-      consoleErrorSpy.mockRestore();
-    });
-
-    it('should sort blog posts by publishedAt date', async () => {
-      const unsortedPosts: BlogPost[] = [
-        {
-          _id: '3',
-          title: mockBlogPosts[1]!.title,
-          slug: mockBlogPosts[1]!.slug,
-          publishedAt: '2024-01-10T00:00:00Z',
-          _createdAt: mockBlogPosts[1]!._createdAt,
-          excerpt: mockBlogPosts[1]!.excerpt,
-          mainImage: mockBlogPosts[1]!.mainImage,
-          author: mockBlogPosts[1]!.author,
-          estimatedReadingTime: mockBlogPosts[1]!.estimatedReadingTime,
-        },
-        {
-          _id: '4',
-          title: mockBlogPosts[0]!.title,
-          slug: mockBlogPosts[0]!.slug,
-          publishedAt: '2024-01-20T00:00:00Z',
-          _createdAt: mockBlogPosts[0]!._createdAt,
-          excerpt: mockBlogPosts[0]!.excerpt,
-          mainImage: mockBlogPosts[0]!.mainImage,
-          author: mockBlogPosts[0]!.author,
-          estimatedReadingTime: mockBlogPosts[0]!.estimatedReadingTime,
-        },
-        {
-          _id: '5',
-          title: 'Middle Blog Post',
-          slug: { current: 'middle-blog-post' },
-          excerpt: 'This is a middle blog post',
-          publishedAt: '2024-01-15T00:00:00Z',
-          _createdAt: '2024-01-15T00:00:00Z',
-          mainImage: {
-            asset: {
-              _ref: 'image-789',
-              _type: 'reference',
-            },
-          },
-          author: 'Ben Hickman',
-          estimatedReadingTime: 4,
-        },
-      ];
-
-      jest.spyOn(sanityClient, 'fetchPosts').mockResolvedValue(unsortedPosts);
-
-      renderWithRouter(<Home />);
-
-      await waitFor(() => {
-        // Should display the post with the latest publishedAt date
-        expect(screen.getByTestId('featured-post-title')).toHaveTextContent('Latest Blog Post');
-      });
-
-      // Wait for state updates to complete
-      await act(async () => {
-        await new Promise((resolve) => setTimeout(resolve, 0));
-      });
-    });
-
-    it('should fallback to _createdAt if publishedAt is missing', async () => {
-      const postsWithoutPublishedAt: BlogPost[] = [
-        {
-          _id: '6',
-          title: mockBlogPosts[0]!.title,
-          slug: mockBlogPosts[0]!.slug,
-          publishedAt: undefined,
-          _createdAt: '2024-01-20T00:00:00Z',
-          excerpt: mockBlogPosts[0]!.excerpt,
-          mainImage: mockBlogPosts[0]!.mainImage,
-          author: mockBlogPosts[0]!.author,
-          estimatedReadingTime: mockBlogPosts[0]!.estimatedReadingTime,
-        },
-        {
-          _id: '7',
-          title: mockBlogPosts[1]!.title,
-          slug: mockBlogPosts[1]!.slug,
-          publishedAt: undefined,
-          _createdAt: '2024-01-10T00:00:00Z',
-          excerpt: mockBlogPosts[1]!.excerpt,
-          mainImage: mockBlogPosts[1]!.mainImage,
-          author: mockBlogPosts[1]!.author,
-          estimatedReadingTime: mockBlogPosts[1]!.estimatedReadingTime,
-        },
-      ];
-
-      jest.spyOn(sanityClient, 'fetchPosts').mockResolvedValue(postsWithoutPublishedAt);
-
-      renderWithRouter(<Home />);
-
-      await waitFor(() => {
-        // Should use _createdAt for sorting
-        expect(screen.getByTestId('featured-post-title')).toHaveTextContent('Latest Blog Post');
-      });
-
-      // Wait for state updates to complete
-      await act(async () => {
-        await new Promise((resolve) => setTimeout(resolve, 0));
-      });
-    });
-  });
-
-  describe('Responsiveness', () => {
-    it('should apply responsive padding styles', async () => {
-      jest.spyOn(sanityClient, 'fetchPosts').mockResolvedValue([]);
-
-      const { container } = renderWithRouter(<Home />);
-
-      const mainContainer = container.querySelector('.MuiContainer-root');
-      expect(mainContainer).toHaveStyle({ paddingTop: expect.any(String) });
-      expect(mainContainer).toHaveStyle({ paddingBottom: expect.any(String) });
-
-      // Wait for state updates to complete
-      await act(async () => {
-        await new Promise((resolve) => setTimeout(resolve, 0));
-      });
-    });
-
-    it('should apply responsive margin bottom to sections', async () => {
-      jest.spyOn(sanityClient, 'fetchPosts').mockResolvedValue([]);
-
-      const { container } = renderWithRouter(<Home />);
-
-      const boxes = container.querySelectorAll('.MuiBox-root');
-      expect(boxes.length).toBeGreaterThan(0);
-
-      // Wait for state updates to complete
-      await act(async () => {
-        await new Promise((resolve) => setTimeout(resolve, 0));
-      });
-    });
-  });
-
-  describe('Accessibility', () => {
-    it('should have proper semantic structure', async () => {
-      jest.spyOn(sanityClient, 'fetchPosts').mockResolvedValue([]);
-
-      const { container } = renderWithRouter(<Home />);
-
-      // Check that content is within a container
-      const mainContainer = container.querySelector('.MuiContainer-root');
-      expect(mainContainer).toBeInTheDocument();
-
-      // Wait for state updates to complete
-      await act(async () => {
-        await new Promise((resolve) => setTimeout(resolve, 0));
-      });
-    });
-
-    it('should not have any accessibility violations in structure', async () => {
-      jest.spyOn(sanityClient, 'fetchPosts').mockResolvedValue([]);
-
-      renderWithRouter(<Home />);
-
-      // All sections should be rendered
-      expect(screen.getByTestId('hero-banner')).toBeInTheDocument();
-      expect(screen.getByTestId('home-summary')).toBeInTheDocument();
-      expect(screen.getByTestId('home-blog-cta')).toBeInTheDocument();
-
-      // Wait for state updates to complete
-      await act(async () => {
-        await new Promise((resolve) => setTimeout(resolve, 0));
-      });
-    });
-  });
-
-  describe('Integration', () => {
-    it('should update UI after blog posts are fetched', async () => {
-      jest.spyOn(sanityClient, 'fetchPosts').mockResolvedValue(mockBlogPosts);
-
-      renderWithRouter(<Home />);
-
-      // Initially, no featured post
-      expect(screen.queryByTestId('featured-post-title')).not.toBeInTheDocument();
-
-      // After fetch completes
-      await waitFor(() => {
-        expect(screen.getByTestId('featured-post-title')).toBeInTheDocument();
-      });
-
-      // Wait for state updates to complete
-      await act(async () => {
-        await new Promise((resolve) => setTimeout(resolve, 0));
-      });
-    });
-
-    it('should only fetch posts once on mount', async () => {
-      const mockFetchPosts = jest
-        .spyOn(sanityClient, 'fetchPosts')
-        .mockResolvedValue(mockBlogPosts);
-
-      const { rerender } = renderWithRouter(<Home />);
-
-      await waitFor(() => {
-        expect(mockFetchPosts).toHaveBeenCalledTimes(1);
-      });
-
-      // Rerender the component
-      rerender(
-        <BrowserRouter>
-          <Home />
-        </BrowserRouter>
+    it('has the primary and secondary hero CTAs', () => {
+      renderHome();
+      const contact = screen.getAllByRole('link', { name: /start a conversation/i });
+      expect(contact.length).toBeGreaterThanOrEqual(1);
+      contact.forEach((link) => expect(link).toHaveAttribute('href', '/contact'));
+      expect(screen.getByRole('link', { name: /see the work/i })).toHaveAttribute(
+        'href',
+        '/experience'
       );
-
-      // Should still only be called once
-      expect(mockFetchPosts).toHaveBeenCalledTimes(1);
-
-      // Wait for state updates to complete
-      await act(async () => {
-        await new Promise((resolve) => setTimeout(resolve, 0));
-      });
     });
   });
 
-  describe('Edge Cases', () => {
-    it('should handle posts with missing dates', async () => {
-      const postsWithMissingDates: BlogPost[] = [
-        {
-          _id: '8',
-          title: mockBlogPosts[0]!.title,
-          slug: mockBlogPosts[0]!.slug,
-          publishedAt: undefined,
-          _createdAt: undefined,
-          excerpt: mockBlogPosts[0]!.excerpt,
-          mainImage: mockBlogPosts[0]!.mainImage,
-          author: mockBlogPosts[0]!.author,
-          estimatedReadingTime: mockBlogPosts[0]!.estimatedReadingTime,
-        },
-        {
-          _id: '9',
-          title: mockBlogPosts[1]!.title,
-          slug: mockBlogPosts[1]!.slug,
-          publishedAt: '2024-01-10T00:00:00Z',
-          _createdAt: mockBlogPosts[1]!._createdAt,
-          excerpt: mockBlogPosts[1]!.excerpt,
-          mainImage: mockBlogPosts[1]!.mainImage,
-          author: mockBlogPosts[1]!.author,
-          estimatedReadingTime: mockBlogPosts[1]!.estimatedReadingTime,
-        },
-      ];
+  describe('Proof strip', () => {
+    it('renders the three verified proof points', () => {
+      renderHome();
+      expect(screen.getByText(/enterprise SaaS platform/i)).toBeInTheDocument();
+      expect(screen.getByText(/Astro \+ Cloudflare Workers/i)).toBeInTheDocument();
+      expect(
+        screen.getByText(/from-scratch GPT, QLoRA fine-tune, GGUF export/i)
+      ).toBeInTheDocument();
+    });
+  });
 
-      jest.spyOn(sanityClient, 'fetchPosts').mockResolvedValue(postsWithMissingDates);
-
-      renderWithRouter(<Home />);
-
-      // Should not crash
-      expect(screen.getByTestId('hero-banner')).toBeInTheDocument();
-
-      await waitFor(() => {
-        expect(screen.getByTestId('home-blog-cta')).toBeInTheDocument();
-      });
-
-      // Wait for state updates to complete
-      await act(async () => {
-        await new Promise((resolve) => setTimeout(resolve, 0));
+  describe('Featured work bento', () => {
+    it('features only the verified project set', () => {
+      renderHome();
+      ['zenn_ai', 'ZenMind', 'model-training', 'token-counter', 'zennlogic.com'].forEach((name) => {
+        expect(screen.getByRole('heading', { level: 3, name })).toBeInTheDocument();
       });
     });
 
-    it('should handle posts with invalid date strings', async () => {
-      const postsWithInvalidDates: BlogPost[] = [
-        {
-          _id: '10',
-          title: mockBlogPosts[0]!.title,
-          slug: mockBlogPosts[0]!.slug,
-          publishedAt: 'invalid-date',
-          _createdAt: mockBlogPosts[0]!._createdAt,
-          excerpt: mockBlogPosts[0]!.excerpt,
-          mainImage: mockBlogPosts[0]!.mainImage,
-          author: mockBlogPosts[0]!.author,
-          estimatedReadingTime: mockBlogPosts[0]!.estimatedReadingTime,
-        },
-        {
-          _id: '11',
-          title: mockBlogPosts[1]!.title,
-          slug: mockBlogPosts[1]!.slug,
-          publishedAt: '2024-01-10T00:00:00Z',
-          _createdAt: mockBlogPosts[1]!._createdAt,
-          excerpt: mockBlogPosts[1]!.excerpt,
-          mainImage: mockBlogPosts[1]!.mainImage,
-          author: mockBlogPosts[1]!.author,
-          estimatedReadingTime: mockBlogPosts[1]!.estimatedReadingTime,
-        },
-      ];
-
-      jest.spyOn(sanityClient, 'fetchPosts').mockResolvedValue(postsWithInvalidDates);
-
-      renderWithRouter(<Home />);
-
-      // Should handle gracefully and still render
-      await waitFor(() => {
-        expect(screen.getByTestId('home-blog-cta')).toBeInTheDocument();
-      });
-
-      // Wait for state updates to complete
-      await act(async () => {
-        await new Promise((resolve) => setTimeout(resolve, 0));
-      });
+    it('badges zennlogic.com as shipped', () => {
+      renderHome();
+      expect(screen.getByText('shipped')).toBeInTheDocument();
     });
 
-    it('should handle single blog post', async () => {
-      const singlePost = [mockBlogPosts[0]];
+    // Regression guard: these are never Ben's to feature (content-plan 06).
+    it.each(['llmfit', 'agent-spec-lab', 'java-spring-ai', 'zennlogic_ai'])(
+      'never surfaces the unverified project %s',
+      (forbidden) => {
+        const { container } = renderHome();
+        expect(container.textContent?.toLowerCase()).not.toContain(forbidden.toLowerCase());
+      }
+    );
 
-      jest.spyOn(sanityClient, 'fetchPosts').mockResolvedValue(singlePost);
+    it('links to all work', () => {
+      renderHome();
+      expect(screen.getByRole('link', { name: /all work/i })).toHaveAttribute(
+        'href',
+        '/experience'
+      );
+    });
+  });
 
-      renderWithRouter(<Home />);
+  describe('Stack band', () => {
+    it('renders the three capability rows', () => {
+      renderHome();
+      expect(screen.getByText('AI / ML')).toBeInTheDocument();
+      expect(screen.getByText('Languages')).toBeInTheDocument();
+      expect(screen.getByText('Web / Infra')).toBeInTheDocument();
+    });
+  });
 
-      await waitFor(() => {
-        expect(screen.getByTestId('featured-post-title')).toHaveTextContent('Latest Blog Post');
-      });
+  describe('Writing teasers', () => {
+    it('renders three upcoming pieces that link to the blog', () => {
+      renderHome();
+      const links = screen.getAllByRole('link', { name: /read →/i });
+      expect(links).toHaveLength(3);
+      links.forEach((link) => expect(link).toHaveAttribute('href', '/blog'));
+    });
+  });
 
-      // Wait for state updates to complete
-      await act(async () => {
-        await new Promise((resolve) => setTimeout(resolve, 0));
-      });
+  describe('Contact CTA', () => {
+    it('renders the closing heading and verified social links', () => {
+      renderHome();
+      expect(
+        screen.getByRole('heading', { level: 2, name: /ready to build agents that think/i })
+      ).toBeInTheDocument();
+      expect(screen.getByRole('link', { name: /github/i })).toHaveAttribute(
+        'href',
+        'https://github.benhickman.dev'
+      );
+      expect(screen.getByRole('link', { name: /linkedin/i })).toHaveAttribute(
+        'href',
+        'https://linkedin.benhickman.dev'
+      );
+    });
+  });
+
+  describe('Semantics', () => {
+    it('labels each landmark section', () => {
+      const { container } = renderHome();
+      const sections = container.querySelectorAll('section');
+      // hero, proof, work, stack, writing, contact
+      expect(sections).toHaveLength(6);
     });
   });
 });

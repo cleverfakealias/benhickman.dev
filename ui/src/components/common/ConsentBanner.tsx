@@ -26,7 +26,11 @@ const ConsentBanner: React.FC = () => {
       <Box
         sx={{
           position: 'fixed',
-          bottom: { xs: 16, sm: 24 },
+          // On mobile, clear the fixed bottom tab bar; normal offset on desktop.
+          bottom: {
+            xs: 'calc(var(--bottom-nav-h) + env(safe-area-inset-bottom) + 16px)',
+            md: 24,
+          },
           left: '50%',
           transform: 'translateX(-50%) !important', // Override Slide transform interactions if needed, but Slide usually handles it.
           // Slide adds transform, so we might need a wrapper or handle positioning carefully.

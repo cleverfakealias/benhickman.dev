@@ -60,12 +60,19 @@ export const domainConfigs: Record<string, DomainConfig> = {
   },
 };
 
+// Resolved configs are memoized per host — the hostname is stable for the
+// session, so repeated calls (App, Header, Footer) return one stable reference.
+const configCache = new Map<string, DomainConfig>();
+
 export const getDomainConfig = (hostname?: string): DomainConfig => {
   const host =
     hostname || (typeof window !== 'undefined' ? window.location.hostname : 'benhickman.dev');
+  const cached = configCache.get(host);
+  if (cached) return cached;
   const fallback = domainConfigs['benhickman.dev'];
-  const cfg = domainConfigs[host as keyof typeof domainConfigs];
-  return (cfg || fallback) as DomainConfig;
+  const cfg = (domainConfigs[host as keyof typeof domainConfigs] || fallback) as DomainConfig;
+  configCache.set(host, cfg);
+  return cfg;
 };
 
 export const updateMetaTags = (hostname?: string) => {

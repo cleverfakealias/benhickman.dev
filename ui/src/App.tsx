@@ -1,9 +1,17 @@
-import Header from './components/layout/Header';
-import Footer from './components/layout/Footer';
+import { Header } from './components/layout/Header';
+import { Footer } from './components/layout/Footer';
+import { BottomNav } from './components/layout/BottomNav';
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import { useTheme } from './hooks/useTheme';
-import { BrowserRouter as Router, Route, Routes, useLocation, Navigate } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  useLocation,
+  Navigate,
+  useParams,
+} from 'react-router-dom';
 import { lazy, Suspense, useState, useEffect, useMemo, useRef } from 'react';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import ErrorBoundary from './components/common/ErrorBoundary';
@@ -22,6 +30,13 @@ import CookieSettingsModal from './components/common/CookieSettingsModal';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import AnalyticsTracker from './components/common/AnalyticsTracker';
 import './theme/tokens.css';
+
+// Legacy /blog/:slug links → /blog/post/:slug. Navigate's `to` is a literal
+// string (it does not substitute `:slug`), so resolve the param explicitly.
+function LegacyBlogRedirect() {
+  const { slug } = useParams();
+  return <Navigate to={`/blog/post/${slug}`} replace />;
+}
 
 function AnimatedPageContainer() {
   const location = useLocation();
@@ -82,7 +97,7 @@ function AnimatedPageContainer() {
             <Route path="/" element={<Home />} />
             <Route path="blog" element={<Blog />} />
             <Route path="/blog/post/:slug" element={<BlogPostDetail />} />
-            <Route path="/blog/:slug" element={<Navigate to="/blog/post/:slug" replace />} />
+            <Route path="/blog/:slug" element={<LegacyBlogRedirect />} />
             <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="experience" element={<DevelopmentExperience />} />
             <Route path="career" element={<DevelopmentExperience />} />
@@ -139,6 +154,7 @@ function App() {
             <AnimatedPageContainer />
           </main>
           <Footer themeMode={themeMode} setThemeMode={setThemeMode} />
+          <BottomNav />
           <ConsentBanner />
         </Router>
         <CookieSettingsModal />
