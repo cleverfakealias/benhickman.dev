@@ -1,9 +1,11 @@
 import { projects, getProjectsWithDetail } from '@/data/projects';
 import { getAllPosts } from '@/lib/sanity';
 
-// Build-time index for the ⌘K palette (v1 = local, no LLM). Serialized into the
-// CommandPalette island as a prop. Memoized so the Sanity fetch runs once across
-// the whole build, not per page.
+// Build-time index for the ⌘K palette (v1 = local, no LLM). Served from the
+// prerendered /search-index.json endpoint and fetched by the CommandPalette
+// island on first open — not inlined as a prop, which duplicated ~7 KB into
+// every prerendered page. Memoized so the Sanity fetch runs once across the
+// whole build, not per page.
 
 export type SearchGroup = 'Pages' | 'Projects' | 'Writing';
 

@@ -1,8 +1,10 @@
-import { useCallback, useEffect, useRef, useState, type FormEvent } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import type React from 'react';
 
 // Contact form island (client:visible). Ports the SPA's field set + validation +
-// 15s timeout + error/success UX, swapping hCaptcha → Cloudflare Turnstile and
-// Formspree-direct → the /api/contact Worker (which verifies Turnstile server-side).
+// 15s timeout + error/success UX, posting directly to Formspree with hCaptcha —
+// the same provider pair the legacy SPA used. Turnstile is reserved for the
+// ⌘K chat endpoint; the contact flow needs no Worker code or secrets.
 
 interface FormData {
   name: string;
@@ -13,11 +15,11 @@ interface FormData {
 type Errors = Partial<Record<keyof FormData, string>>;
 type Status = 'idle' | 'submitting' | 'success' | 'error';
 
-const TURNSTILE_SRC = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+const HCAPTCHA_SRC = 'https://js.hcaptcha.com/1/api.js?render=explicit';
 
-// Self-contained Turnstile widget — renders on mount, removes on unmount. Remount
+// Self-contained hCaptcha widget — renders on mount, removes on unmount. Remount
 // (via a changing `key`) gives a fresh challenge after submit/error.
-function TurnstileWidget({
+function HCaptchaWidget({
   siteKey,
   onToken,
 }: {
@@ -30,27 +32,28 @@ function TurnstileWidget({
   useEffect(() => {
     let cancelled = false;
     const render = () => {
-      if (cancelled || !window.turnstile || !ref.current || idRef.current) return;
-      idRef.current = window.turnstile.render(ref.current, {
+      if (cancelled || !window.hcaptcha || !ref.current || idRef.current) return;
+      idRef.current = window.hcaptcha.render(ref.current, {
         sitekey: siteKey,
-        theme: 'auto',
+        // hCaptcha has no 'auto' theme — match the site's pre-paint data-theme.
+        theme: document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light',
         callback: (t) => onToken(t),
         'expired-callback': () => onToken(null),
         'error-callback': () => onToken(null),
       });
     };
     let timer: ReturnType<typeof setInterval> | undefined;
-    if (window.turnstile) {
+    if (window.hcaptcha) {
       render();
-    } else if (!document.querySelector(`script[src="${TURNSTILE_SRC}"]`)) {
+    } else if (!document.querySelector(`script[src="${HCAPTCHA_SRC}"]`)) {
       const s = document.createElement('script');
-      s.src = TURNSTILE_SRC;
+      s.src = HCAPTCHA_SRC;
       s.async = true;
       s.onload = render;
       document.head.appendChild(s);
     } else {
       timer = setInterval(() => {
-        if (window.turnstile) {
+        if (window.hcaptcha) {
           clearInterval(timer);
           render();
         }
@@ -59,9 +62,9 @@ function TurnstileWidget({
     return () => {
       cancelled = true;
       if (timer) clearInterval(timer);
-      if (window.turnstile && idRef.current) {
+      if (window.hcaptcha && idRef.current) {
         try {
-          window.turnstile.remove(idRef.current);
+          window.hcaptcha.remove(idRef.current);
         } catch {
           /* already gone */
         }
@@ -70,7 +73,7 @@ function TurnstileWidget({
     };
   }, [siteKey, onToken]);
 
-  return <div ref={ref} className="turnstile-widget" />;
+  return <div ref={ref} className="hcaptcha-widget" />;
 }
 
 const EMAIL_RE =
@@ -85,7 +88,24 @@ function validate(data: FormData): Errors {
   return errors;
 }
 
-const TURNSTILE_SITE_KEY = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ?? '';
+// Formspree error payloads: { message } or { errors: [{ message }] }.
+async function formspreeError(res: Response): Promise<string> {
+  let msg = `Submission failed (${res.status}).`;
+  try {
+    const j = (await res.json()) as { message?: string; errors?: { message?: string }[] };
+    if (Array.isArray(j?.errors) && j.errors.length) {
+      msg = j.errors.map((e) => e.message).filter(Boolean).join('; ') || msg;
+    } else if (j?.message) {
+      msg = j.message;
+    }
+  } catch {
+    /* ignore */
+  }
+  return msg;
+}
+
+const FORMSPREE_URL = import.meta.env.PUBLIC_FORMSPREE_URL ?? '';
+const HCAPTCHA_SITE_KEY = import.meta.env.PUBLIC_HCAPTCHA_SITEKEY ?? '';
 
 export default function ContactForm() {
   const [data, setData] = useState<FormData>({ name: '', email: '', phone: '', message: '' });
@@ -93,8 +113,15 @@ export default function ContactForm() {
   const [status, setStatus] = useState<Status>('idle');
   const [errorMsg, setErrorMsg] = useState('');
   const [token, setToken] = useState<string | null>(null);
-  // Bumping this remounts TurnstileWidget for a fresh challenge.
+  // Bumping this remounts HCaptchaWidget for a fresh challenge.
   const [widgetKey, setWidgetKey] = useState(0);
+  const successHeadingRef = useRef<HTMLHeadingElement>(null);
+
+  // Success unmounts the form under the focused submit button; move focus to
+  // the confirmation heading so keyboard/SR users aren't dropped on <body>.
+  useEffect(() => {
+    if (status === 'success') successHeadingRef.current?.focus();
+  }, [status]);
 
   const onToken = useCallback((t: string | null) => setToken(t), []);
 
@@ -103,12 +130,23 @@ export default function ContactForm() {
     if (errors[field]) setErrors((prev) => ({ ...prev, [field]: undefined }));
   };
 
-  const onSubmit = async (e: FormEvent) => {
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const v = validate(data);
     setErrors(v);
-    if (Object.keys(v).length > 0) return;
-    if (TURNSTILE_SITE_KEY && !token) {
+    if (Object.keys(v).length > 0) {
+      // Send focus to the first invalid field (document order) so keyboard/SR
+      // users land on the problem instead of staying parked on Submit.
+      const first = (['name', 'email', 'message'] as const).find((f) => v[f]);
+      if (first) document.getElementById(`cf-${first}`)?.focus();
+      return;
+    }
+    if (!FORMSPREE_URL) {
+      setErrorMsg('Contact form is not configured yet. Please reach out via social.');
+      setStatus('error');
+      return;
+    }
+    if (HCAPTCHA_SITE_KEY && !token) {
       setErrorMsg('Please complete the verification.');
       setStatus('error');
       return;
@@ -116,27 +154,36 @@ export default function ContactForm() {
 
     setStatus('submitting');
     setErrorMsg('');
+    // Urlencoded body (Formspree-friendly); hCaptcha tokens travel under the
+    // g-recaptcha-response field — Formspree's expected captcha field name.
+    const params = new URLSearchParams();
+    params.append('name', data.name);
+    params.append('email', data.email);
+    params.append('phone', data.phone);
+    params.append('message', data.message);
+    params.append('_subject', `New contact from ${data.name} — benhickman.dev`);
+    if (token) params.append('g-recaptcha-response', token);
+
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 15000);
     try {
-      const res = await fetch('/api/contact', {
+      const res = await fetch(FORMSPREE_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({ ...data, turnstileToken: token }),
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          Accept: 'application/json',
+        },
+        body: params.toString(),
+        credentials: 'omit',
+        cache: 'no-store',
+        referrerPolicy: 'no-referrer',
         signal: controller.signal,
       });
       if (res.ok) {
         setStatus('success');
         return;
       }
-      let msg = `Submission failed (${res.status}).`;
-      try {
-        const j = (await res.json()) as { error?: string };
-        if (j?.error) msg = j.error;
-      } catch {
-        /* ignore */
-      }
-      setErrorMsg(msg);
+      setErrorMsg(await formspreeError(res));
       setStatus('error');
       setToken(null);
       setWidgetKey((k) => k + 1); // fresh challenge for retry
@@ -156,8 +203,11 @@ export default function ContactForm() {
 
   if (status === 'success') {
     return (
-      <div className="contact-success">
-        <h2>Thank you.</h2>
+      <div className="contact-success" role="status">
+        {/* tabIndex={-1}: programmatic focus target only — never in the tab order. */}
+        <h2 ref={successHeadingRef} tabIndex={-1}>
+          Thank you.
+        </h2>
         <p>Your message has been sent — I'll get back to you soon.</p>
         <button
           type="button"
@@ -231,8 +281,8 @@ export default function ContactForm() {
         )}
       </div>
 
-      {TURNSTILE_SITE_KEY ? (
-        <TurnstileWidget key={widgetKey} siteKey={TURNSTILE_SITE_KEY} onToken={onToken} />
+      {HCAPTCHA_SITE_KEY ? (
+        <HCaptchaWidget key={widgetKey} siteKey={HCAPTCHA_SITE_KEY} onToken={onToken} />
       ) : (
         <p className="field-note">Verification will appear here once configured.</p>
       )}

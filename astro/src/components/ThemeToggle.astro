@@ -9,10 +9,14 @@ interface Props {
 const { class: className } = Astro.props;
 ---
 
+<!-- aria-pressed: "true" = light theme engaged (dark is the site default, so the
+     server renders "false"); the BaseLayout theme script syncs it on load and on
+     every toggle, keeping SR output truthful for visitors who saved "light". -->
 <button
   type="button"
   data-theme-toggle
   class:list={['theme-toggle', className]}
+  aria-pressed="false"
   aria-label="Toggle colour theme"
   title="Toggle colour theme"
 >

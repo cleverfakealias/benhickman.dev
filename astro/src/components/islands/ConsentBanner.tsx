@@ -9,7 +9,10 @@ export default function ConsentBanner() {
   if (consent !== 'unknown') return null;
 
   return (
-    <div className="consent-banner" role="dialog" aria-label="Cookie consent" aria-live="polite">
+    // <section aria-label> = a named region (not "dialog"): the banner never
+    // traps focus or blocks the page, so dialog semantics would misdescribe it;
+    // aria-live announces its arrival politely.
+    <section className="consent-banner" aria-label="Cookie consent" aria-live="polite">
       <p className="consent-text">
         We use cookies to improve this site and measure traffic. Choose what you're okay with.{' '}
         <button type="button" className="consent-link" onClick={openSettings}>
@@ -24,6 +27,6 @@ export default function ConsentBanner() {
           Accept all
         </button>
       </div>
-    </div>
+    </section>
   );
 }

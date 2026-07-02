@@ -50,6 +50,15 @@ html[data-brand='northwoods'] {
   --color-accent-hover: oklch(0.66 0.2 44);
   --color-accent-hover-hex: #ff6316;
 
+  /* Accent used as a background FILL under white text (filled buttons, the
+     bottom-nav Ask pill). Brand Persimmon is too bright for that: computed WCAG
+     ratios vs #ffffff — #e65100 = 3.79:1, #ff6316 = 2.98:1 (AA needs 4.5:1).
+     Fills use a deepened persimmon instead: #c2410c = 5.18:1, hover #a83a0a =
+     6.41:1. Accent-as-text/border/glow on dark surfaces keeps the brighter
+     brand values above — darkening those would break their own contrast. */
+  --color-accent-fill: #c2410c;
+  --color-accent-fill-hover: #a83a0a;
+
   --color-secondary: oklch(0.66 0.11 122);
   --color-secondary-hex: #889e48; /* Wasabi */
 
@@ -89,12 +98,18 @@ html[data-brand='northwoods'] {
   --color-info: oklch(0.59 0.2 41);
   --color-info-hex: #e65100; /* links carry Persimmon */
 
-  /* Typography — Geist display, JetBrains Mono (proportional-mono) body */
+  /* Typography — Geist display, JetBrains Mono (proportional-mono) body.
+     Family names match the self-hosted Fontsource faces imported in
+     BaseLayout ('Geist Sans' / 'JetBrains Mono Variable'); the Google-Fonts-era
+     names stay in the stacks as fallbacks. */
   --font-sans:
-    'JetBrains Mono', 'Commit Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  --font-display: 'Geist', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    'JetBrains Mono Variable', 'JetBrains Mono', 'Commit Mono', ui-monospace, SFMono-Regular,
+    Menlo, Consolas, monospace;
+  --font-display:
+    'Geist Sans', 'Geist', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
   --font-mono:
-    'JetBrains Mono', 'Commit Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    'JetBrains Mono Variable', 'JetBrains Mono', 'Commit Mono', ui-monospace, SFMono-Regular,
+    Menlo, Consolas, monospace;
 
   /* Shadows — none. 1px Iron borders do the work. */
   --shadow-1: none;
@@ -146,6 +161,10 @@ html[data-theme='light'][data-brand='obsidian'] {
   --color-accent-hex: #c2410c;
   --color-accent-hover: oklch(0.59 0.2 41);
   --color-accent-hover-hex: #e65100;
+  /* Fills track the light accents — #c2410c with white text = 5.18:1. Hover
+     darkens (#a83a0a = 6.41:1); the old #e65100 hover was 3.79:1 and failed AA. */
+  --color-accent-fill: #c2410c;
+  --color-accent-fill-hover: #a83a0a;
   --color-secondary: oklch(0.55 0.1 122);
   --color-secondary-hex: #5f7032;
   --color-success-hex: #5f7032;
@@ -219,7 +238,7 @@ a:focus-visible {
 
 /* Button primary */
 .button-primary {
-  background: var(--color-accent-hex);
+  background: var(--color-accent-fill);
   color: var(--color-accent-contrast-hex);
   border: none;
   border-radius: var(--radius-md);
@@ -230,7 +249,7 @@ a:focus-visible {
 }
 
 .button-primary:hover {
-  background: var(--color-accent-hover-hex);
+  background: var(--color-accent-fill-hover);
 }
 
 .button-primary:focus-visible {
@@ -399,11 +418,11 @@ select {
     border-color var(--motion-150) var(--easing-standard);
 }
 .consent-btn.primary {
-  background: var(--color-accent-hex);
+  background: var(--color-accent-fill);
   color: var(--color-accent-contrast-hex);
 }
 .consent-btn.primary:hover {
-  background: var(--color-accent-hover-hex);
+  background: var(--color-accent-fill-hover);
 }
 .consent-btn.ghost {
   background: transparent;
@@ -580,8 +599,9 @@ select {
   color: var(--color-text-muted);
   margin: 0;
 }
-.turnstile-widget {
-  min-height: 65px;
+.hcaptcha-widget {
+  /* Reserve the checkbox widget's footprint so render doesn't shift layout. */
+  min-height: 78px;
 }
 .form-error {
   margin: 0;
@@ -665,9 +685,79 @@ select {
   border-radius: var(--radius-sm);
   padding: 2px 6px;
 }
+.cmdk-stop,
+.cmdk-chat-header button {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-text-secondary);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  cursor: pointer;
+}
+.cmdk-stop {
+  padding: 3px 8px;
+  color: var(--color-accent-hex);
+}
+.cmdk-chat-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-2) var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.cmdk-chat-header button {
+  padding: 3px 8px;
+  text-transform: none;
+  letter-spacing: 0;
+}
+.cmdk-chat-header button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
 .cmdk-list {
   overflow-y: auto;
   padding: var(--space-2);
+}
+.cmdk-thread {
+  display: grid;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+.cmdk-message {
+  width: fit-content;
+  max-width: 88%;
+  padding: var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-2);
+}
+.cmdk-message.user {
+  justify-self: end;
+  border-color: color-mix(in srgb, var(--color-accent-hex) 45%, var(--color-border));
+}
+.cmdk-message-label {
+  margin: 0 0 var(--space-1);
+  color: var(--color-accent-hex);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.cmdk-message.user .cmdk-message-label {
+  color: var(--color-text-muted);
+}
+.cmdk-message-text {
+  margin: 0;
+  color: var(--color-text);
+  font-size: 0.9rem;
+  line-height: 1.6;
+  white-space: pre-wrap;
 }
 .cmdk-group + .cmdk-group {
   margin-top: var(--space-2);
@@ -741,7 +831,9 @@ select {
   color: var(--color-text);
 }
 .cmdk-answer-error {
-  margin: 0;
+  margin: 0 0 var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border-left: 2px solid var(--color-danger-hex);
   font-size: 0.88rem;
   color: var(--color-danger-hex);
 }
@@ -770,10 +862,24 @@ select {
   color: var(--color-text-muted);
   font-style: italic;
 }
-/* Invisible Turnstile container — present for token minting, no layout. */
-.cmdk-turnstile {
-  position: absolute;
-  width: 0;
-  height: 0;
-  overflow: hidden;
+/* Inline Turnstile verify step inside the pending assistant bubble. The
+   widget slot reserves the managed-challenge height (~65px) up front so a
+   checkbox appearing never shifts the conversation layout. */
+.cmdk-verify {
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+.cmdk-verify-label {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+}
+.cmdk-verify-widget {
+  min-height: 65px;
 }

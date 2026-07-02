@@ -27,8 +27,17 @@ const {
 } = Astro.props;
 
 const fullTitle = title ? `${title} · ${site.name}` : `${site.name} · ${site.tagline}`;
-const canonical = new URL(path ?? Astro.url.pathname, site.url).href;
+// /work and /work/ both resolve, but the assets layer 308-redirects the
+// slash-less form to the directory-format URL that actually serves 200 — and
+// the sitemap and RSS feed emit slashed URLs. Canonicalise on the trailing
+// slash so canonicals point at the 200s, not at redirects.
+const rawPath = path ?? Astro.url.pathname;
+const canonicalPath = rawPath.endsWith('/') ? rawPath : `${rawPath}/`;
+const canonical = new URL(canonicalPath, site.url).href;
 const ogImage = new URL(image, site.url).href;
+// Dimensions/alt are only tracked for the site default (see config/site.ts);
+// per-page overrides are arbitrary Sanity assets, so omit rather than guess.
+const ogImageMeta = image === site.ogImage ? site.ogImageMeta : undefined;
 
 // Person (site identity) + WebSite — emitted on every page.
 const personLd = {
@@ -65,10 +74,20 @@ const safeJsonLd = (obj: Record<string, unknown>): string =>
 <!-- Open Graph -->
 <meta property="og:type" content={type} />
 <meta property="og:site_name" content={site.name} />
+<meta property="og:locale" content={site.locale} />
 <meta property="og:title" content={fullTitle} />
 <meta property="og:description" content={description} />
 <meta property="og:url" content={canonical} />
 <meta property="og:image" content={ogImage} />
+{
+  ogImageMeta && (
+    <>
+      <meta property="og:image:width" content={String(ogImageMeta.width)} />
+      <meta property="og:image:height" content={String(ogImageMeta.height)} />
+      <meta property="og:image:alt" content={ogImageMeta.alt} />
+    </>
+  )
+}
 {publishedTime && <meta property="article:published_time" content={publishedTime} />}
 
 <!-- Twitter -->
