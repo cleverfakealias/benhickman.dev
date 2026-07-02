@@ -34,30 +34,8 @@ interface ImportMeta {
   readonly env: ImportMetaEnv;
 }
 
-// Cloudflare Turnstile global (loaded via the api.js script tag), used by the
-// CommandPalette (interaction-only) island. The ContactForm island uses
-// hCaptcha + Formspree instead (see HCaptchaApi below).
-interface TurnstileApi {
-  render(
-    el: HTMLElement | string,
-    opts: {
-      sitekey: string;
-      theme?: 'auto' | 'light' | 'dark';
-      size?: 'normal' | 'compact' | 'flexible';
-      execution?: 'render' | 'execute';
-      appearance?: 'always' | 'execute' | 'interaction-only';
-      action?: string;
-      callback?: (token: string) => void;
-      'expired-callback'?: () => void;
-      'timeout-callback'?: () => void;
-      'error-callback'?: (errorCode?: string) => void;
-    },
-  ): string;
-  reset(id?: string): void;
-  remove(id?: string): void;
-  execute(el?: HTMLElement | string, opts?: { callback?: (token: string) => void }): void;
-  getResponse(id?: string): string | undefined;
-}
+// The Cloudflare Turnstile global (window.turnstile, used by the CommandPalette
+// island) is declared alongside its loader in src/lib/turnstileClient.ts.
 
 // hCaptcha global (loaded via api.js?render=explicit), used by the ContactForm
 // island. The token is verified by Formspree server-side — no Worker involved.
@@ -79,6 +57,5 @@ interface HCaptchaApi {
 }
 
 interface Window {
-  turnstile?: TurnstileApi;
   hcaptcha?: HCaptchaApi;
 }

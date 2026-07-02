@@ -1,8 +1,11 @@
 # Cloudflare _headers — security baseline for all routes.
-# script-src keeps 'unsafe-inline' because Astro's is:inline scripts (theme,
-# analytics, JSON-LD) aren't hashed by the build; the JSON-LD sink is
-# unicode-escaped (SEO.astro) so a </script> breakout can't execute. Tighten to
-# per-script hashes/nonces later. The LLM (NVIDIA/OpenRouter) calls are
+# script-src 'unsafe-inline' below is a BUILD-TIME PLACEHOLDER: the cspHashes
+# integration (scripts/cspHashes.mjs) replaces it in the emitted copy with
+# sha256 hashes of every inline script Astro actually emitted, so inline
+# injection can't execute in production. style-src keeps 'unsafe-inline'
+# (style attributes would need 'unsafe-hashes' for little gain). The JSON-LD
+# sink is additionally unicode-escaped (SEO.astro), and the LLM
+# (NVIDIA/OpenRouter) calls are
 # server-side from the Worker, so they need no browser connect-src entry.
 # challenges.cloudflare.com = Turnstile (⌘K chat only); hcaptcha.com +
 # *.hcaptcha.com = hCaptcha widget and formspree.io = the contact form's

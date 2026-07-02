@@ -3,6 +3,7 @@ import { defineConfig } from 'astro/config';
 import cloudflare from '@astrojs/cloudflare';
 import react from '@astrojs/react';
 import sitemap from '@astrojs/sitemap';
+import { cspHashes } from './scripts/cspHashes.mjs';
 
 // https://docs.astro.build/en/guides/integrations-guide/cloudflare/
 export default defineConfig({
@@ -38,6 +39,9 @@ export default defineConfig({
       // Drop noindex routes (privacy) + the 404 from the sitemap.
       filter: (page) => !/\/(privacy|404)\/?$/.test(page),
     }),
+    // Post-build: swap script-src 'unsafe-inline' for per-script sha256 hashes
+    // computed from the emitted HTML (see scripts/cspHashes.mjs).
+    cspHashes(),
   ],
   vite: {
     build: {

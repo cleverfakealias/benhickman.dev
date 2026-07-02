@@ -1,59 +1,22 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { navigate } from 'astro:transitions/client';
 import { scoreItem } from '@/lib/scoreItem';
+import { getCachedSearchIndex, loadSearchIndex } from '@/lib/searchIndexClient';
+import { getTurnstileToken } from '@/lib/turnstileClient';
 import type { SearchItem, SearchGroup } from '@/lib/searchIndex';
 
 // ⌘K "ask my work" palette (client:idle). v1 is local: fuzzy search over the
 // prerendered /search-index.json (pages · projects · writing) fetched on first
-// open, navigate on select. The "Ask" row streams from /api/cmdk (projects-led/
-// stubbed until the LLM key lands) to prove the streaming boundary. Opens from
-// ⌘K / "/" and any [data-cmdk-trigger].
+// open (cached in @/lib/searchIndexClient), navigate on select. The "Ask" row
+// streams from /api/cmdk (projects-led/stubbed until the LLM key lands) to
+// prove the streaming boundary. Opens from ⌘K / "/" and any [data-cmdk-trigger].
 
 const GROUP_ORDER: SearchGroup[] = ['Pages', 'Projects', 'Writing'];
 const TURNSTILE_SITE_KEY =
   import.meta.env.PUBLIC_CMDK_TURNSTILE_SITE_KEY ??
   import.meta.env.PUBLIC_TURNSTILE_SITE_KEY ??
   '';
-const TURNSTILE_SRC = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
-const TURNSTILE_TIMEOUT_MS = 30_000;
-// How long getToken waits for React to commit the in-bubble widget container.
-const TURNSTILE_MOUNT_TIMEOUT_MS = 2_000;
 const CHAT_ACTION = 'portfolio-chat';
-
-// The index is a static per-deploy asset, so one successful fetch serves every
-// open (module-level cache — survives island remounts and view transitions).
-// A failed or aborted load leaves the cache empty so the next open retries;
-// until then search degrades to the Ask row only.
-let indexCache: SearchItem[] | null = null;
-let indexInFlight: Promise<SearchItem[]> | null = null;
-
-function isSearchItem(value: unknown): value is SearchItem {
-  if (typeof value !== 'object' || value === null) return false;
-  const v = value as Record<string, unknown>;
-  return (
-    (v.group === 'Pages' || v.group === 'Projects' || v.group === 'Writing') &&
-    typeof v.label === 'string' &&
-    typeof v.href === 'string'
-  );
-}
-
-function loadSearchIndex(signal: AbortSignal): Promise<SearchItem[]> {
-  if (indexCache) return Promise.resolve(indexCache);
-  if (!indexInFlight) {
-    indexInFlight = (async () => {
-      const res = await fetch('/search-index.json', { signal });
-      if (!res.ok) throw new Error(`Search index request failed (${res.status}).`);
-      const payload: unknown = await res.json();
-      if (!Array.isArray(payload)) throw new Error('Search index payload is malformed.');
-      indexCache = payload.filter(isSearchItem);
-      return indexCache;
-    })();
-    indexInFlight.catch(() => {
-      indexInFlight = null;
-    });
-  }
-  return indexInFlight;
-}
 
 interface ChatMessage {
   id: string;
@@ -73,7 +36,7 @@ function messageId(): string {
 
 export default function CommandPalette() {
   const [open, setOpen] = useState(false);
-  const [items, setItems] = useState<SearchItem[]>(() => indexCache ?? []);
+  const [items, setItems] = useState<SearchItem[]>(() => getCachedSearchIndex() ?? []);
   const [query, setQuery] = useState('');
   const [selected, setSelected] = useState(0);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -95,10 +58,9 @@ export default function CommandPalette() {
   const returnFocusRef = useRef<HTMLElement | null>(null);
   // Turnstile is rendered only while minting a fresh token for an ask. The
   // container lives inside the pending assistant bubble (phase 'verifying'),
-  // so getToken must await its mount before rendering into it.
+  // so getTurnstileToken must await its mount before rendering into it — it
+  // receives this ref as a getter (widget lifecycle lives in turnstileClient).
   const tsRef = useRef<HTMLDivElement>(null);
-  const tsId = useRef<string | null>(null);
-  const tsScriptPromise = useRef<Promise<void> | null>(null);
   const resetPending = useRef(false);
 
   const close = useCallback(() => {
@@ -249,106 +211,6 @@ export default function CommandPalette() {
     };
   }, [open, historyLoaded]);
 
-  const loadTurnstileScript = useCallback(async (): Promise<void> => {
-    if (window.turnstile) return;
-    if (!tsScriptPromise.current) {
-      tsScriptPromise.current = new Promise<void>((resolve, reject) => {
-        // A failed tag must be removed before rejecting: if it stayed in the DOM,
-        // a retry would find it via `existing` and wait on load/error events that
-        // already fired — hanging the promise (and the ask) forever.
-        const fail = (script: HTMLScriptElement) => {
-          script.remove();
-          reject(new Error('Chat verification could not load.'));
-        };
-        const existing = document.querySelector<HTMLScriptElement>(`script[src="${TURNSTILE_SRC}"]`);
-        if (existing) {
-          existing.addEventListener('load', () => resolve(), { once: true });
-          existing.addEventListener('error', () => fail(existing), { once: true });
-          return;
-        }
-        const script = document.createElement('script');
-        script.src = TURNSTILE_SRC;
-        script.async = true;
-        script.defer = true;
-        script.onload = () => resolve();
-        script.onerror = () => fail(script);
-        document.head.appendChild(script);
-      });
-    }
-    try {
-      await tsScriptPromise.current;
-    } catch (error) {
-      tsScriptPromise.current = null;
-      throw error;
-    }
-    if (!window.turnstile) throw new Error('Chat verification is unavailable.');
-  }, []);
-
-  // Mint one single-use token per ask, then remove the widget immediately.
-  const getToken = useCallback(async (signal: AbortSignal): Promise<string> => {
-    if (!TURNSTILE_SITE_KEY) throw new Error('Chat verification is not configured.');
-    await loadTurnstileScript();
-    if (signal.aborted) throw new DOMException('Aborted', 'AbortError');
-    // The container is rendered by the pending bubble appended just before this
-    // call — React may not have committed it yet, so poll a frame at a time.
-    const mountDeadline = performance.now() + TURNSTILE_MOUNT_TIMEOUT_MS;
-    while (!tsRef.current) {
-      if (signal.aborted) throw new DOMException('Aborted', 'AbortError');
-      if (performance.now() > mountDeadline) throw new Error('Chat verification is unavailable.');
-      await new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
-    }
-    const container = tsRef.current;
-    const turnstile = window.turnstile;
-    if (!container || !turnstile) throw new Error('Chat verification is unavailable.');
-
-    if (tsId.current) {
-      try {
-        turnstile.remove(tsId.current);
-      } catch {
-        // The previous widget is already gone.
-      }
-      tsId.current = null;
-    }
-    container.replaceChildren();
-
-    return new Promise<string>((resolve, reject) => {
-      let finished = false;
-      const finish = (result: { token?: string; error?: string }) => {
-        if (finished) return;
-        finished = true;
-        clearTimeout(timeoutId);
-        signal.removeEventListener('abort', onAbort);
-        if (tsId.current) {
-          try {
-            turnstile.remove(tsId.current);
-          } catch {
-            // Turnstile may remove a failed widget itself.
-          }
-          tsId.current = null;
-        }
-        if (result.error === 'aborted') reject(new DOMException('Aborted', 'AbortError'));
-        else if (result.error) reject(new Error(result.error));
-        else resolve(result.token ?? '');
-      };
-      const onAbort = () => finish({ error: 'aborted' });
-      const timeoutId = window.setTimeout(
-        () => finish({ error: 'Chat verification timed out. Please try again.' }),
-        TURNSTILE_TIMEOUT_MS,
-      );
-      signal.addEventListener('abort', onAbort, { once: true });
-      tsId.current = turnstile.render(container, {
-        sitekey: TURNSTILE_SITE_KEY,
-        action: CHAT_ACTION,
-        size: 'flexible',
-        appearance: 'interaction-only',
-        callback: (token) => finish({ token }),
-        'expired-callback': () => finish({ error: 'Chat verification expired. Please try again.' }),
-        'timeout-callback': () => finish({ error: 'Chat verification timed out. Please try again.' }),
-        'error-callback': () => finish({ error: 'Chat verification failed. Please try again.' }),
-      });
-    });
-  }, [loadTurnstileScript]);
-
   const clearConversation = useCallback(async () => {
     abortRef.current?.abort();
     resetPending.current = true;
@@ -399,7 +261,12 @@ export default function CommandPalette() {
     };
 
     try {
-      const turnstileToken = await getToken(controller.signal);
+      const turnstileToken = await getTurnstileToken({
+        siteKey: TURNSTILE_SITE_KEY,
+        action: CHAT_ACTION,
+        signal: controller.signal,
+        getContainer: () => tsRef.current,
+      });
       setPendingPhase('thinking');
       const shouldReset = resetPending.current;
       const res = await fetch('/api/cmdk', {
@@ -488,7 +355,7 @@ export default function CommandPalette() {
       abortRef.current = null;
       window.setTimeout(() => inputRef.current?.focus(), 30);
     }
-  }, [query, streaming, getToken]);
+  }, [query, streaming]);
 
   const activate = useCallback(
     (row: (typeof flat)[number]) => {
