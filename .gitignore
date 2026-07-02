@@ -136,3 +136,10 @@ dist
 
 # Claude Code local overrides
 .claude/settings.local.json
+
+# Local-only agent planning context (intents, specs, content plan) — not
+# part of the shipped repo; agents read these from the working tree.
+.agents/
+/specs/
+.claude/content-plan/
+*.code-workspace
