@@ -9,10 +9,10 @@ import SectionHeading from './SectionHeading.astro';
     <div class="grid">
       {
         writingTeasers.map((t) => (
-          <a href={WRITING_HREF} class="wcard">
+          <a href={WRITING_HREF} class="card">
             <span class="meta">{t.meta}</span>
             <h3>{t.title}</h3>
-            <span class="cta">read →</span>
+            <span class="readcta">read →</span>
           </a>
         ))
       }
@@ -29,26 +29,22 @@ import SectionHeading from './SectionHeading.astro';
     gap: 8px;
     grid-template-columns: 1fr;
   }
-  .wcard {
+  /* Surface/border/hover come from the global .card pattern. */
+  .card {
     display: flex;
     flex-direction: column;
     gap: 12px;
     padding: 24px;
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    border-bottom: 1px solid var(--color-border);
     text-decoration: none;
     transition:
       border-color 200ms var(--easing-standard),
       transform 200ms var(--easing-standard);
   }
-  .wcard:hover {
-    border-color: var(--color-border-hover);
+  .card:hover {
     transform: translateY(-2px);
   }
   @media (prefers-reduced-motion: reduce) {
-    .wcard:hover {
+    .card:hover {
       transform: none;
     }
   }
@@ -68,7 +64,7 @@ import SectionHeading from './SectionHeading.astro';
     letter-spacing: -0.01em;
     color: var(--color-text);
   }
-  .cta {
+  .readcta {
     margin-top: auto;
     font-family: var(--font-mono);
     font-size: 12.5px;

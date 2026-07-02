@@ -49,6 +49,7 @@ html[data-brand='obsidian'] {
   --color-accent-fill-hover: #a83a0a;
 
   --color-secondary-hex: #889e48; /* Wasabi */
+  --color-secondary-border: rgba(136, 158, 72, 0.4); /* Wasabi @ 40% — badge borders */
 
   /* Surfaces — Carbon black / Weathered slate */
   --color-bg: #0a0a0b; /* Carbon Black */
@@ -116,6 +117,7 @@ html[data-theme='light'] {
   --color-accent-fill: #c2410c;
   --color-accent-fill-hover: #a83a0a;
   --color-secondary-hex: #5f7032;
+  --color-secondary-border: rgba(95, 112, 50, 0.4);
 }
 
 /* Explicit dark — same as base (kept for the toggle + future per-mode tweaks). */
@@ -156,6 +158,35 @@ html[data-theme='dark'] {
   font-weight: 500;
 }
 
+/* Maturity badge + tech tag pills — mono micro-type in a 1px pill border.
+   Pages keep only their size/color deltas scoped. */
+.badge {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  padding: 2px 8px;
+  white-space: nowrap;
+}
+
+.badge.shipped,
+.badge.deployed {
+  color: var(--color-secondary-hex);
+  border-color: var(--color-secondary-border);
+}
+
+.tag {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--color-text-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  padding: 3px 9px;
+}
+
 /* Links and CTAs carry the accent */
 a {
   color: var(--color-accent-hex);
@@ -193,6 +224,22 @@ a:focus-visible {
 .button-primary:focus-visible {
   outline: 2px solid var(--color-accent-hex);
   outline-offset: 2px;
+}
+
+/* CTA sizing recipe — composes with .button-primary (filled) or a scoped
+   ghost border (Hero). Declared after .button-primary so its padding/border
+   win the tie. */
+.cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 44px;
+  padding: 13px 20px;
+  border-radius: var(--radius-md);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 500;
+  border: 1px solid transparent;
 }
 
 /* =======================================================================

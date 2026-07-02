@@ -2,6 +2,7 @@
 export const prerender = true;
 
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHeader from '@/components/PageHeader.astro';
 
 // Ported from the SPA's PrivacyPolicy, updated for the Cloudflare rebuild:
 // the contact form submits to Formspree with hCaptcha (as in the SPA); the
@@ -58,8 +59,9 @@ const processors = [
 
 <BaseLayout title="Privacy Policy" description="How benhickman.dev collects, uses, and safeguards your data." noindex>
   <article class="wrap legal section-y">
-    <h1>Privacy Policy</h1>
-    <p class="updated">Last updated: {lastUpdated}</p>
+    <PageHeader title="Privacy Policy">
+      <p class="updated">Last updated: {lastUpdated}</p>
+    </PageHeader>
 
     <p class="intro">
       Welcome to <strong>benhickman.dev</strong>. I'm committed to protecting your personal data and
@@ -130,11 +132,6 @@ const processors = [
 <style>
   .legal {
     max-width: 760px;
-  }
-  .legal h1 {
-    font-size: clamp(2rem, 5vw, 3rem);
-    letter-spacing: -0.02em;
-    margin: 0;
   }
   .updated {
     font-family: var(--font-mono);

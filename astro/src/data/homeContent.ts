@@ -13,8 +13,6 @@
  * prototype), or `zennlogic_ai` (stub over-claims).
  */
 
-import { socialProfiles } from '@/config/socialLinks';
-
 export const WORK_HREF = '/work';
 export const WRITING_HREF = '/writing';
 export const CONTACT_HREF = '/contact';
@@ -164,14 +162,3 @@ export const writingTeasers: WritingTeaser[] = [
     title: 'RAG that actually retrieves: hybrid search, citations, and confidence gating',
   },
 ];
-
-export interface SocialLink {
-  name: string;
-  href: string;
-}
-
-/** Featured profiles, derived from the single source of profile URLs. */
-export const socials: SocialLink[] = socialProfiles.map(({ name, url }) => ({
-  name,
-  href: url,
-}));

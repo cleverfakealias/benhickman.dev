@@ -1,6 +1,7 @@
 ---
-import { socials, CONTACT_HREF } from '@/data/homeContent';
+import { CONTACT_HREF } from '@/data/homeContent';
 import SectionHeading from './SectionHeading.astro';
+import SocialPills from '../SocialPills.astro';
 ---
 
 <section class="contact section-y" aria-labelledby="contact-heading">
@@ -18,15 +19,7 @@ import SectionHeading from './SectionHeading.astro';
     <div class="cta-row">
       <a class="button-primary cta" href={CONTACT_HREF}>Start a conversation</a>
     </div>
-    <div class="socials">
-      {
-        socials.map((s) => (
-          <a href={s.href} target="_blank" rel="me noopener noreferrer">
-            {s.name} <span class="arrow" aria-hidden="true">↗</span>
-          </a>
-        ))
-      }
-    </div>
+    <SocialPills class="socials" />
   </div>
 </section>
 
@@ -44,48 +37,8 @@ import SectionHeading from './SectionHeading.astro';
     display: flex;
     justify-content: center;
   }
-  .cta {
-    display: inline-flex;
-    align-items: center;
-    gap: 9px;
-    min-height: 44px;
-    padding: 13px 20px;
-    border-radius: var(--radius-md);
-    font-family: var(--font-mono);
-    font-size: 14px;
-    font-weight: 500;
-    border: 1px solid transparent;
-  }
   .socials {
     margin-top: 15px;
-    display: flex;
-    flex-wrap: wrap;
     justify-content: center;
-    gap: 10px;
-  }
-  .socials a {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    min-height: 44px;
-    padding: 9px 16px;
-    font-family: var(--font-mono);
-    font-size: 13px;
-    color: var(--color-text-secondary);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-pill);
-    transition:
-      color 180ms var(--easing-standard),
-      border-color 180ms var(--easing-standard),
-      background 180ms var(--easing-standard);
-  }
-  .socials a:hover {
-    color: var(--color-text);
-    border-color: var(--color-border-hover);
-    border-bottom-color: var(--color-border-hover);
-    background: var(--color-surface);
-  }
-  .socials .arrow {
-    color: var(--color-accent-hex);
   }
 </style>

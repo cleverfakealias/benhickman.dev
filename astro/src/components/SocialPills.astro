@@ -1,0 +1,55 @@
+---
+// Social pill links (name + ↗) — shared by the contact page and the home
+// contact CTA. Icon-only variant lives in Socials.astro. Layout deltas
+// (centering, margins) stay in the caller via the forwarded `class`.
+import { socialProfiles } from '@/config/socialLinks';
+
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<div class:list={['socials', className]}>
+  {
+    socialProfiles.map((s) => (
+      <a href={s.url} target="_blank" rel="me noopener noreferrer">
+        {s.name} <span class="arrow" aria-hidden="true">↗</span>
+      </a>
+    ))
+  }
+</div>
+
+<style>
+  .socials {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .socials a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 9px 16px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-pill);
+    transition:
+      color var(--motion-150) var(--easing-standard),
+      border-color var(--motion-150) var(--easing-standard),
+      background var(--motion-150) var(--easing-standard);
+  }
+  .socials a:hover {
+    color: var(--color-text);
+    border-color: var(--color-border-hover);
+    border-bottom-color: var(--color-border-hover);
+    background: var(--color-surface);
+  }
+  .socials .arrow {
+    color: var(--color-accent-hex);
+  }
+</style>
