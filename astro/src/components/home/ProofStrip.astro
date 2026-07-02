@@ -1,0 +1,63 @@
+---
+import { proofPoints } from '@/data/homeContent';
+---
+
+<section class="proof" aria-label="Proof points">
+  <div class="grid">
+    {
+      proofPoints.map((p) => (
+        <div class="cell">
+          <p class="kicker">{p.key}</p>
+          <p class="value">{p.value}</p>
+        </div>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .proof {
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+    background: var(--color-surface);
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+  .cell {
+    padding: clamp(24px, 3vw, 30px) clamp(20px, 5vw, 40px);
+    border-top: 1px solid var(--color-border);
+  }
+  .cell:first-child {
+    border-top: none;
+  }
+  .kicker {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-secondary-hex);
+    font-weight: 500;
+  }
+  .value {
+    margin-top: 10px;
+    margin-bottom: 0;
+    font-size: 15px;
+    line-height: 1.45;
+    color: var(--color-text);
+  }
+  @media (min-width: 900px) {
+    .grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .cell {
+      border-top: none;
+      border-left: 1px solid var(--color-border);
+    }
+    .cell:first-child {
+      border-left: none;
+    }
+  }
+</style>

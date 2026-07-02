@@ -1,0 +1,52 @@
+---
+// `title` and `titleHtml` are mutually exclusive — passing both would
+// silently discard `title`, so the union makes that a type error instead.
+type Props = {
+  eyebrow: string;
+  id?: string;
+  centered?: boolean;
+} & (
+  | {
+      /** Plain-text title. */
+      title: string;
+      titleHtml?: never;
+    }
+  | {
+      /** Trusted, hardcoded HTML title (allows the <em> serif accent). Never CMS/user content. */
+      titleHtml: string;
+      title?: never;
+    }
+);
+const { eyebrow, title, titleHtml, id, centered } = Astro.props;
+---
+
+<div class:list={['section-heading', { centered }]}>
+  <p class="eyebrow">{eyebrow}</p>
+  {titleHtml ? <h2 id={id} set:html={titleHtml} /> : <h2 id={id}>{title}</h2>}
+</div>
+
+<style>
+  .section-heading {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    margin-bottom: var(--space-6);
+    max-width: 680px;
+  }
+  .section-heading.centered {
+    margin-inline: auto;
+    align-items: center;
+    text-align: center;
+  }
+  .section-heading h2 {
+    font-size: clamp(1.9rem, 4.5vw, 2.6rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin: 0;
+  }
+  .section-heading :global(em) {
+    font-style: italic;
+    font-family: var(--font-display), serif;
+    color: var(--color-accent-hex);
+  }
+</style>

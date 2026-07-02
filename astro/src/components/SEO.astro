@@ -1,0 +1,114 @@
+---
+import { site } from '@/config/site';
+
+// Exported so BaseLayout can re-use the exact prop shape instead of
+// maintaining a hand-copied twin that silently drifts.
+export interface SeoProps {
+  title?: string;
+  description?: string;
+  /** Canonical path (defaults to the current route). */
+  path?: string;
+  /** OG/Twitter image path or absolute URL. */
+  image?: string;
+  type?: 'website' | 'article';
+  publishedTime?: string;
+  noindex?: boolean;
+  /** Extra JSON-LD object(s) to emit (e.g. Article, BreadcrumbList). */
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+}
+
+type Props = SeoProps;
+
+const {
+  title,
+  description = site.description,
+  path,
+  image = site.ogImage,
+  type = 'website',
+  publishedTime,
+  noindex = false,
+  jsonLd,
+} = Astro.props;
+
+const fullTitle = title ? `${title} · ${site.name}` : `${site.name} · ${site.tagline}`;
+// /work and /work/ both resolve, but the assets layer 308-redirects the
+// slash-less form to the directory-format URL that actually serves 200 — and
+// the sitemap and RSS feed emit slashed URLs. Canonicalise on the trailing
+// slash so canonicals point at the 200s, not at redirects.
+const rawPath = path ?? Astro.url.pathname;
+const canonicalPath = rawPath.endsWith('/') ? rawPath : `${rawPath}/`;
+const canonical = new URL(canonicalPath, site.url).href;
+const ogImage = new URL(image, site.url).href;
+// Dimensions/alt are only tracked for the site default (see config/site.ts);
+// per-page overrides are arbitrary Sanity assets, so omit rather than guess.
+const ogImageMeta = image === site.ogImage ? site.ogImageMeta : undefined;
+
+// Person (site identity) + WebSite — emitted on every page.
+const personLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: site.name,
+  url: site.url,
+  jobTitle: 'AI/ML Engineer',
+  description: site.description,
+  image: new URL(site.ogImage, site.url).href,
+  sameAs: ['https://github.benhickman.dev', 'https://linkedin.benhickman.dev'],
+};
+const websiteLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: site.name,
+  url: site.url,
+  description: site.description,
+};
+const extraLd = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
+const graphs = [personLd, websiteLd, ...extraLd];
+
+// JSON.stringify does NOT escape <, > or & — a Sanity field containing
+// "</script>" would break out of the JSON-LD block. Unicode-escape them,
+// plus U+2028/U+2029, which are valid JSON but illegal inside a <script>
+// body and would abort JSON-LD parsing.
+const safeJsonLd = (obj: Record<string, unknown>): string =>
+  JSON.stringify(obj)
+    .replace(/</g, '\\u003c')
+    .replace(/>/g, '\\u003e')
+    .replace(/&/g, '\\u0026')
+    .replace(/\u2028/g, '\\u2028')
+    .replace(/\u2029/g, '\\u2029');
+---
+
+<title>{fullTitle}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+{noindex && <meta name="robots" content="noindex, nofollow" />}
+
+<!-- Open Graph -->
+<meta property="og:type" content={type} />
+<meta property="og:site_name" content={site.name} />
+<meta property="og:locale" content={site.locale} />
+<meta property="og:title" content={fullTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={ogImage} />
+{
+  ogImageMeta && (
+    <>
+      <meta property="og:image:width" content={String(ogImageMeta.width)} />
+      <meta property="og:image:height" content={String(ogImageMeta.height)} />
+      <meta property="og:image:alt" content={ogImageMeta.alt} />
+    </>
+  )
+}
+{publishedTime && <meta property="article:published_time" content={publishedTime} />}
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={fullTitle} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImage} />
+
+{
+  graphs.map((g) => (
+    <script type="application/ld+json" is:inline set:html={safeJsonLd(g)} />
+  ))
+}

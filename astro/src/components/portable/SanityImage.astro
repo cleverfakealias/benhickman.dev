@@ -1,0 +1,51 @@
+---
+import type { Props as PtProps } from 'astro-portabletext/types';
+import { responsiveImageAttrs } from '@/lib/sanity';
+
+// astro-portabletext passes the block value as `node` (must extend TypedObject).
+interface ImageValue {
+  _type: string;
+  asset?: { _ref: string };
+  alt?: string;
+  caption?: string;
+}
+type Props = PtProps<ImageValue>;
+const { node } = Astro.props;
+const image = node?.asset ? responsiveImageAttrs(node, { baseWidth: 1200 }) : null;
+---
+
+{
+  /* sizes tracks the .prose column: capped at 720px, ~90vw once wrap padding bites. */
+  image && (
+    <figure class="pt-image">
+      <img
+        src={image.src}
+        srcset={image.srcset}
+        sizes="(min-width: 800px) 720px, 90vw"
+        alt={node.alt ?? ''}
+        loading="lazy"
+        decoding="async"
+      />
+      {node.caption && <figcaption>{node.caption}</figcaption>}
+    </figure>
+  )
+}
+
+<style>
+  .pt-image {
+    margin: var(--space-5) 0;
+  }
+  .pt-image img {
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+  }
+  figcaption {
+    margin-top: var(--space-2);
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+  }
+</style>

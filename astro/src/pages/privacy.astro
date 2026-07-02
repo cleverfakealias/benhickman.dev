@@ -1,0 +1,199 @@
+---
+export const prerender = true;
+
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHeader from '@/components/PageHeader.astro';
+
+// Ported from the SPA's PrivacyPolicy, updated for the Cloudflare rebuild:
+// the contact form submits to Formspree with hCaptcha (as in the SPA); the
+// command-bar chat is protected by Cloudflare Turnstile.
+// Hardcoded on purpose: a policy's revision date is a legal statement and must
+// only move when the policy text actually changes — not on every deploy.
+const lastUpdated = '1 July 2026';
+
+const processors = [
+  {
+    name: 'Formspree',
+    purpose: 'Message delivery',
+    detail:
+      'When you send a message, your name, email address, and message content are submitted to Formspree, a form-processing service that forwards the message by email so I can reply.',
+  },
+  {
+    name: 'hCaptcha',
+    purpose: 'Contact form spam protection',
+    detail:
+      'The contact form is protected from bots by hCaptcha, a privacy-focused CAPTCHA service. Completing the challenge shares limited technical data (such as IP address and browser information) with hCaptcha to verify you are human.',
+  },
+  {
+    name: 'Cloudflare Turnstile',
+    purpose: 'Chat spam protection',
+    detail:
+      'The command-bar chat is protected from bots by Cloudflare Turnstile, a privacy-preserving CAPTCHA alternative that verifies you are human without tracking you across sites.',
+  },
+  {
+    name: 'Command-bar assistant (Cloudflare Worker + NVIDIA NIM)',
+    purpose: 'Conversational portfolio answers',
+    detail:
+      'When you use the command-bar assistant, your questions and its answers are processed by a Cloudflare Worker and NVIDIA NIM. The six most recent exchanges are stored for up to 24 hours in Cloudflare KV so follow-up questions retain context; choosing “New chat” clears that history.',
+  },
+  {
+    name: 'Langfuse (LLM observability)',
+    purpose: 'Assistant quality & abuse monitoring',
+    detail:
+      'Command-bar assistant conversations — your questions, the answers, and the lookups the assistant performs — are recorded in Langfuse, an LLM observability service (US-hosted), so I can debug answer quality and detect abuse. Conversations are grouped by a pseudonymised session identifier; your IP address is never included.',
+  },
+  {
+    name: 'Rate limiting (Cloudflare KV)',
+    purpose: 'Abuse prevention',
+    detail:
+      'To enforce fair daily usage limits on the command-bar assistant, a pseudonymised (one-way hashed) form of your IP address is stored for up to 24 hours. The raw IP address itself is not retained.',
+  },
+  {
+    name: 'Sanity.io',
+    purpose: 'Content delivery',
+    detail:
+      'Blog content is sourced from Sanity at build time. Routine requests may log basic technical data (IP address, user agent) for security and performance.',
+  },
+];
+---
+
+<BaseLayout title="Privacy Policy" description="How benhickman.dev collects, uses, and safeguards your data." noindex>
+  <article class="wrap legal section-y">
+    <PageHeader title="Privacy Policy">
+      <p class="updated">Last updated: {lastUpdated}</p>
+    </PageHeader>
+
+    <p class="intro">
+      Welcome to <strong>benhickman.dev</strong>. I'm committed to protecting your personal data and
+      respecting your privacy. This policy explains how the site collects, uses, and safeguards your
+      information.
+    </p>
+
+    <section>
+      <h2>1. Data we collect</h2>
+      <p>
+        Data is collected depending on how you interact with the site, split into "Functional"
+        (necessary) and "Analytics" (optional).
+      </p>
+      <h3>Functional &amp; necessary</h3>
+      <p>This is required for the site to function securely. It can't be opted out of without affecting functionality.</p>
+      <ul class="processors">
+        {
+          processors.map((p) => (
+            <li>
+              <strong>{p.name}</strong> <span class="purpose">({p.purpose})</span>
+              <p>{p.detail}</p>
+            </li>
+          ))
+        }
+      </ul>
+      <h3>Analytics (optional)</h3>
+      <p>
+        Google Analytics is used to understand how visitors interact with the site.
+        <strong> This is not collected unless you explicitly consent</strong> via the cookie banner
+        or settings. With consent, analytics cookies track session data; IP anonymization is enabled
+        where possible.
+      </p>
+    </section>
+
+    <section>
+      <h2>2. Cookies</h2>
+      <p>Cookies manage your consent preferences, maintain command-bar chat continuity, and enable the analytics above.</p>
+      <ul>
+        <li><strong>Essential cookies</strong> — remember your privacy choices (e.g. <code>benhickman_consent_v1</code>).</li>
+        <li><strong>Chat session cookie</strong> — associates command-bar follow-ups with the short-lived conversation stored in Cloudflare KV.</li>
+        <li><strong>Analytics cookies (Google Analytics)</strong> — only set if you accept or enable analytics in settings.</li>
+      </ul>
+      <p>You can change your preferences anytime via "Cookie Preferences" in the footer.</p>
+    </section>
+
+    <section>
+      <h2>3. Your rights (GDPR &amp; CCPA)</h2>
+      <p>Depending on your location, you have rights over your personal data:</p>
+      <ul>
+        <li>The right to access the personal data held about you.</li>
+        <li>The right to request correction of inaccurate data.</li>
+        <li>The right to request deletion of your data ("right to be forgotten").</li>
+        <li>The right to withdraw consent at any time.</li>
+      </ul>
+      <p>To exercise these rights, get in touch via the <a href="/contact">contact page</a>.</p>
+    </section>
+
+    <section>
+      <h2>4. Contact</h2>
+      <p>
+        Questions about this policy or these data practices? Reach out through the
+        <a href="/contact">contact page</a>.
+      </p>
+    </section>
+  </article>
+</BaseLayout>
+
+<style>
+  .legal {
+    max-width: 760px;
+  }
+  .updated {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+    margin-top: var(--space-2);
+  }
+  .intro {
+    margin-top: var(--space-4);
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+  }
+  .legal section {
+    margin-top: var(--space-6);
+  }
+  .legal h2 {
+    font-size: 1.4rem;
+    margin-bottom: var(--space-3);
+  }
+  .legal h3 {
+    font-size: 1.05rem;
+    margin: var(--space-4) 0 var(--space-2);
+    color: var(--color-text);
+  }
+  .legal p {
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+    margin-block: var(--space-2);
+  }
+  .legal ul {
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+    padding-left: var(--space-5);
+  }
+  .legal li {
+    margin-block: var(--space-2);
+  }
+  .processors {
+    list-style: none;
+    padding: 0;
+  }
+  .processors > li {
+    padding: var(--space-3) 0;
+    border-top: 1px solid var(--color-border);
+  }
+  .processors strong {
+    color: var(--color-text);
+  }
+  .purpose {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+  }
+  .processors p {
+    margin-top: var(--space-1);
+  }
+  code {
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    padding: 2px 5px;
+    background: var(--color-surface-2);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+  }
+</style>

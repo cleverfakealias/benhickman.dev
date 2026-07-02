@@ -1,0 +1,17 @@
+# Local Worker bindings. Copy to .dev.vars with `npm run setup:local`.
+# This file contains test values and blank placeholders only.
+
+# Cloudflare's official always-pass test secret. Never use it in production.
+CMDK_TURNSTILE_SECRET=1x0000000000000000000000000000000AA
+
+# Optional live command-bar assistant. With no key, the app uses its local stub.
+LLM_API_KEY=
+LLM_BASE_URL=https://integrate.api.nvidia.com/v1
+LLM_MODEL=nvidia/nemotron-3-super-120b-a12b
+LLM_ENABLE_THINKING=false
+
+# Optional contact delivery. Configure either the Resend trio or a forward URL.
+RESEND_API_KEY=
+CONTACT_TO=
+CONTACT_FROM=
+CONTACT_FORWARD_URL=

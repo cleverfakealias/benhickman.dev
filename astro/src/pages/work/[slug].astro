@@ -1,0 +1,133 @@
+---
+export const prerender = true;
+
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { projects, getProjectsWithDetail } from '@/data/projects';
+import { CONTACT_HREF } from '@/data/homeContent';
+
+export function getStaticPaths() {
+  return getProjectsWithDetail().map((p) => ({ params: { slug: p.slug } }));
+}
+
+const { slug } = Astro.params;
+const project = projects.find((p) => p.slug === slug);
+// Unreachable under prerender (getStaticPaths bounds the slugs); real 404 if ever SSR'd.
+if (!project) return new Response(null, { status: 404 });
+---
+
+<BaseLayout title={project.name} description={project.summary} path={`/work/${project.slug}`}>
+  <article class="wrap project">
+    <a class="back" href="/work">← All work</a>
+
+    <header class="head">
+      <div class="title-row">
+        <h1>{project.name}</h1>
+        <span class:list={['badge', project.maturity.replace(/\s+/g, '-')]}>{project.maturity}</span>
+      </div>
+      <p class="group">{project.group}</p>
+      <p class="lede">{project.description}</p>
+      <div class="tags">
+        {project.tags.map((t) => <span class="tag">{t}</span>)}
+      </div>
+    </header>
+
+    <div class="sections">
+      {
+        project.detail?.map((s) => (
+          <section class="block">
+            <h2>{s.heading}</h2>
+            <p>{s.body}</p>
+          </section>
+        ))
+      }
+    </div>
+
+    <div class="cta-row">
+      <a class="button-primary" href={CONTACT_HREF}>Talk about work like this →</a>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .project {
+    padding-block: var(--space-6) var(--space-7);
+  }
+  .back {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-5);
+  }
+  .head {
+    max-width: 760px;
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: var(--space-5);
+  }
+  .title-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+  }
+  .head h1 {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 3rem);
+    letter-spacing: -0.02em;
+    margin: 0;
+  }
+  /* Detail page runs the global badge a size up, and lets it wrap. */
+  .badge {
+    font-size: 11px;
+    padding: 3px 10px;
+    white-space: normal;
+  }
+  .group {
+    margin: var(--space-2) 0 0;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-accent-hex);
+  }
+  .lede {
+    margin-top: var(--space-3);
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: var(--color-text-secondary);
+  }
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: var(--space-4);
+  }
+  .sections {
+    max-width: 720px;
+    margin-top: var(--space-5);
+  }
+  .block {
+    margin-bottom: var(--space-5);
+  }
+  .block h2 {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    margin: 0 0 var(--space-2);
+    font-weight: 500;
+  }
+  .block p {
+    margin: 0;
+    line-height: 1.7;
+    color: var(--color-text-secondary);
+  }
+  .cta-row {
+    margin-top: var(--space-6);
+  }
+  .button-primary {
+    display: inline-block;
+    text-decoration: none;
+  }
+</style>

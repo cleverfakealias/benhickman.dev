@@ -1,0 +1,56 @@
+---
+export const prerender = true;
+
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { navLinks } from '@/config/navLinks';
+---
+
+<BaseLayout title="Not found" description="That page doesn't exist." noindex>
+  <section class="wrap section-y notfound">
+    <p class="eyebrow">// 404</p>
+    <h1>This route returned <em>null</em>.</h1>
+    <p class="lede">The page you're after doesn't exist or has moved. Try one of these:</p>
+    <nav class="links" aria-label="Primary destinations">
+      <a href="/">Home</a>
+      {navLinks.map((l) => <a href={l.href}>{l.name}</a>)}
+    </nav>
+  </section>
+</BaseLayout>
+
+<style>
+  .notfound {
+    max-width: 640px;
+  }
+  .notfound h1 {
+    font-size: clamp(2rem, 6vw, 3.25rem);
+    letter-spacing: -0.02em;
+    margin-block: var(--space-2) var(--space-3);
+  }
+  .notfound h1 em {
+    font-style: italic;
+    font-family: var(--font-display), serif;
+    color: var(--color-accent-hex);
+  }
+  .lede {
+    color: var(--color-text-secondary);
+  }
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-5);
+  }
+  .links a {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    padding: var(--space-2) var(--space-4);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-pill);
+    color: var(--color-text-secondary);
+  }
+  .links a:hover {
+    color: var(--color-text);
+    border-color: var(--color-border-hover);
+    border-bottom-color: var(--color-border-hover);
+  }
+</style>

@@ -1,0 +1,139 @@
+---
+import { ClientRouter } from 'astro:transitions';
+import SEO, { type SeoProps } from '@/components/SEO.astro';
+import Analytics from '@/components/Analytics.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import BottomNav from '@/components/BottomNav.astro';
+import ConsentBanner from '@/components/islands/ConsentBanner';
+import CookieSettings from '@/components/islands/CookieSettings';
+import CommandPalette from '@/components/islands/CommandPalette';
+import '@/styles/global.css';
+// Self-hosted fonts (Fontsource) — Astro bundles + hashes the woff2 under
+// /_astro/ (immutable-cached), replacing the render-blocking Google Fonts
+// request and its third-party connection. Geist Sans: the four weights the
+// site uses. JetBrains Mono: variable wght + italic (`.cmdk-thinking` is the
+// one real italic use).
+import '@fontsource/geist-sans/400.css';
+import '@fontsource/geist-sans/500.css';
+import '@fontsource/geist-sans/600.css';
+import '@fontsource/geist-sans/700.css';
+import '@fontsource-variable/jetbrains-mono/wght.css';
+import '@fontsource-variable/jetbrains-mono/wght-italic.css';
+
+// The layout's props ARE the SEO props — one shape, owned by SEO.astro.
+type Props = SeoProps;
+const seo = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" data-brand="obsidian">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico" />
+    <link rel="apple-touch-icon" href="/images/favicon_io/apple-touch-icon.png" />
+    <link rel="manifest" href="/images/favicon_io/site.webmanifest" />
+    <link rel="alternate" type="application/rss+xml" title="Ben Hickman — Writing" href="/rss.xml" />
+    <!-- Browser-chrome color per system scheme — matches --color-bg (Carbon
+         Black dark / Parchment-ish light) from global.css. -->
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0a0a0b" />
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#faf9f5" />
+
+    <SEO {...seo} />
+
+    <!-- Pre-paint theme: set data-theme before first paint (no FOUC). Same
+         localStorage keys as the SPA (zennlogic-theme-source / -mode). Also wires
+         the [data-theme-toggle] buttons via document-level delegation (registered
+         once; survives view-transition swaps) and re-applies on astro:after-swap.
+         Every apply also syncs aria-pressed on the toggle buttons (pressed =
+         light engaged, matching ThemeToggle.astro's SSR default of "false" on
+         the dark-default site); this keeps it truthful across toggles and
+         swaps. -->
+    <script is:inline>
+      (function () {
+        var SOURCE_KEY = 'zennlogic-theme-source';
+        var MODE_KEY = 'zennlogic-theme-mode';
+        function systemMode() {
+          return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+            ? 'dark'
+            : 'light';
+        }
+        function currentMode() {
+          try {
+            var source = localStorage.getItem(SOURCE_KEY) || 'system';
+            var mode = source === 'manual' ? localStorage.getItem(MODE_KEY) : null;
+            if (mode !== 'light' && mode !== 'dark') mode = systemMode();
+            return mode;
+          } catch (e) {
+            return 'dark';
+          }
+        }
+        function syncToggles(mode) {
+          var buttons = document.querySelectorAll('[data-theme-toggle]');
+          for (var i = 0; i < buttons.length; i++) {
+            buttons[i].setAttribute('aria-pressed', mode === 'light' ? 'true' : 'false');
+          }
+        }
+        function apply() {
+          var mode = currentMode();
+          document.documentElement.setAttribute('data-theme', mode);
+          syncToggles(mode);
+        }
+        function toggle() {
+          var next = currentMode() === 'dark' ? 'light' : 'dark';
+          try {
+            localStorage.setItem(SOURCE_KEY, 'manual');
+            localStorage.setItem(MODE_KEY, next);
+          } catch (e) {}
+          document.documentElement.setAttribute('data-theme', next);
+          syncToggles(next);
+        }
+        apply();
+        if (!window.__themeInit) {
+          window.__themeInit = true;
+          // The pre-paint apply() above runs before <body> parses, so no
+          // toggle buttons exist yet — re-sync once the DOM is in.
+          document.addEventListener('DOMContentLoaded', apply);
+          document.addEventListener('click', function (e) {
+            var t = e.target && e.target.closest ? e.target.closest('[data-theme-toggle]') : null;
+            if (t) {
+              e.preventDefault();
+              toggle();
+            }
+          });
+          if (window.matchMedia) {
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function () {
+              try {
+                if ((localStorage.getItem(SOURCE_KEY) || 'system') === 'system') apply();
+              } catch (e) {}
+            });
+          }
+          document.addEventListener('astro:after-swap', apply);
+        }
+      })();
+    </script>
+
+    <ClientRouter />
+    <Analytics />
+
+    <!-- Per-page <head> extras: SEO/meta/JSON-LD (Phase 3 SEO.astro renders here). -->
+    <slot name="head" />
+  </head>
+
+  <body>
+    <a href="#main-content" class="skip-link">Skip to content</a>
+    <Header />
+    <main id="main-content" tabindex="-1" transition:animate="fade">
+      <slot />
+    </main>
+    <Footer />
+    <BottomNav />
+    <ConsentBanner client:idle />
+    <CookieSettings client:idle />
+    <!-- client:idle + no props: the palette renders null until invoked and
+         fetches /search-index.json on first open, instead of a ~7 KB props
+         attribute duplicated into every prerendered page. -->
+    <CommandPalette client:idle />
+  </body>
+</html>

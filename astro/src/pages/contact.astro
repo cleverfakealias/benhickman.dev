@@ -1,0 +1,60 @@
+---
+export const prerender = true;
+
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHeader from '@/components/PageHeader.astro';
+import SocialPills from '@/components/SocialPills.astro';
+import ContactForm from '@/components/islands/ContactForm';
+---
+
+<BaseLayout
+  title="Contact"
+  description="Tell me about the system — what it should do, where it runs, and what good looks like."
+>
+  <section class="wrap section-y">
+    <PageHeader
+      class="head"
+      eyebrow="// contact"
+      title="Start a conversation."
+      lede={'Tell me about the system — what it should do, where it runs, and what "good" looks like. I read every message. Open to senior AI roles and select consulting, remote.'}
+    />
+
+    <div class="form-slot">
+      <ContactForm client:visible />
+      <div class="or-socials">
+        <span>or reach me on</span>
+        <SocialPills />
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .head {
+    max-width: 640px;
+    --lede-max: 56ch;
+  }
+  .form-slot {
+    margin-top: var(--space-6);
+    max-width: 560px;
+    padding: var(--pad-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface);
+  }
+  .or-socials {
+    margin-top: var(--space-5);
+    padding-top: var(--space-4);
+    border-top: 1px solid var(--color-border);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  .or-socials > span {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-text-muted);
+  }
+</style>

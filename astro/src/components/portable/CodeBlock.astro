@@ -1,0 +1,50 @@
+---
+import type { Props as PtProps } from 'astro-portabletext/types';
+
+interface CodeValue {
+  _type: string;
+  code?: string;
+  language?: string;
+  filename?: string;
+}
+type Props = PtProps<CodeValue>;
+const { node } = Astro.props;
+---
+
+<figure class="pt-code">
+  {node?.filename && <figcaption>{node.filename}</figcaption>}
+  <pre data-language={node?.language}><code>{node?.code}</code></pre>
+</figure>
+
+<style>
+  .pt-code {
+    margin: var(--space-4) 0;
+  }
+  .pt-code figcaption {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    padding: var(--space-2) var(--space-3);
+    border: 1px solid var(--color-border);
+    border-bottom: none;
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
+    background: var(--color-surface-2);
+  }
+  pre {
+    margin: 0;
+    overflow-x: auto;
+    padding: var(--space-4);
+    background: var(--color-surface-2);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    line-height: 1.5;
+  }
+  .pt-code figcaption + pre {
+    border-radius: 0 0 var(--radius-md) var(--radius-md);
+  }
+  code {
+    font-family: var(--font-mono);
+  }
+</style>

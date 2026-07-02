@@ -1,0 +1,20 @@
+---
+export const prerender = true;
+
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Hero from '@/components/home/Hero.astro';
+import ProofStrip from '@/components/home/ProofStrip.astro';
+import FeaturedWork from '@/components/home/FeaturedWork.astro';
+import StackBand from '@/components/home/StackBand.astro';
+import WritingTeasers from '@/components/home/WritingTeasers.astro';
+import ContactCta from '@/components/home/ContactCta.astro';
+---
+
+<BaseLayout>
+  <Hero />
+  <ProofStrip />
+  <FeaturedWork />
+  <StackBand />
+  <WritingTeasers />
+  <ContactCta />
+</BaseLayout>

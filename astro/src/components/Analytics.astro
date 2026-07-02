@@ -1,0 +1,78 @@
+---
+// Consent-gated GA4 (Consent Mode v2). The default is DENIED before anything
+// loads; gtag.js loads only once consent is granted. Page views fire on
+// `astro:page-load` (initial load + every view-transition navigation) — the
+// MPA-correct replacement for the SPA's manual route-listener.
+// gaId is empty until PUBLIC_GA_MEASUREMENT_ID is set — the whole layer no-ops.
+const gaId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID ?? '';
+---
+
+<script is:inline define:vars={{ gaId }}>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() {
+    window.dataLayer.push(arguments);
+  }
+  window.gtag = window.gtag || gtag;
+
+  // Consent Mode v2 defaults — denied, set before any config/load.
+  gtag('consent', 'default', {
+    ad_storage: 'denied',
+    ad_user_data: 'denied',
+    ad_personalization: 'denied',
+    analytics_storage: 'denied',
+    wait_for_update: 500,
+  });
+
+  function loadGtag() {
+    if (!gaId || document.getElementById('ga-gtag')) return;
+    var s = document.createElement('script');
+    s.id = 'ga-gtag';
+    s.async = true;
+    s.src = 'https://www.googletagmanager.com/gtag/js?id=' + gaId;
+    document.head.appendChild(s);
+    gtag('js', new Date());
+    gtag('config', gaId, { send_page_view: false });
+  }
+
+  function pageView() {
+    if (!gaId) return;
+    gtag('event', 'page_view', {
+      page_title: document.title,
+      page_location: location.href,
+      page_path: location.pathname + location.search,
+    });
+  }
+
+  function consentGranted() {
+    try {
+      return document.cookie.indexOf('benhickman_consent_v1=granted') !== -1;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  // Called by the consent store (src/lib/consent.ts) on user choice.
+  window.__grantAnalytics = function () {
+    gtag('consent', 'update', { analytics_storage: 'granted' });
+    loadGtag();
+    pageView();
+  };
+  window.__denyAnalytics = function () {
+    gtag('consent', 'update', { analytics_storage: 'denied' });
+  };
+
+  function grantedView() {
+    if (consentGranted()) {
+      // Returning consented visitor: re-affirm consent, ensure gtag, count the view.
+      gtag('consent', 'update', { analytics_storage: 'granted' });
+      loadGtag();
+      pageView();
+    }
+  }
+  if (!window.__analyticsInit) {
+    window.__analyticsInit = true;
+    document.addEventListener('astro:page-load', grantedView);
+    // Cover the cold load too, in case astro:page-load already fired before this ran.
+    grantedView();
+  }
+</script>

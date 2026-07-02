@@ -1,0 +1,232 @@
+---
+import { featuredProjects, moreWork, WORK_HREF } from '@/data/homeContent';
+import SectionHeading from './SectionHeading.astro';
+---
+
+<section class="featured section-y" aria-labelledby="work-heading">
+  <div class="wrap">
+    <SectionHeading
+      id="work-heading"
+      eyebrow="// selected work"
+      title="Agents, models, and the tools between them."
+    />
+
+    <div class="bento">
+      {
+        featuredProjects.map((p) => (
+          <article class:list={['card', p.span]}>
+            {p.spanTag && <span class="span-tag" aria-hidden="true">{p.spanTag}</span>}
+            {p.badge && <span class="badge">{p.badge}</span>}
+            <h3>{p.name}</h3>
+            <p class="desc">{p.description}</p>
+            {p.trace && (
+              <div class="trace">
+                {p.trace.map((step) => (
+                  <div class="trace-line">
+                    <span class="arrow" aria-hidden="true">›</span>
+                    <span>{step}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+            <div class="tags">
+              {p.tags.map((t) => <span class="tag">{t}</span>)}
+            </div>
+          </article>
+        ))
+      }
+
+      <article class="card all-work">
+        <a href={WORK_HREF}>All work <span class="arrow" aria-hidden="true">→</span></a>
+        <p class="more">{moreWork.join(' · ')}</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<style>
+  .bento {
+    display: grid;
+    gap: 8px;
+    grid-template-columns: 1fr;
+  }
+
+  .card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    min-height: 180px;
+    padding: 24px;
+    overflow: hidden;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    transition:
+      border-color 200ms var(--easing-standard),
+      transform 200ms var(--easing-standard);
+  }
+  .card:hover {
+    border-color: var(--color-border-hover);
+    transform: translateY(-2px);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .card:hover {
+      transform: none;
+    }
+  }
+
+  .span-tag {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.08em;
+    color: var(--color-text-muted);
+  }
+  /* Bento badge is always the wasabi "shipped" accent, mid-size. */
+  .badge {
+    align-self: flex-start;
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    padding: 3px 9px;
+    color: var(--color-secondary-hex);
+    border-color: var(--color-secondary-border);
+  }
+  h3 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 19px;
+    letter-spacing: -0.01em;
+    color: var(--color-text);
+  }
+  .desc {
+    margin: 0;
+    font-size: 14.5px;
+    line-height: 1.5;
+    color: var(--color-text-secondary);
+  }
+
+  .trace {
+    margin-top: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+  }
+  .trace-line {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--color-text-secondary);
+    opacity: 0.45;
+    animation: traceln 6s var(--easing-standard) infinite;
+  }
+  .trace-line:nth-child(1) {
+    animation-delay: 0s;
+  }
+  .trace-line:nth-child(2) {
+    animation-delay: 0.9s;
+  }
+  .trace-line:nth-child(3) {
+    animation-delay: 1.8s;
+  }
+  .trace-line:nth-child(4) {
+    animation-delay: 2.7s;
+  }
+  .trace-line:nth-child(5) {
+    animation-delay: 3.6s;
+  }
+  .trace-line .arrow {
+    color: var(--color-accent-hex);
+  }
+  @keyframes traceln {
+    0%,
+    8% {
+      opacity: 0.45;
+    }
+    14%,
+    30% {
+      opacity: 1;
+      color: var(--color-text);
+    }
+    60%,
+    100% {
+      opacity: 0.45;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .trace-line {
+      animation: none;
+      opacity: 1;
+      color: var(--color-text);
+    }
+  }
+
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: auto;
+  }
+  .all-work {
+    min-height: 0;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  .all-work a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--color-text);
+    border-bottom: none;
+  }
+  .all-work a .arrow {
+    color: var(--color-accent-hex);
+    transition: transform 180ms var(--easing-standard);
+  }
+  .all-work a:hover .arrow {
+    transform: translateX(4px);
+  }
+  .all-work .more {
+    margin: 8px 0 0;
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    color: var(--color-text-secondary);
+  }
+
+  @media (min-width: 600px) {
+    .bento {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .card.big,
+    .all-work {
+      grid-column: span 2;
+    }
+  }
+  @media (min-width: 900px) {
+    .bento {
+      grid-template-columns: repeat(4, 1fr);
+      grid-auto-rows: 1fr;
+    }
+    .card.big {
+      grid-column: span 2;
+      grid-row: span 2;
+    }
+    .card.tall {
+      grid-row: span 2;
+    }
+    .card.small {
+      grid-column: span 1;
+    }
+    .all-work {
+      grid-column: span 2;
+    }
+  }
+</style>

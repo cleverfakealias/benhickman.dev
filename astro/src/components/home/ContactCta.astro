@@ -1,0 +1,44 @@
+---
+import { CONTACT_HREF } from '@/data/homeContent';
+import SectionHeading from './SectionHeading.astro';
+import SocialPills from '../SocialPills.astro';
+---
+
+<section class="contact section-y" aria-labelledby="contact-heading">
+  <div class="wrap inner">
+    <SectionHeading
+      id="contact-heading"
+      centered
+      eyebrow="// contact"
+      titleHtml="Ready to build agents that <em>think?</em>"
+    />
+    <p class="desc">
+      Tell me about the system — what it should do, where it runs, and what "good" looks like. I read
+      every message.
+    </p>
+    <div class="cta-row">
+      <a class="button-primary cta" href={CONTACT_HREF}>Start a conversation</a>
+    </div>
+    <SocialPills class="socials" />
+  </div>
+</section>
+
+<style>
+  .inner {
+    text-align: center;
+  }
+  .desc {
+    margin: 9px auto 0;
+    max-width: 520px;
+    color: var(--color-text-secondary);
+  }
+  .cta-row {
+    margin-top: 14px;
+    display: flex;
+    justify-content: center;
+  }
+  .socials {
+    margin-top: 15px;
+    justify-content: center;
+  }
+</style>

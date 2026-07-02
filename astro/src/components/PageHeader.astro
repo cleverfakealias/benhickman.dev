@@ -1,0 +1,37 @@
+---
+// Shared page header — eyebrow kicker, display-size h1, optional lede.
+// Width/margins stay page-scoped via the forwarded `class`; pages set the
+// lede measure with the `--lede-max` custom property. Extra meta rows
+// (e.g. privacy's revision date) go in the default slot.
+interface Props {
+  eyebrow?: string;
+  title: string;
+  lede?: string;
+  class?: string;
+}
+
+const { eyebrow, title, lede, class: className } = Astro.props;
+---
+
+<header class={className}>
+  {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+  <h1>{title}</h1>
+  {lede && <p class="lede">{lede}</p>}
+  <slot />
+</header>
+
+<style>
+  h1 {
+    font-size: clamp(2rem, 5vw, 3rem);
+    letter-spacing: -0.02em;
+    margin-block: var(--space-2);
+  }
+  /* No eyebrow above (e.g. privacy) — don't push the title down. */
+  h1:first-child {
+    margin-top: 0;
+  }
+  .lede {
+    color: var(--color-text-secondary);
+    max-width: var(--lede-max, none);
+  }
+</style>

@@ -1,0 +1,129 @@
+---
+export const prerender = true;
+
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHeader from '@/components/PageHeader.astro';
+import { projectsByGroup, getProjectsWithDetail } from '@/data/projects';
+
+const groups = projectsByGroup();
+const detailSlugs = new Set(getProjectsWithDetail().map((p) => p.slug));
+---
+
+<BaseLayout
+  title="Work"
+  description="Agentic systems, RAG pipelines, model training, and the tools between them — selected, verified projects."
+>
+  <section class="wrap section-y">
+    <PageHeader
+      class="head"
+      eyebrow="// work"
+      title="Agents, models, and the tools between them."
+      lede="Selected projects across agents, retrieval, the model layer, and the web — each shown at its honest maturity, from shipped to working prototype."
+    />
+
+    {
+      groups.map((g) => (
+        <div class="group">
+          <h2 class="group-label">{g.group}</h2>
+          <div class="grid">
+            {g.items.map((p) => {
+              const hasDetail = detailSlugs.has(p.slug);
+              const Tag = hasDetail ? 'a' : 'div';
+              return (
+                <Tag {...(hasDetail ? { href: `/work/${p.slug}` } : {})} class:list={['card', { link: hasDetail }]}>
+                  <div class="card-top">
+                    <h3>{p.name}</h3>
+                    <span class:list={['badge', p.maturity.replace(/\s+/g, '-')]}>{p.maturity}</span>
+                  </div>
+                  <p class="summary">{p.description}</p>
+                  <div class="tags">
+                    {p.tags.map((t) => <span class="tag">{t}</span>)}
+                  </div>
+                  {hasDetail && <span class="readcta">Read more →</span>}
+                </Tag>
+              );
+            })}
+          </div>
+        </div>
+      ))
+    }
+  </section>
+</BaseLayout>
+
+<style>
+  .head {
+    max-width: 720px;
+    margin-bottom: var(--space-6);
+    --lede-max: 62ch;
+  }
+  .group {
+    margin-top: var(--space-6);
+  }
+  .group-label {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: var(--space-2);
+    margin-bottom: var(--space-4);
+    font-weight: 500;
+  }
+  .grid {
+    display: grid;
+    gap: var(--space-3);
+    grid-template-columns: 1fr;
+  }
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: var(--pad-card);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    text-decoration: none;
+    transition:
+      border-color 200ms var(--easing-standard),
+      transform 200ms var(--easing-standard);
+  }
+  .card.link:hover {
+    border-color: var(--color-border-hover);
+    transform: translateY(-2px);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .card.link:hover {
+      transform: none;
+    }
+  }
+  .card-top {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-2);
+  }
+  .card h3 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 1.15rem;
+    color: var(--color-text);
+  }
+  .summary {
+    margin: 0;
+    font-size: 0.92rem;
+    line-height: 1.5;
+    color: var(--color-text-secondary);
+  }
+  .tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  @media (min-width: 700px) {
+    .grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>

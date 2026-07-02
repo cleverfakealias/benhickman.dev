@@ -1,0 +1,23 @@
+# Cloudflare _headers — security baseline for all routes.
+# script-src 'unsafe-inline' below is a BUILD-TIME PLACEHOLDER: the cspHashes
+# integration (scripts/cspHashes.mjs) replaces it in the emitted copy with
+# sha256 hashes of every inline script Astro actually emitted, so inline
+# injection can't execute in production. style-src keeps 'unsafe-inline'
+# (style attributes would need 'unsafe-hashes' for little gain). The JSON-LD
+# sink is additionally unicode-escaped (SEO.astro), and the LLM
+# (NVIDIA/OpenRouter) calls are
+# server-side from the Worker, so they need no browser connect-src entry.
+# challenges.cloudflare.com = Turnstile (⌘K chat only); hcaptcha.com +
+# *.hcaptcha.com = hCaptcha widget and formspree.io = the contact form's
+# direct browser POST (per docs.hcaptcha.com CSP guidance).
+# Fonts are self-hosted (Fontsource, same-origin under /_astro/), so 'self'
+# covers style-src/font-src; GA4 beacons hit regional *.google-analytics.com /
+# *.analytics.google.com hosts, hence the connect-src wildcards.
+# The adapter appends the immutable /_astro/* cache rule automatically.
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com https://hcaptcha.com https://*.hcaptcha.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://hcaptcha.com https://*.hcaptcha.com; font-src 'self'; img-src 'self' data: https://cdn.sanity.io https://www.googletagmanager.com; connect-src 'self' https://challenges.cloudflare.com https://hcaptcha.com https://*.hcaptcha.com https://formspree.io https://*.google-analytics.com https://*.analytics.google.com; frame-src https://challenges.cloudflare.com https://hcaptcha.com https://*.hcaptcha.com; base-uri 'self'; form-action 'self'; frame-ancestors 'none'
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  X-Frame-Options: DENY
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+  Permissions-Policy: geolocation=(), microphone=(), camera=()

@@ -134,5 +134,10 @@ dist
 **/localhost.pem
 .vercel
 
-# Claude Code local overrides
-.claude/settings.local.json
+# Local-only agent/tooling context (Claude Code config, intents, specs,
+# content plan) — not part of the shipped repo; agents read these from
+# the working tree.
+.claude/
+.agents/
+/specs/
+*.code-workspace
