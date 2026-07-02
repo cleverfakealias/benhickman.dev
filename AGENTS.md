@@ -8,12 +8,19 @@
 - **Name**: benhickman.dev
 - **Purpose**: Personal portfolio site + blog for Ben Hickman, multi-domain
   (benhickman.dev primary; also zengineer.cloud, zennlogic.com).
-- **Stack**: TypeScript (strict) monorepo — React 19 + Vite SPA in `ui/`
-  (Material-UI), Sanity v4 headless CMS in `studio/`. Deployed on Vercel.
+- **Stack**: TypeScript (strict) monorepo — Astro 7 site on Cloudflare Workers in
+  `astro/` (canonical), legacy React 19 + Vite SPA in `ui/` (Vercel), Sanity v4
+  headless CMS in `studio/`.
 
 ## Layout
 
-- `ui/` — the React 19 + Vite SPA. MUI theme, react-router, Sanity client for blog data.
+- `astro/` — **the canonical site** (as of 2026-07-01): Astro 7 + Cloudflare Workers,
+  Obsidian Foundry design system. Commands live in `astro/README.md`; the gate is
+  `npm run verify` (Biome + astro check + Vitest + build).
+- `ui/` — LEGACY React 19 + Vite SPA, superseded by `astro/` and pending decommission.
+  Do not add features here. Until it is removed, keep the shared consent cookie
+  (`benhickman_consent_v1`) and theme localStorage keys compatible across both apps —
+  consent/nav/theme logic is intentionally duplicated and must not drift semantically.
 - `studio/` — Sanity v4 Studio (schema types, desk structure, presentation).
 - Each subproject has its own `package.json`; run commands from inside that folder.
 
